@@ -8,22 +8,20 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
 
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '21'
+      - name: Build project
+        run: cd P1 && ./gradlew build
 
-    - name: Build project
-      run: ./gradlew build
-
-    - name: Run tests
-      run: ./gradlew test
+      - name: Run tests
+        run: cd P1 && ./gradlew test
