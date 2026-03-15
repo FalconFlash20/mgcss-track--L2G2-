@@ -20,6 +20,9 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Make gradlew executable
+        run: chmod +x P1/gradlew
+
       - name: Build project
         run: cd P1 && ./gradlew build
 
