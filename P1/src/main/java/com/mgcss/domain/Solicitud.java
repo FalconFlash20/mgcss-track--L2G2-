@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class Solicitud {
 
     private Long id;
-    private String estado
+    private String estado;
     private LocalDateTime fechaCreacion;
 
     public Solicitud() {
