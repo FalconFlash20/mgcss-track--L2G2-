@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "MGCSS" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Build project
+      run: ./gradlew build
+
+    - name: Run tests
+      run: ./gradlew test
