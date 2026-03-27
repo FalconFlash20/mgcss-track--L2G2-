@@ -8,6 +8,7 @@ public class Solicitud {
     private EstadoSolicitud estado;
     private LocalDateTime fechaCreacion;
     public enum EstadoSolicitud{ ABIERTA, EN_PROCESO, CERRADA };
+    private Tecnico tecnico;
 
     public Solicitud() {
     }
@@ -43,6 +44,19 @@ public class Solicitud {
 			throw new IllegalStateException("Solo se puede cerrar solicitudes si no está en proceso ");
 		}
 	this.estado = EstadoSolicitud.CERRADA;
+		
+	}
+
+	public Tecnico getTecnico() {
+		return tecnico;
+	}
+	
+	public void asignarTecnico(Tecnico t) {
+		if(this.estado == EstadoSolicitud.CERRADA) {
+			throw new IllegalArgumentException("No se puede asignar un tecnico a una solicitud cerrada");
+		}
+		if(!t.isActivo() || t == null) throw new IllegalArgumentException("No se puede asignar un tecnico inactivo");
+		this.tecnico = t;
 		
 	}
 }
