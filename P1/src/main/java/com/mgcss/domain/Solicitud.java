@@ -5,13 +5,14 @@ import java.time.LocalDateTime;
 public class Solicitud {
 
     private Long id;
-    private String estado;
+    private EstadoSolicitud estado;
     private LocalDateTime fechaCreacion;
+    public enum EstadoSolicitud{ ABIERTA, EN_PROCESO, CERRADA };
 
     public Solicitud() {
     }
 
-    public Solicitud(Long id, String estado, LocalDateTime fechaCreacion) {
+    public Solicitud(Long id, EstadoSolicitud estado, LocalDateTime fechaCreacion) {
         this.id = id;
         this.estado = estado;
         this.fechaCreacion = fechaCreacion;
@@ -21,7 +22,7 @@ public class Solicitud {
         return id;
     }
 
-    public String getEstado() {
+    public EstadoSolicitud getEstado() {
         return estado;
     }
 
@@ -33,11 +34,15 @@ public class Solicitud {
         this.id = id;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
+
+	public void cerrar() {
+		if(this.estado != EstadoSolicitud.EN_PROCESO) {
+			throw new IllegalStateException("Solo se puede cerrar solicitudes si no está en proceso ");
+		}
+	this.estado = EstadoSolicitud.CERRADA;
+		
+	}
 }
