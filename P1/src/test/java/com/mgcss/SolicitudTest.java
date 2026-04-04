@@ -19,6 +19,22 @@ void noCerrarEnProceso() {
 }
 
 @Test
+void cerrarSolicitudEnProceso() {
+    Solicitud s = new Solicitud(1L, EstadoSolicitud.EN_PROCESO, LocalDateTime.now());
+
+    s.cerrar();
+
+    assertEquals(EstadoSolicitud.CERRADA, s.getEstado());
+}
+
+@Test
+void cambiarSolicitudAbiertaAEnProceso() {
+    Solicitud s = new Solicitud(1L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
+    s.iniciarProceso();
+    assertEquals(EstadoSolicitud.EN_PROCESO, s.getEstado());
+}
+
+@Test
 void asignaTecnicoActivo() {
 	Solicitud s = new Solicitud(2L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
 	Tecnico t = new Tecnico("Francisco", true);

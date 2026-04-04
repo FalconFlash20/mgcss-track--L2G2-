@@ -46,6 +46,12 @@ public class Solicitud {
 	this.estado = EstadoSolicitud.CERRADA;
 		
 	}
+	public void iniciarProceso() {
+	    if (this.estado != EstadoSolicitud.ABIERTA) {
+	        throw new IllegalStateException("Solo se puede iniciar si está ABIERTA");
+	    }
+	    this.estado = EstadoSolicitud.EN_PROCESO;
+	}
 
 	public Tecnico getTecnico() {
 		return tecnico;
