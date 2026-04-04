@@ -5,13 +5,30 @@ import java.time.LocalDateTime;
 public class Solicitud {
 
     private Long id;
-    private String estado;
+    private EstadoSolicitud estado;
     private LocalDateTime fechaCreacion;
+    public enum EstadoSolicitud{ ABIERTA, EN_PROCESO, CERRADA };
+    private Tecnico tecnico;
 
     public Solicitud() {
     }
 
-    public Solicitud(Long id, String estado, LocalDateTime fechaCreacion) {
+    public Solicitud(Long id, EstadoSolicitud estado, LocalDateTime fechaCreacion) {
+    	if (id == null || id < 0) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+
+        if (estado == null) {
+            throw new IllegalArgumentException("Estado obligatorio");
+        }
+
+        if (fechaCreacion == null) {
+            throw new IllegalArgumentException("Fecha obligatoria");
+        }
+
+        if (fechaCreacion.isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Fecha no puede ser futura");
+        }
         this.id = id;
         this.estado = estado;
         this.fechaCreacion = fechaCreacion;
@@ -21,7 +38,7 @@ public class Solicitud {
         return id;
     }
 
-    public String getEstado() {
+    public EstadoSolicitud getEstado() {
         return estado;
     }
 
@@ -33,11 +50,34 @@ public class Solicitud {
         this.id = id;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
+
+	public void cerrar() {
+		if(this.estado != EstadoSolicitud.EN_PROCESO) {
+			throw new IllegalStateException("Solo se puede cerrar solicitudes si no está en proceso ");
+		}
+	this.estado = EstadoSolicitud.CERRADA;
+		
+	}
+	public void iniciarProceso() {
+	    if (this.estado != EstadoSolicitud.ABIERTA) {
+	        throw new IllegalStateException("Solo se puede iniciar si está ABIERTA");
+	    }
+	    this.estado = EstadoSolicitud.EN_PROCESO;
+	}
+
+	public Tecnico getTecnico() {
+		return tecnico;
+	}
+	
+	public void asignarTecnico(Tecnico t) {
+		if(this.estado == EstadoSolicitud.CERRADA) {
+			throw new IllegalArgumentException("No se puede asignar un tecnico a una solicitud cerrada");
+		}
+		if(!t.isActivo() || t == null) throw new IllegalArgumentException("No se puede asignar un tecnico inactivo");
+		this.tecnico = t;
+		
+	}
 }
