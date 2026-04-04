@@ -19,22 +19,6 @@ void noCerrarEnProceso() {
 }
 
 @Test
-void cerrarSolicitudEnProceso() {
-    Solicitud s = new Solicitud(1L, EstadoSolicitud.EN_PROCESO, LocalDateTime.now());
-
-    s.cerrar();
-
-    assertEquals(EstadoSolicitud.CERRADA, s.getEstado());
-}
-
-@Test
-void cambiarSolicitudAbiertaAEnProceso() {
-    Solicitud s = new Solicitud(1L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
-    s.iniciarProceso();
-    assertEquals(EstadoSolicitud.EN_PROCESO, s.getEstado());
-}
-
-@Test
 void asignaTecnicoActivo() {
 	Solicitud s = new Solicitud(2L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
 	Tecnico t = new Tecnico("Francisco", true);
@@ -48,5 +32,42 @@ void asignaTecnicoInactivo() {
 	Solicitud s = new Solicitud(3L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
 	Tecnico t = new Tecnico("Jossue", false);
 	assertThrows(IllegalArgumentException.class, () -> { s.asignarTecnico(t); });
+}
+
+@Test
+void cerrarSolicitudEnProceso() {
+    Solicitud s = new Solicitud(4L, EstadoSolicitud.EN_PROCESO, LocalDateTime.now());
+
+    s.cerrar();
+
+    assertEquals(EstadoSolicitud.CERRADA, s.getEstado());
+}
+
+@Test
+void cambiarSolicitudAbiertaAEnProceso() {
+    Solicitud s = new Solicitud(5L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
+    s.iniciarProceso();
+    assertEquals(EstadoSolicitud.EN_PROCESO, s.getEstado());
+}
+
+@Test
+void noCerrarSolicitudYaCerrada() {
+    Solicitud s = new Solicitud(6L, EstadoSolicitud.CERRADA, LocalDateTime.now());
+
+    assertThrows(IllegalStateException.class, () -> s.cerrar());
+}
+
+@Test
+void noIniciarProcesoSiYaEstaEnProceso() {
+    Solicitud s = new Solicitud(7L, EstadoSolicitud.EN_PROCESO, LocalDateTime.now());
+
+    assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
+}
+
+@Test
+void noIniciarProcesoSiEstaCerrada() {
+    Solicitud s = new Solicitud(8L, EstadoSolicitud.CERRADA, LocalDateTime.now());
+
+    assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
 }
 }
