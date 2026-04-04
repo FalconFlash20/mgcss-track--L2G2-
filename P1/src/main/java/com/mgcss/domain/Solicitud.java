@@ -14,6 +14,21 @@ public class Solicitud {
     }
 
     public Solicitud(Long id, EstadoSolicitud estado, LocalDateTime fechaCreacion) {
+    	if (id == null || id < 0) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+
+        if (estado == null) {
+            throw new IllegalArgumentException("Estado obligatorio");
+        }
+
+        if (fechaCreacion == null) {
+            throw new IllegalArgumentException("Fecha obligatoria");
+        }
+
+        if (fechaCreacion.isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Fecha no puede ser futura");
+        }
         this.id = id;
         this.estado = estado;
         this.fechaCreacion = fechaCreacion;

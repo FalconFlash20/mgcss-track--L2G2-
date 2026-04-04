@@ -70,4 +70,39 @@ void noIniciarProcesoSiEstaCerrada() {
 
     assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
 }
+
+@Test
+void noCrearSolicitudSinId() {
+    assertThrows(IllegalArgumentException.class, () -> {
+        new Solicitud(null, EstadoSolicitud.ABIERTA, LocalDateTime.now());
+    });
+}
+
+@Test
+void noCrearSolicitudConIdNegativo() {
+    assertThrows(IllegalArgumentException.class, () -> {
+        new Solicitud(-1L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
+    });
+}
+
+@Test
+void noCrearSolicitudSinEstado() {
+    assertThrows(IllegalArgumentException.class, () -> {
+        new Solicitud(1L, null, LocalDateTime.now());
+    });
+}
+
+@Test
+void noCrearSolicitudSinFecha() {
+    assertThrows(IllegalArgumentException.class, () -> {
+        new Solicitud(1L, EstadoSolicitud.ABIERTA, null);
+    });
+}
+
+@Test
+void noCrearSolicitudConFechaFutura() {
+    assertThrows(IllegalArgumentException.class, () -> {
+        new Solicitud(1L, EstadoSolicitud.ABIERTA, LocalDateTime.now().plusDays(1));
+    });
+}
 }
