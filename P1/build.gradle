@@ -3,12 +3,24 @@ plugins {
 	id 'org.springframework.boot' version '4.0.3'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id "org.sonarqube" version "7.2.3.7755"
+	id "jacoco"
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 description = 'Demo project for Spring Boot'
 
+tasks.named('test') {
+	useJUnitPlatform()
+    finalizedBy jacocoTestReport // <--- 2. ESTO HACE QUE AL ACABAR EL TEST SE GENERE EL REPORTE
+}
+
+// 3. AÑADIR ESTE BLOQUE PARA QUE EL REPORTE SEA COMPATIBLE CON SONAR
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
@@ -46,5 +58,6 @@ sonar {
   properties {
     property "sonar.projectKey", "FalconFlash20_mgcss-track--L2G2-"
     property "sonar.organization", "falconflash20"
+	  property "sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml"
   }
 }
