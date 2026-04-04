@@ -112,4 +112,11 @@ void noDesactivarTecnicoYaInactivo() {
 
     assertThrows(IllegalStateException.class, () -> t.desactivar());
 }
+
+@Test
+void noAsignarTecnicoNull() {
+    Solicitud s = new Solicitud(1L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
+
+    assertThrows(IllegalArgumentException.class, () -> s.asignarTecnico(null));
+}
 }

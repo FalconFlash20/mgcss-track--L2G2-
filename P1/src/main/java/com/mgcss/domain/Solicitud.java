@@ -46,14 +46,6 @@ public class Solicitud {
         return fechaCreacion;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
 	public void cerrar() {
 		if(this.estado != EstadoSolicitud.EN_PROCESO) {
 			throw new IllegalStateException("Solo se puede cerrar solicitudes si no está en proceso ");
@@ -76,7 +68,9 @@ public class Solicitud {
 		if(this.estado == EstadoSolicitud.CERRADA) {
 			throw new IllegalArgumentException("No se puede asignar un tecnico a una solicitud cerrada");
 		}
-		if(!t.isActivo() || t == null) throw new IllegalArgumentException("No se puede asignar un tecnico inactivo");
+		if (t == null || !t.isActivo()) {
+		    throw new IllegalArgumentException("No se puede asignar un tecnico inactivo");
+		}
 		this.tecnico = t;
 		
 	}
