@@ -105,4 +105,11 @@ void noCrearSolicitudConFechaFutura() {
         new Solicitud(1L, EstadoSolicitud.ABIERTA, LocalDateTime.now().plusDays(1));
     });
 }
+
+@Test
+void noDesactivarTecnicoYaInactivo() {
+    Tecnico t = new Tecnico("Fran", false);
+
+    assertThrows(IllegalStateException.class, () -> t.desactivar());
+}
 }

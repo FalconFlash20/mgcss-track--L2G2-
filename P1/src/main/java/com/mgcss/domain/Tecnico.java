@@ -11,4 +11,11 @@ public class Tecnico {
 	public boolean isActivo() {
 		return activo;
 	}
+	
+	public void desactivar() {
+	    if (!activo) {
+	        throw new IllegalStateException("Ya está inactivo");
+	    }
+	    this.activo = false;
+	}
 }
