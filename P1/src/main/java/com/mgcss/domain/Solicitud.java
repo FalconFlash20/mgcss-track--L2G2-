@@ -68,9 +68,11 @@ public class Solicitud {
 		if(this.estado == EstadoSolicitud.CERRADA) {
 			throw new IllegalArgumentException("No se puede asignar un tecnico a una solicitud cerrada");
 		}
+		
 		if (t == null || !t.isActivo()) {
 		    throw new IllegalArgumentException("No se puede asignar un tecnico inactivo");
 		}
+	
 		this.tecnico = t;
 		
 	}
