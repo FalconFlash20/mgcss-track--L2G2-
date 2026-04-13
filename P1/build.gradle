@@ -12,10 +12,9 @@ description = 'Demo project for Spring Boot'
 
 tasks.named('test') {
 	useJUnitPlatform()
-    finalizedBy jacocoTestReport // <--- 2. ESTO HACE QUE AL ACABAR EL TEST SE GENERE EL REPORTE
+    finalizedBy jacocoTestReport 
 }
 
-// 3. AÑADIR ESTE BLOQUE PARA QUE EL REPORTE SEA COMPATIBLE CON SONAR
 jacocoTestReport {
     reports {
         xml.required = true
@@ -23,7 +22,7 @@ jacocoTestReport {
 }
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
