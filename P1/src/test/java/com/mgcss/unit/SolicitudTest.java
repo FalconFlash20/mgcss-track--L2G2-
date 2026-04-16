@@ -102,7 +102,6 @@ void noCrearSolicitudConFechaFutura() {
 @Test
 void noDesactivarTecnicoYaInactivo() {
     Tecnico t = new Tecnico("Fran", false);
-
     assertThrows(IllegalStateException.class, () -> t.desactivar());
 }
 
