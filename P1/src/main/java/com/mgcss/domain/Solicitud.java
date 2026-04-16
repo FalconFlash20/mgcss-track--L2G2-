@@ -16,8 +16,12 @@ public class Solicitud {
     }
     @Enumerated(EnumType.STRING)
     private EstadoSolicitud estado;
+    private String descripcion;
+    private LocalDateTime fechaCierre;
     @Transient
     private Tecnico tecnico;
+    @Transient
+    private Cliente cliente;
 
     public Solicitud() {
     }
@@ -85,4 +89,17 @@ public class Solicitud {
 		this.tecnico = t;
 		
 	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public LocalDateTime getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
 }
