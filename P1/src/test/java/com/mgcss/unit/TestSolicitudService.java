@@ -1,4 +1,4 @@
-package com.mgcss;
+package com.mgcss.unit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -20,6 +21,7 @@ import com.mgcss.domain.Tecnico;
 import com.mgcss.service.SolicitudService;
 
 @ExtendWith(MockitoExtension.class)
+@Tag("unit")
 public class TestSolicitudService {
 	@Mock
 	private SolicitudRepository repository;
