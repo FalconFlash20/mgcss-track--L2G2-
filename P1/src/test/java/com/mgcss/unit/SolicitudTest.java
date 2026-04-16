@@ -1,4 +1,4 @@
-package com.mgcss;
+package com.mgcss.unit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -69,13 +69,6 @@ void noIniciarProcesoSiEstaCerrada() {
     Solicitud s = new Solicitud(8L, EstadoSolicitud.CERRADA, LocalDateTime.now());
 
     assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
-}
-
-@Test
-void noCrearSolicitudSinId() {
-    assertThrows(IllegalArgumentException.class, () -> {
-        new Solicitud(null, EstadoSolicitud.ABIERTA, LocalDateTime.now());
-    });
 }
 
 @Test

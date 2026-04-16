@@ -2,19 +2,28 @@ package com.mgcss.domain;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Solicitud {
 
-    private Long id;
-    private EstadoSolicitud estado;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
     private LocalDateTime fechaCreacion;
-    public enum EstadoSolicitud{ ABIERTA, EN_PROCESO, CERRADA };
+    public enum EstadoSolicitud {
+        ABIERTA, EN_PROCESO, CERRADA
+    }
+    @Enumerated(EnumType.STRING)
+    private EstadoSolicitud estado;
+    @Transient
     private Tecnico tecnico;
 
     public Solicitud() {
     }
 
     public Solicitud(Long id, EstadoSolicitud estado, LocalDateTime fechaCreacion) {
-    	if (id == null || id < 0) {
+    	if (id != null && id < 0) {
             throw new IllegalArgumentException("ID inválido");
         }
 
