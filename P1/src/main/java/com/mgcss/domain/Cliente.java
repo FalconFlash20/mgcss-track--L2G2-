@@ -15,7 +15,7 @@ public Cliente(Long id, String nombre, String email, TipoCliente tipoCliente) {
 	this.nombre = nombre;
 	this.email = email;
 	this.tipoCliente = tipoCliente;
-    if (id != null && id < 0) {
+   /* if (id != null && id < 0) {
         throw new IllegalArgumentException("ID inválido");
     }
 
@@ -29,7 +29,7 @@ public Cliente(Long id, String nombre, String email, TipoCliente tipoCliente) {
 
     if (tipoCliente == null) {
         throw new IllegalArgumentException("Tipo cliente obligatorio");
-    }
+    }*/
 }
 
 public Long getId() {

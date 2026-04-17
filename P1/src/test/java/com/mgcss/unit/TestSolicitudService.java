@@ -14,10 +14,12 @@ import org.mockito.Mock;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.mgcss.domain.Cliente;
 import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Solicitud.EstadoSolicitud;
 import com.mgcss.domain.SolicitudRepository;
 import com.mgcss.domain.Tecnico;
+import com.mgcss.domain.Cliente.TipoCliente;
 import com.mgcss.service.SolicitudService;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,13 +32,13 @@ public class TestSolicitudService {
 	
 	@Test
 	void deberiaLanzarExcepcionSiTecnicoInactivo() {
-		Tecnico t = new Tecnico("Juan", false);
-		Solicitud s = new Solicitud(1L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
+		Tecnico t = new Tecnico("Juan", false,"");
+		Cliente c=new Cliente(1L,"","",TipoCliente.STANDARD);
+		Solicitud s = new Solicitud(1L,"",EstadoSolicitud.ABIERTA, LocalDateTime.now(),c);
 		when(repository.findById(1L)).thenReturn(Optional.of(s));
 		Exception e = assertThrows(IllegalArgumentException.class, () -> {
 		    service.asignarTecnico(1L, t);
 		});
-
 		System.out.println(e.getMessage());
 		verify(repository, never()).save(any());
 	}
@@ -45,8 +47,9 @@ public class TestSolicitudService {
 	// Cuando se asigna un técnico válido, el servicio debe guardar la solicitud
 	@Test
 	void asignarTecnicoCorrectamente() {
-	    Solicitud s = new Solicitud(1L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
-	    Tecnico t = new Tecnico("Juan", true);
+		Tecnico t = new Tecnico("Juan", true,"");
+		Cliente c=new Cliente(1L,"","",TipoCliente.STANDARD);
+		Solicitud s = new Solicitud(1L,"",EstadoSolicitud.ABIERTA, LocalDateTime.now(),c);
 
 	    when(repository.findById(1L)).thenReturn(Optional.of(s));
 
@@ -61,11 +64,8 @@ public class TestSolicitudService {
 	//Si la solicitud no existe, lanzar excepción
 	@Test
 	void lanzarExcepcionSiSolicitudNoExiste() {
-
 	    when(repository.findById(1L)).thenReturn(Optional.empty());
-
-	    Tecnico t = new Tecnico("Juan", true);
-
+		Tecnico t = new Tecnico("Juan", true,"");
 	    Exception e = assertThrows(IllegalArgumentException.class,
 	        () -> { service.asignarTecnico(1L, t);});
 	    System.out.println(e.getMessage());

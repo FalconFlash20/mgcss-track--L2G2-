@@ -35,10 +35,6 @@ public class Solicitud {
 			throw new IllegalArgumentException("ID inválido");
 		}
 
-		if (descripcion == null || descripcion.isBlank()) {
-			throw new IllegalArgumentException("Descripción obligatoria");
-		}
-
 		if (estado == null) {
 			throw new IllegalArgumentException("Estado obligatorio");
 		}
@@ -50,10 +46,7 @@ public class Solicitud {
 		if (fechaCreacion.isAfter(LocalDateTime.now())) {
 			throw new IllegalArgumentException("Fecha no puede ser futura");
 		}
-
-		if (cliente == null) {
-			throw new IllegalArgumentException("Cliente obligatorio");
-		}
+		
 
 		this.id = id;
 		this.descripcion = descripcion;
