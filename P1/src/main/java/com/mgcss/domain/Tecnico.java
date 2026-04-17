@@ -25,14 +25,23 @@ public class Tecnico {
 		return nombre;
 	}
 
-
-
 	public String getEspecialidad() {
 		return especialidad;
 	}
 
 	public void setActivo(boolean activo) {
 		this.activo = activo;
+	}
+	// RN: Solo se puede cambiar la especialidad si el técnico está activo. 
+	// Además, no puede ser la misma que ya tiene.
+	public void actualizarEspecialidad(String nuevaEspecialidad) {
+	    if (!this.activo) {
+	        throw new IllegalStateException("No se puede cambiar especialidad de un técnico inactivo");
+	    }
+	    if (this.especialidad.equalsIgnoreCase(nuevaEspecialidad)) {
+	        throw new IllegalArgumentException("La nueva especialidad debe ser distinta a la actual");
+	    }
+	    this.especialidad = nuevaEspecialidad;
 	}
 	
 }

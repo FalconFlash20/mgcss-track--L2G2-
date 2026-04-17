@@ -3,57 +3,60 @@ package com.mgcss.domain;
 import java.util.function.BooleanSupplier;
 
 public class Cliente {
-private Long id;
-private String nombre;
-private String email;
-private TipoCliente tipoCliente;
+	private Long id;
+	private String nombre;
+	private String email;
+	private TipoCliente tipoCliente;
 
-public enum TipoCliente{
-	STANDARD, PREMIUM;
-}
+	public enum TipoCliente {
+		STANDARD, PREMIUM;
+	}
 
-public Cliente(Long id, String nombre, String email, TipoCliente tipoCliente) {
-	this.id = id;
-	this.nombre = nombre;
-	this.email = email;
-	this.tipoCliente = tipoCliente;
-   /* if (id != null && id < 0) {
-        throw new IllegalArgumentException("ID inválido");
-    }
+	public Cliente(Long id, String nombre, String email, TipoCliente tipoCliente) {
+		this.id = id;
+		this.nombre = nombre;
+		this.email = email;
+		this.tipoCliente = tipoCliente;
+		/*
+		 * if (id != null && id < 0) { throw new
+		 * IllegalArgumentException("ID inválido"); }
+		 * 
+		 * if (nombre == null || nombre.isBlank()) { throw new
+		 * IllegalArgumentException("Nombre obligatorio"); }
+		 * 
+		 * if (email == null || email.isBlank()) { throw new
+		 * IllegalArgumentException("Email obligatorio"); }
+		 * 
+		 * if (tipoCliente == null) { throw new
+		 * IllegalArgumentException("Tipo cliente obligatorio"); }
+		 */
+	}
 
-    if (nombre == null || nombre.isBlank()) {
-        throw new IllegalArgumentException("Nombre obligatorio");
-    }
+	public Long getId() {
+		return id;
+	}
 
-    if (email == null || email.isBlank()) {
-        throw new IllegalArgumentException("Email obligatorio");
-    }
+	public String getNombre() {
+		return nombre;
+	}
 
-    if (tipoCliente == null) {
-        throw new IllegalArgumentException("Tipo cliente obligatorio");
-    }*/
-}
+	public String getEmail() {
+		return email;
+	}
 
-public Long getId() {
-	return id;
-}
+	public TipoCliente getTipoCliente() {
+		return tipoCliente;
+	}
 
-
-public String getNombre() {
-	return nombre;
-}
-
-
-public String getEmail() {
-	return email;
-}
-
-public TipoCliente getTipoCliente() {
-	return tipoCliente;
-}
-
-public boolean TienePrioridad() {
-	return this.tipoCliente==tipoCliente.PREMIUM;
-}
-
+	public boolean TienePrioridad() {
+		return this.tipoCliente == TipoCliente.PREMIUM;
+	}
+	// RN: Los clientes estándar pueden ascender a Premium si su email es corporativo (.edu o .org)
+	public void ascenderCliente() {
+		if(this.tipoCliente==TipoCliente.STANDARD &&(email.endsWith(".org")||email.endsWith(".edu"))) {
+			this.tipoCliente=TipoCliente.PREMIUM;
+		} else if(this.tipoCliente==TipoCliente.PREMIUM) {
+			throw new IllegalStateException("El cliente ya no puede acceder más ");
+		}
+	}
 }

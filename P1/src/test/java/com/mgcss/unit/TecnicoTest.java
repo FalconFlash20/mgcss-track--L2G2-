@@ -37,4 +37,22 @@ public class TecnicoTest {
 		Tecnico t = new Tecnico("Fran", false, "");
 		assertThrows(IllegalStateException.class, () -> t.desactivar());
 	}
+	@Test
+	void testCambioEspecialidadCorrecto() {
+	    Tecnico t = new Tecnico("Fran", true, "Java");
+	    t.actualizarEspecialidad("Python");
+	    assertEquals("Python", t.getEspecialidad());
+	}
+
+	@Test
+	void testSadPathCambioEspecialidad() {
+	    Tecnico t = new Tecnico("Fran", true, "Java");
+	    
+	    // Error 1: Misma especialidad
+	    assertThrows(IllegalArgumentException.class, () -> t.actualizarEspecialidad("Java"));
+	    
+	    // Error 2: Técnico inactivo
+	    t.desactivar();
+	    assertThrows(IllegalStateException.class, () -> t.actualizarEspecialidad("C++"));
+	}
 }
