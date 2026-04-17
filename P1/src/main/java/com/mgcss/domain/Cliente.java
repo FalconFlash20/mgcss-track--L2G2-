@@ -1,5 +1,7 @@
 package com.mgcss.domain;
 
+import java.util.function.BooleanSupplier;
+
 public class Cliente {
 private Long id;
 private String nombre;
@@ -48,6 +50,10 @@ public String getEmail() {
 
 public TipoCliente getTipoCliente() {
 	return tipoCliente;
+}
+
+public boolean TienePrioridad() {
+	return this.tipoCliente==tipoCliente.PREMIUM;
 }
 
 }
