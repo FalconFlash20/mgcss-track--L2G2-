@@ -10,79 +10,105 @@ public class Solicitud {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-    private LocalDateTime fechaCreacion;
-    public enum EstadoSolicitud {
-        ABIERTA, EN_PROCESO, CERRADA
-    }
-    @Enumerated(EnumType.STRING)
-    private EstadoSolicitud estado;
-    @Transient
-    private Tecnico tecnico;
+	private LocalDateTime fechaCreacion;
 
-    public Solicitud() {
-    }
+	public enum EstadoSolicitud {
+		ABIERTA, EN_PROCESO, CERRADA
+	}
 
-    public Solicitud(Long id, EstadoSolicitud estado, LocalDateTime fechaCreacion) {
-    	if (id != null && id < 0) {
-            throw new IllegalArgumentException("ID inválido");
-        }
+	@Enumerated(EnumType.STRING)
+	private EstadoSolicitud estado;
+	private String descripcion;
+	private LocalDateTime fechaCierre;
+	@Transient
+	private Tecnico tecnico;
+	@Transient
+	private Cliente cliente;
 
-        if (estado == null) {
-            throw new IllegalArgumentException("Estado obligatorio");
-        }
+	public Solicitud() {
+	}
 
-        if (fechaCreacion == null) {
-            throw new IllegalArgumentException("Fecha obligatoria");
-        }
+	public Solicitud(Long id, String descripcion, EstadoSolicitud estado, LocalDateTime fechaCreacion,
+			Cliente cliente) {
 
-        if (fechaCreacion.isAfter(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Fecha no puede ser futura");
-        }
-        this.id = id;
-        this.estado = estado;
-        this.fechaCreacion = fechaCreacion;
-    }
+		if (id != null && id < 0) {
+			throw new IllegalArgumentException("ID inválido");
+		}
 
-    public Long getId() {
-        return id;
-    }
+		if (estado == null) {
+			throw new IllegalArgumentException("Estado obligatorio");
+		}
 
-    public EstadoSolicitud getEstado() {
-        return estado;
-    }
+		if (fechaCreacion == null) {
+			throw new IllegalArgumentException("Fecha obligatoria");
+		}
 
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
+		if (fechaCreacion.isAfter(LocalDateTime.now())) {
+			throw new IllegalArgumentException("Fecha no puede ser futura");
+		}
+		
+
+		this.id = id;
+		this.descripcion = descripcion;
+		this.estado = estado;
+		this.fechaCreacion = fechaCreacion;
+		this.cliente = cliente;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public EstadoSolicitud getEstado() {
+		return estado;
+	}
+
+	public LocalDateTime getFechaCreacion() {
+		return fechaCreacion;
+	}
 
 	public void cerrar() {
-		if(this.estado != EstadoSolicitud.EN_PROCESO) {
+		if (this.estado != EstadoSolicitud.EN_PROCESO) {
 			throw new IllegalStateException("Solo se puede cerrar solicitudes si no está en proceso ");
 		}
-	this.estado = EstadoSolicitud.CERRADA;
-		
+		this.estado = EstadoSolicitud.CERRADA;
+
 	}
+
 	public void iniciarProceso() {
-	    if (this.estado != EstadoSolicitud.ABIERTA) {
-	        throw new IllegalStateException("Solo se puede iniciar si está ABIERTA");
-	    }
-	    this.estado = EstadoSolicitud.EN_PROCESO;
+		if (this.estado != EstadoSolicitud.ABIERTA) {
+			throw new IllegalStateException("Solo se puede iniciar si está ABIERTA");
+		}
+		this.estado = EstadoSolicitud.EN_PROCESO;
 	}
 
 	public Tecnico getTecnico() {
 		return tecnico;
 	}
-	
+
 	public void asignarTecnico(Tecnico t) {
-		if(this.estado == EstadoSolicitud.CERRADA) {
+		if (this.estado == EstadoSolicitud.CERRADA) {
 			throw new IllegalArgumentException("No se puede asignar un tecnico a una solicitud cerrada");
 		}
-		
+
 		if (t == null || !t.isActivo()) {
-		    throw new IllegalArgumentException("No se puede asignar un tecnico inactivo");
+			throw new IllegalArgumentException("No se puede asignar un tecnico inactivo");
 		}
-	
+
 		this.tecnico = t;
-		
+
 	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public LocalDateTime getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
 }

@@ -3,9 +3,11 @@ package com.mgcss.domain;
 public class Tecnico {
 	private String nombre;
 	private boolean activo;
-	public Tecnico(String nombre, boolean activo) {
+	private String especialidad;
+	public Tecnico(String nombre, boolean activo,String especialidad) {
 		this.nombre = nombre;
 		this.activo = activo;
+		this.especialidad=especialidad;
 	}
 	
 	public boolean isActivo() {
@@ -18,4 +20,28 @@ public class Tecnico {
 	    }
 	    this.activo = false;
 	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getEspecialidad() {
+		return especialidad;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+	// RN: Solo se puede cambiar la especialidad si el técnico está activo. 
+	// Además, no puede ser la misma que ya tiene.
+	public void actualizarEspecialidad(String nuevaEspecialidad) {
+	    if (!this.activo) {
+	        throw new IllegalStateException("No se puede cambiar especialidad de un técnico inactivo");
+	    }
+	    if (this.especialidad.equalsIgnoreCase(nuevaEspecialidad)) {
+	        throw new IllegalArgumentException("La nueva especialidad debe ser distinta a la actual");
+	    }
+	    this.especialidad = nuevaEspecialidad;
+	}
+	
 }

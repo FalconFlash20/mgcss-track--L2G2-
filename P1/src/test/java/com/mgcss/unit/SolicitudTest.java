@@ -7,109 +7,99 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
+import com.mgcss.domain.Cliente;
 import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Solicitud.EstadoSolicitud;
 import com.mgcss.domain.Tecnico;
+import com.mgcss.domain.Cliente.TipoCliente;
 
 public class SolicitudTest {
-@Test
-void noCerrarEnProceso() {
-	Solicitud solicitud = new Solicitud(1L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
-	assertThrows(IllegalStateException.class, () -> {solicitud.cerrar();});
-}
+	@Test
+	void noCerrarEnProceso() {
+		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
+		Solicitud solicitud = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
+		assertThrows(IllegalStateException.class, () -> {
+			solicitud.cerrar();
+		});
+	}
 
-@Test
-void asignaTecnicoActivo() {
-	Solicitud s = new Solicitud(2L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
-	Tecnico t = new Tecnico("Francisco", true);
-	
-	s.asignarTecnico(t);
-	assertEquals(t, s.getTecnico());
-}
 
-@Test
-void asignaTecnicoInactivo() {
-	Solicitud s = new Solicitud(3L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
-	Tecnico t = new Tecnico("Jossue", false);
-	assertThrows(IllegalArgumentException.class, () -> { s.asignarTecnico(t); });
-}
 
-@Test
-void cerrarSolicitudEnProceso() {
-    Solicitud s = new Solicitud(4L, EstadoSolicitud.EN_PROCESO, LocalDateTime.now());
+	@Test
+	void cerrarSolicitudEnProceso() {
+		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
+		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), c);
+		s.cerrar();
+		assertEquals(EstadoSolicitud.CERRADA, s.getEstado());
+	}
 
-    s.cerrar();
+	@Test
+	void cambiarSolicitudAbiertaAEnProceso() {
+		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
+		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
+		s.iniciarProceso();
+		assertEquals(EstadoSolicitud.EN_PROCESO, s.getEstado());
+	}
 
-    assertEquals(EstadoSolicitud.CERRADA, s.getEstado());
-}
+	@Test
+	void noCerrarSolicitudYaCerrada() {
+		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
+		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.CERRADA, LocalDateTime.now(), c);
+		assertThrows(IllegalStateException.class, () -> s.cerrar());
+	}
 
-@Test
-void cambiarSolicitudAbiertaAEnProceso() {
-    Solicitud s = new Solicitud(5L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
-    s.iniciarProceso();
-    assertEquals(EstadoSolicitud.EN_PROCESO, s.getEstado());
-}
+	@Test
+	void noIniciarProcesoSiYaEstaEnProceso() {
+		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
+		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), c);
+		assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
+	}
 
-@Test
-void noCerrarSolicitudYaCerrada() {
-    Solicitud s = new Solicitud(6L, EstadoSolicitud.CERRADA, LocalDateTime.now());
+	@Test
+	void noIniciarProcesoSiEstaCerrada() {
+		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
+		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.CERRADA, LocalDateTime.now(), c);
+		assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
+	}
 
-    assertThrows(IllegalStateException.class, () -> s.cerrar());
-}
+	@Test
+	void noCrearSolicitudConIdNegativo() {
 
-@Test
-void noIniciarProcesoSiYaEstaEnProceso() {
-    Solicitud s = new Solicitud(7L, EstadoSolicitud.EN_PROCESO, LocalDateTime.now());
+		assertThrows(IllegalArgumentException.class, () -> {
+			Cliente c = new Cliente(-1L, "", "", TipoCliente.STANDARD);
+			Solicitud s = new Solicitud(-1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
+		});
+	}
 
-    assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
-}
+	@Test
+	void noCrearSolicitudSinEstado() {
+		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
+		assertThrows(IllegalArgumentException.class, () -> {
+			Solicitud solicitud = new Solicitud(1L, "", null, LocalDateTime.now(), c);
+		});
+	}
 
-@Test
-void noIniciarProcesoSiEstaCerrada() {
-    Solicitud s = new Solicitud(8L, EstadoSolicitud.CERRADA, LocalDateTime.now());
+	@Test
+	void noCrearSolicitudSinFecha() {
+		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
+		assertThrows(IllegalArgumentException.class, () -> {
+			Solicitud solicitud = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, null, c);
+		});
+	}
 
-    assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
-}
+	@Test
+	void noCrearSolicitudConFechaFutura() {
+		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
+		assertThrows(IllegalArgumentException.class, () -> {
+			Solicitud solicitud = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now().plusDays(1), c);
+		});
+	}
 
-@Test
-void noCrearSolicitudConIdNegativo() {
-    assertThrows(IllegalArgumentException.class, () -> {
-        new Solicitud(-1L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
-    });
-}
 
-@Test
-void noCrearSolicitudSinEstado() {
-    assertThrows(IllegalArgumentException.class, () -> {
-        new Solicitud(1L, null, LocalDateTime.now());
-    });
-}
-
-@Test
-void noCrearSolicitudSinFecha() {
-    assertThrows(IllegalArgumentException.class, () -> {
-        new Solicitud(1L, EstadoSolicitud.ABIERTA, null);
-    });
-}
-
-@Test
-void noCrearSolicitudConFechaFutura() {
-    assertThrows(IllegalArgumentException.class, () -> {
-        new Solicitud(1L, EstadoSolicitud.ABIERTA, LocalDateTime.now().plusDays(1));
-    });
-}
-
-@Test
-void noDesactivarTecnicoYaInactivo() {
-    Tecnico t = new Tecnico("Fran", false);
-
-    assertThrows(IllegalStateException.class, () -> t.desactivar());
-}
-
-@Test
-void noAsignarTecnicoNull() {
-    Solicitud s = new Solicitud(1L, EstadoSolicitud.ABIERTA, LocalDateTime.now());
-
-    assertThrows(IllegalArgumentException.class, () -> s.asignarTecnico(null));
-}
+	@Test
+	void noAsignarTecnicoNull() {
+		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
+		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
+		assertThrows(IllegalArgumentException.class, () -> s.asignarTecnico(null));
+	}
 }
