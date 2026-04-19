@@ -65,8 +65,13 @@ public class ClienteTest {
 	@Test
 	public void ErrorAlDesbloquearCuentaYaActiva() {
 		Cliente c = new Cliente(1L, "Pepe", "pepe@gmail.com", TipoCliente.STANDARD);
-
 		assertThrows(IllegalStateException.class, () -> c.desbloquearCuenta());
+	}
+	@Test
+	public void ErrorAlDesbloquearClienteSinNombre() {
+		Cliente c = new Cliente(1L, null, "pepe@gmail.com", TipoCliente.STANDARD);
+		c.bloquearCuenta();
+		assertThrows(IllegalArgumentException.class, ()->c.desbloquearCuenta());
 	}
 	@Test
 	public void VerificacionExitosa() {

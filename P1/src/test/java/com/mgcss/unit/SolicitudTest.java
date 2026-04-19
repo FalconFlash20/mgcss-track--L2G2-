@@ -137,5 +137,14 @@ public class SolicitudTest {
 	    s2.marcarComoUrgente();
 	    assertTrue(s2.isUrgente());
 	}
+	@Test
+	void testMarcarUrgenteEnEstadoCerrado() {
+	    // Cubre la condición de que no se puede marcar urgente si está CERRADA
+	    Cliente c = new Cliente(1L, "P", "p@p.com", Cliente.TipoCliente.STANDARD);
+	    Solicitud s = new Solicitud(1L, "Desc larga para testear urgencia", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), c);
+	    s.asignarTecnico(new Tecnico("Fran", true, "IT"));
+	    s.cerrar();
+	    assertThrows(IllegalStateException.class, () -> s.marcarComoUrgente());
+	}
 	
 }

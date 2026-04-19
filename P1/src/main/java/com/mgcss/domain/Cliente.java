@@ -99,7 +99,7 @@ public class Cliente {
 	    if (!this.bloqueado) {
 	        throw new IllegalStateException("La cuenta ya está activa.");
 	    }
-	    if (this.nombre == null || this.nombre.isBlank()) {
+	    if (this.nombre == null || this.nombre.trim().isEmpty()) {
 	        throw new IllegalArgumentException("No se puede desbloquear una cuenta sin nombre titular.");
 	    }
 	    this.bloqueado = false;
