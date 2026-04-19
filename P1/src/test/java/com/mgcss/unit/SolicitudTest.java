@@ -116,4 +116,20 @@ public class SolicitudTest {
 	    assertEquals(EstadoSolicitud.ABIERTA, s.getEstado());
 	    assertNull(s.getTecnico());
 	}
+	@Test
+	void MarcarUrgenteClientePremium() {
+	    Cliente vip = new Cliente(1L, "Empresa", "info@empresa.com", Cliente.TipoCliente.PREMIUM);
+	    Solicitud s = new Solicitud(1L, "Desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), vip);
+	    
+	    s.marcarComoUrgente();
+	    assertTrue(s.isUrgente());
+	}
+
+	@Test
+	void ErrorUrgenteClienteEstandarDescCorta() {
+	    Cliente normal = new Cliente(1L, "Pepe", "p@p.com", Cliente.TipoCliente.STANDARD);
+	    Solicitud s = new Solicitud(1L, "Corta", EstadoSolicitud.ABIERTA, LocalDateTime.now(), normal);
+	    
+	    assertThrows(IllegalArgumentException.class, () -> s.marcarComoUrgente());
+	}
 }

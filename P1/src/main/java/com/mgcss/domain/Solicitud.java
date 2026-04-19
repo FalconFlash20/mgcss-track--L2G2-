@@ -20,6 +20,7 @@ public class Solicitud {
 	private EstadoSolicitud estado;
 	private String descripcion;
 	private LocalDateTime fechaCierre;
+	private boolean urgente;
 	@Transient
 	private Tecnico tecnico;
 	@Transient
@@ -65,6 +66,11 @@ public class Solicitud {
 
 	public LocalDateTime getFechaCreacion() {
 		return fechaCreacion;
+	}
+	
+	
+	public boolean isUrgente() {
+		return urgente;
 	}
 
 	public void cerrar() {
@@ -115,6 +121,28 @@ public class Solicitud {
 
 	public Cliente getCliente() {
 		return cliente;
+	}
+	// RN: Una solicitud solo se puede marcar como urgente si está ABIERTA o EN_PROCESO.
+	// Además, si el cliente es PREMIUM, se marca como urgente automáticamente.
+	// Si ya es urgente, no se puede volver a marcar .
+	public void marcarComoUrgente() {
+	    if (this.urgente) {
+	        throw new IllegalStateException("La solicitud ya tiene prioridad urgente.");
+	    }
+	    if (this.estado == EstadoSolicitud.CERRADA) {
+	        throw new IllegalStateException("No se puede dar prioridad a una solicitud cerrada.");
+	    }
+	    
+	    if (this.cliente != null && this.cliente.getTipoCliente() == Cliente.TipoCliente.PREMIUM) {
+	        this.urgente = true;
+	    } else {
+	        // Si no es premium, necesitamos que la descripción sea larga para ser urgente
+	        if (this.descripcion != null && this.descripcion.length() > 20) {
+	            this.urgente = true;
+	        } else {
+	            throw new IllegalArgumentException("Descripción demasiado corta para prioridad urgente en clientes estándar.");
+	        }
+	    }
 	}
 
 }
