@@ -76,9 +76,16 @@ public class ClienteTest {
 	}
 
 	@Test
-	public void ErrorDobleVerificacion() {
-	    Cliente c = new Cliente(1L, "Pepe", "pepe@gmail.com", TipoCliente.STANDARD);
-	    c.verificarIdentidad();
-	    assertThrows(IllegalStateException.class, () -> c.verificarIdentidad());
+	public void ErrorVerificacion() {
+		// Prueba email null
+	    Cliente c1 = new Cliente(1L, "Pepe", null, TipoCliente.STANDARD);
+	    assertThrows(IllegalArgumentException.class, () -> c1.verificarIdentidad());
+	    
+	    // Prueba email sin arroba
+	    Cliente c2 = new Cliente(2L, "Pepe", "gmail.com", TipoCliente.STANDARD);
+	    assertThrows(IllegalArgumentException.class, () -> c2.verificarIdentidad());
+	    Cliente c3 = new Cliente(1L, "Pepe", "pepe@gmail.com", TipoCliente.STANDARD);
+	    c3.verificarIdentidad();
+	    assertThrows(IllegalStateException.class, () -> c3.verificarIdentidad());
 	}
 }

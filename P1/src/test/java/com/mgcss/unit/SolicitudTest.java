@@ -127,9 +127,15 @@ public class SolicitudTest {
 
 	@Test
 	void ErrorUrgenteClienteEstandarDescCorta() {
-	    Cliente normal = new Cliente(1L, "Pepe", "p@p.com", Cliente.TipoCliente.STANDARD);
-	    Solicitud s = new Solicitud(1L, "Corta", EstadoSolicitud.ABIERTA, LocalDateTime.now(), normal);
-	    
-	    assertThrows(IllegalArgumentException.class, () -> s.marcarComoUrgente());
+		Cliente normal = new Cliente(1L, "Pepe", "p@p.com", Cliente.TipoCliente.STANDARD);
+	    // Caso 1: Estándar con descripción corta (Salta el último throw)
+	    Solicitud s1 = new Solicitud(1L, "Corta", EstadoSolicitud.ABIERTA, LocalDateTime.now(), normal);
+	    assertThrows(IllegalArgumentException.class, () -> s1.marcarComoUrgente());
+
+	    // Caso 2: Estándar con descripción larga (Entra en el else if)
+	    Solicitud s2 = new Solicitud(2L, "Descripción suficientemente larga para test", EstadoSolicitud.ABIERTA, LocalDateTime.now(), normal);
+	    s2.marcarComoUrgente();
+	    assertTrue(s2.isUrgente());
 	}
+	
 }
