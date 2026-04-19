@@ -28,7 +28,7 @@ public class ClienteTest {
 	}
 
 	@Test
-	void testFalloAscensoPremium() {
+	public void testFalloAscensoPremium() {
 		// Caso 1: Email normal no asciende
 		Cliente c1 = new Cliente(1L, "Pepe", "pepe@gmail.com", TipoCliente.STANDARD);
 		c1.ascenderCliente();
@@ -40,21 +40,21 @@ public class ClienteTest {
 	}
 
 	@Test
-	void testBloqueoClienteStandardExitoso() {
+	public void testBloqueoClienteStandardExitoso() {
 		Cliente c = new Cliente(1L, "Pepe", "pepe@gmail.com", TipoCliente.STANDARD);
 		c.bloquearCuenta();
 		assertTrue(c.isBloqueado());
 	}
 
 	@Test
-	void ErrorAlBloquearClientePremium() {
+	public void ErrorAlBloquearClientePremium() {
 		Cliente c = new Cliente(1L, "Empresa VIP", "vip@empresa.com", TipoCliente.PREMIUM);
 
 		assertThrows(IllegalStateException.class, () -> c.bloquearCuenta());
 	}
 
 	@Test
-	void testDesbloqueoExitoso() {
+	public void testDesbloqueoExitoso() {
 		Cliente c = new Cliente(1L, "Pepe", "pepe@gmail.com", TipoCliente.STANDARD);
 		c.bloquearCuenta(); // Lo bloqueamos primero
 
@@ -63,9 +63,22 @@ public class ClienteTest {
 	}
 
 	@Test
-	void ErrorAlDesbloquearCuentaYaActiva() {
+	public void ErrorAlDesbloquearCuentaYaActiva() {
 		Cliente c = new Cliente(1L, "Pepe", "pepe@gmail.com", TipoCliente.STANDARD);
 
 		assertThrows(IllegalStateException.class, () -> c.desbloquearCuenta());
+	}
+	@Test
+	public void VerificacionExitosa() {
+	    Cliente c = new Cliente(1L, "Pepe", "pepe@gmail.com", TipoCliente.STANDARD);
+	    c.verificarIdentidad();
+	    assertTrue(c.isVerificado());
+	}
+
+	@Test
+	public void ErrorDobleVerificacion() {
+	    Cliente c = new Cliente(1L, "Pepe", "pepe@gmail.com", TipoCliente.STANDARD);
+	    c.verificarIdentidad();
+	    assertThrows(IllegalStateException.class, () -> c.verificarIdentidad());
 	}
 }

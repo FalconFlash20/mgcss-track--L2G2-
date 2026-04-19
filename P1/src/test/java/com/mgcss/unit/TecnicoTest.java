@@ -15,7 +15,7 @@ import com.mgcss.domain.Solicitud.EstadoSolicitud;
 
 public class TecnicoTest {
 	@Test
-	void asignaTecnicoActivo() {
+	public void asignaTecnicoActivo() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
 		Tecnico t = new Tecnico("Francisco", true, "");
@@ -24,7 +24,7 @@ public class TecnicoTest {
 		assertEquals(t, s.getTecnico());
 	}
 	@Test
-	void asignaTecnicoInactivo() {
+	public void asignaTecnicoInactivo() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		Solicitud s = new Solicitud(null, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
 		Tecnico t = new Tecnico("Jossue", false, "");
@@ -33,19 +33,19 @@ public class TecnicoTest {
 		});
 	}
 	@Test
-	void noDesactivarTecnicoYaInactivo() {
+	public void noDesactivarTecnicoYaInactivo() {
 		Tecnico t = new Tecnico("Fran", false, "");
 		assertThrows(IllegalStateException.class, () -> t.desactivar());
 	}
 	@Test
-	void testCambioEspecialidadCorrecto() {
+	public void testCambioEspecialidadCorrecto() {
 	    Tecnico t = new Tecnico("Fran", true, "Java");
 	    t.actualizarEspecialidad("Python");
 	    assertEquals("Python", t.getEspecialidad());
 	}
 
 	@Test
-	void ExcepcionCambioEspecialidad() {
+	public void ExcepcionCambioEspecialidad() {
 	    Tecnico t = new Tecnico("Fran", true, "Java");
 	    
 	    // Error 1: Misma especialidad
@@ -57,13 +57,13 @@ public class TecnicoTest {
 	}
 	
 	@Test
-	void testErrorAlDesactivarSeguridadSinEmergencia() {
+	public void testErrorAlDesactivarSeguridadSinEmergencia() {
 	    Tecnico t = new Tecnico("Fran", true, "Seguridad");
 	    assertThrows(IllegalStateException.class, () -> t.desactivarSeguro(false));
 	}
 
 	@Test
-	void testDesactivarSeguridadConEmergencia() {
+	public void testDesactivarSeguridadConEmergencia() {
 	    Tecnico t = new Tecnico("Fran", true, "Seguridad");
 	    t.desactivarSeguro(true);
 	    assertFalse(t.isActivo());

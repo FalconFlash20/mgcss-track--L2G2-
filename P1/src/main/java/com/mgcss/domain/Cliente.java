@@ -11,6 +11,7 @@ public class Cliente {
 	private String nombre;
 	private String email;
 	private boolean bloqueado;
+	private boolean verificado;
 	@Enumerated(EnumType.STRING)
 	private TipoCliente tipoCliente;
 
@@ -58,6 +59,11 @@ public class Cliente {
 		return bloqueado;
 	}
 
+	
+	public boolean isVerificado() {
+		return verificado;
+	}
+
 	public boolean TienePrioridad() {
 		return this.tipoCliente == TipoCliente.PREMIUM;
 	}
@@ -97,5 +103,16 @@ public class Cliente {
 	        throw new IllegalArgumentException("No se puede desbloquear una cuenta sin nombre titular.");
 	    }
 	    this.bloqueado = false;
+	}
+	// RN: Solo se puede verificar si el email es válido (contiene @) y el nombre no es nulo.
+	// Además, si ya está verificado, no se puede volver a hacer (lanza excepción).
+	public void verificarIdentidad() {
+	    if (this.verificado) {
+	        throw new IllegalStateException("El cliente ya ha sido verificado anteriormente.");
+	    }
+	    if (this.email == null || !this.email.contains("@")) {
+	        throw new IllegalArgumentException("No se puede verificar: Email inválido.");
+	    }
+	    this.verificado = true;
 	}
 }

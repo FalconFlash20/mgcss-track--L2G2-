@@ -15,7 +15,7 @@ import com.mgcss.domain.Cliente.TipoCliente;
 
 public class SolicitudTest {
 	@Test
-	void noCerrarEnProceso() {
+	public void noCerrarEnProceso() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		Solicitud solicitud = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
 		assertThrows(IllegalStateException.class, () -> {
@@ -26,7 +26,7 @@ public class SolicitudTest {
 
 
 	@Test
-	void cerrarSolicitudEnProceso() {
+	public void cerrarSolicitudEnProceso() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), c);
 		s.cerrar();
@@ -34,7 +34,7 @@ public class SolicitudTest {
 	}
 
 	@Test
-	void cambiarSolicitudAbiertaAEnProceso() {
+	public void cambiarSolicitudAbiertaAEnProceso() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
 		s.iniciarProceso();
@@ -42,28 +42,28 @@ public class SolicitudTest {
 	}
 
 	@Test
-	void noCerrarSolicitudYaCerrada() {
+	public void noCerrarSolicitudYaCerrada() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.CERRADA, LocalDateTime.now(), c);
 		assertThrows(IllegalStateException.class, () -> s.cerrar());
 	}
 
 	@Test
-	void noIniciarProcesoSiYaEstaEnProceso() {
+	public void noIniciarProcesoSiYaEstaEnProceso() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), c);
 		assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
 	}
 
 	@Test
-	void noIniciarProcesoSiEstaCerrada() {
+	public void noIniciarProcesoSiEstaCerrada() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.CERRADA, LocalDateTime.now(), c);
 		assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
 	}
 
 	@Test
-	void noCrearSolicitudConIdNegativo() {
+	public void noCrearSolicitudConIdNegativo() {
 
 		assertThrows(IllegalArgumentException.class, () -> {
 			Cliente c = new Cliente(-1L, "", "", TipoCliente.STANDARD);
@@ -72,7 +72,7 @@ public class SolicitudTest {
 	}
 
 	@Test
-	void noCrearSolicitudSinEstado() {
+	public void noCrearSolicitudSinEstado() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		assertThrows(IllegalArgumentException.class, () -> {
 			Solicitud solicitud = new Solicitud(1L, "", null, LocalDateTime.now(), c);
@@ -80,7 +80,7 @@ public class SolicitudTest {
 	}
 
 	@Test
-	void noCrearSolicitudSinFecha() {
+	public void noCrearSolicitudSinFecha() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		assertThrows(IllegalArgumentException.class, () -> {
 			Solicitud solicitud = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, null, c);
@@ -88,7 +88,7 @@ public class SolicitudTest {
 	}
 
 	@Test
-	void noCrearSolicitudConFechaFutura() {
+	public void noCrearSolicitudConFechaFutura() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		assertThrows(IllegalArgumentException.class, () -> {
 			Solicitud solicitud = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now().plusDays(1), c);
@@ -97,13 +97,13 @@ public class SolicitudTest {
 
 
 	@Test
-	void noAsignarTecnicoNull() {
+	public void noAsignarTecnicoNull() {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
 		assertThrows(IllegalArgumentException.class, () -> s.asignarTecnico(null));
 	}
 	@Test
-	void testReabrirSolicitudExitosa() {
+	public void testReabrirSolicitudExitosa() {
 	    Cliente c = new Cliente(1L, "P", "p@p.com", TipoCliente.STANDARD);
 	    Solicitud s = new Solicitud(1L, "D", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
 	    
