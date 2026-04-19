@@ -1,13 +1,17 @@
 package com.mgcss.domain;
 
-import java.util.function.BooleanSupplier;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name="clientes")
 public class Cliente {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String nombre;
 	private String email;
+	@Enumerated(EnumType.STRING)
 	private TipoCliente tipoCliente;
-
 	public enum TipoCliente {
 		STANDARD, PREMIUM;
 	}
@@ -50,6 +54,12 @@ public class Cliente {
 
 	public boolean TienePrioridad() {
 		return this.tipoCliente == TipoCliente.PREMIUM;
+	}
+	public void actualizarDatos(String nom,String correo ) {
+		if(nom!=null&& !nom.isBlank())
+			this.nombre=nom;
+		if(correo!=null&& !correo.isBlank())
+			this.email=correo;
 	}
 	// RN: Los clientes estándar pueden ascender a Premium si su email es corporativo (.edu o .org)
 	public void ascenderCliente() {
