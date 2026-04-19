@@ -3,15 +3,17 @@ package com.mgcss.domain;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="clientes")
+@Table(name = "clientes")
 public class Cliente {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nombre;
 	private String email;
+	private boolean bloqueado;
 	@Enumerated(EnumType.STRING)
 	private TipoCliente tipoCliente;
+
 	public enum TipoCliente {
 		STANDARD, PREMIUM;
 	}
@@ -52,21 +54,48 @@ public class Cliente {
 		return tipoCliente;
 	}
 
+	public boolean isBloqueado() {
+		return bloqueado;
+	}
+
 	public boolean TienePrioridad() {
 		return this.tipoCliente == TipoCliente.PREMIUM;
 	}
-	public void actualizarDatos(String nom,String correo ) {
-		if(nom!=null&& !nom.isBlank())
-			this.nombre=nom;
-		if(correo!=null&& !correo.isBlank())
-			this.email=correo;
+
+	public void actualizarDatos(String nom, String correo) {
+		if (nom != null && !nom.isBlank())
+			this.nombre = nom;
+		if (correo != null && !correo.isBlank())
+			this.email = correo;
 	}
-	// RN: Los clientes estándar pueden ascender a Premium si su email es corporativo (.edu o .org)
+
+	// RN: Los clientes estándar pueden ascender a Premium si su email es
+	// corporativo (.edu o .org)
 	public void ascenderCliente() {
-		if(this.tipoCliente==TipoCliente.STANDARD &&(email.endsWith(".org")||email.endsWith(".edu"))) {
-			this.tipoCliente=TipoCliente.PREMIUM;
-		} else if(this.tipoCliente==TipoCliente.PREMIUM) {
+		if (this.tipoCliente == TipoCliente.STANDARD && (email.endsWith(".org") || email.endsWith(".edu"))) {
+			this.tipoCliente = TipoCliente.PREMIUM;
+		} else if (this.tipoCliente == TipoCliente.PREMIUM) {
 			throw new IllegalStateException("El cliente ya no puede acceder más ");
 		}
+	}
+
+	// RN: Solo se puede bloquear a un cliente si NO es PREMIUM (los VIP tienen soporte especial).
+	// Si se intenta bloquear a un PREMIUM, lanza excepción.
+	public void bloquearCuenta() {
+	    if (this.tipoCliente == TipoCliente.PREMIUM) {
+	        throw new IllegalStateException("No se puede bloquear automáticamente a un cliente PREMIUM. Contacte con administración.");
+	    }
+	    this.bloqueado = true;
+	}
+
+	// RN: Para desbloquear, el nombre no puede estar vacío y el cliente debe estar bloqueado previamente.
+	public void desbloquearCuenta() {
+	    if (!this.bloqueado) {
+	        throw new IllegalStateException("La cuenta ya está activa.");
+	    }
+	    if (this.nombre == null || this.nombre.isBlank()) {
+	        throw new IllegalArgumentException("No se puede desbloquear una cuenta sin nombre titular.");
+	    }
+	    this.bloqueado = false;
 	}
 }
