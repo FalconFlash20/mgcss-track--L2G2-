@@ -98,7 +98,13 @@ public class Solicitud {
 		this.tecnico = t;
 
 	}
-
+	
+	public void reabrirSolicitud() {
+		if(this.estado!= EstadoSolicitud.CERRADA)
+			throw new IllegalStateException("Solo se pueden reabrir solicitudes cerradas");
+		this.estado=EstadoSolicitud.ABIERTA;
+		this.tecnico=null;
+	}
 	public String getDescripcion() {
 		return descripcion;
 	}

@@ -44,4 +44,13 @@ public class Tecnico {
 	    this.especialidad = nuevaEspecialidad;
 	}
 	
+	// RN: No se puede desactivar a un técnico cuya especialidad sea "Seguridad" 
+	// a menos que sea una emergencia (forzado).
+	public void desactivarSeguro(boolean esEmergencia) {
+	    if (this.especialidad.equalsIgnoreCase("Seguridad") && !esEmergencia) {
+	        throw new IllegalStateException("No se puede desactivar personal de Seguridad sin modo emergencia");
+	    }
+	    this.activo = false;
+	}
+	
 }

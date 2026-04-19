@@ -1,6 +1,6 @@
 package com.mgcss.unit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
@@ -45,7 +45,7 @@ public class TecnicoTest {
 	}
 
 	@Test
-	void testSadPathCambioEspecialidad() {
+	void ExcepcionCambioEspecialidad() {
 	    Tecnico t = new Tecnico("Fran", true, "Java");
 	    
 	    // Error 1: Misma especialidad
@@ -54,5 +54,18 @@ public class TecnicoTest {
 	    // Error 2: Técnico inactivo
 	    t.desactivar();
 	    assertThrows(IllegalStateException.class, () -> t.actualizarEspecialidad("C++"));
+	}
+	
+	@Test
+	void testErrorAlDesactivarSeguridadSinEmergencia() {
+	    Tecnico t = new Tecnico("Fran", true, "Seguridad");
+	    assertThrows(IllegalStateException.class, () -> t.desactivarSeguro(false));
+	}
+
+	@Test
+	void testDesactivarSeguridadConEmergencia() {
+	    Tecnico t = new Tecnico("Fran", true, "Seguridad");
+	    t.desactivarSeguro(true);
+	    assertFalse(t.isActivo());
 	}
 }

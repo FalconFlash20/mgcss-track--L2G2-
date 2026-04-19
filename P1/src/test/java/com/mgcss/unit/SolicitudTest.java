@@ -1,6 +1,6 @@
 package com.mgcss.unit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
@@ -101,5 +101,19 @@ public class SolicitudTest {
 		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
 		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
 		assertThrows(IllegalArgumentException.class, () -> s.asignarTecnico(null));
+	}
+	@Test
+	void testReabrirSolicitudExitosa() {
+	    Cliente c = new Cliente(1L, "P", "p@p.com", TipoCliente.STANDARD);
+	    Solicitud s = new Solicitud(1L, "D", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
+	    
+	    s.iniciarProceso();
+	    s.asignarTecnico(new Tecnico("F", true, "IT"));
+	    s.cerrar(); // Ahora está CERRADA
+	    
+	    s.reabrirSolicitud();
+	    
+	    assertEquals(EstadoSolicitud.ABIERTA, s.getEstado());
+	    assertNull(s.getTecnico());
 	}
 }
