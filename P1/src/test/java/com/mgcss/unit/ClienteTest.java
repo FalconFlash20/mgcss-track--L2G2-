@@ -93,4 +93,43 @@ public class ClienteTest {
 	    c3.verificarIdentidad();
 	    assertThrows(IllegalStateException.class, () -> c3.verificarIdentidad());
 	}
+	@Test
+	public void testActualizarDatosCompleto() {
+	    Cliente c = new Cliente(1L, "Original", "original@test.com", TipoCliente.STANDARD);
+	    
+	    // 1. Caso: Actualización total (Ambos if son TRUE)
+	    c.actualizarDatos("Nuevo Nombre", "nuevo@test.com");
+	    assertEquals("Nuevo Nombre", c.getNombre());
+	    assertEquals("nuevo@test.com", c.getEmail());
+	}
+
+	@Test
+	public void testActualizarDatosSoloNombre() {
+	    Cliente c = new Cliente(1L, "Original", "original@test.com", TipoCliente.STANDARD);
+	    
+	    // 2. Caso: Solo nombre (Primer if TRUE, segundo if FALSE por ser null)
+	    c.actualizarDatos("Solo Nombre", null);
+	    assertEquals("Solo Nombre", c.getNombre());
+	    assertEquals("original@test.com", c.getEmail()); // El email no debe cambiar
+	}
+
+	@Test
+	public void testActualizarDatosSoloEmail() {
+	    Cliente c = new Cliente(1L, "Original", "original@test.com", TipoCliente.STANDARD);
+	    
+	    // 3. Caso: Solo email (Primer if FALSE por blanco, segundo if TRUE)
+	    c.actualizarDatos("   ", "solo-email@test.com");
+	    assertEquals("Original", c.getNombre()); // El nombre no debe cambiar
+	    assertEquals("solo-email@test.com", c.getEmail());
+	}
+
+	@Test
+	public void testActualizarDatosNulosYVacios() {
+	    Cliente c = new Cliente(1L, "Original", "original@test.com", TipoCliente.STANDARD);
+	    
+	    // 4. Caso: Ninguno se actualiza (Ambos if son FALSE)
+	    c.actualizarDatos(null, "");
+	    assertEquals("Original", c.getNombre());
+	    assertEquals("original@test.com", c.getEmail());
+	}
 }
