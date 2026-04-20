@@ -19,6 +19,7 @@ import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Solicitud.EstadoSolicitud;
 import com.mgcss.domain.SolicitudRepository;
 import com.mgcss.domain.Tecnico;
+import com.mgcss.domain.TecnicoRepository;
 import com.mgcss.domain.Cliente.TipoCliente;
 import com.mgcss.service.SolicitudService;
 
@@ -26,50 +27,67 @@ import com.mgcss.service.SolicitudService;
 @Tag("unit")
 public class TestSolicitudService {
 	@Mock
-	private SolicitudRepository repository;
+	private SolicitudRepository solicitudRepository;
+	@Mock
+	private TecnicoRepository tecnicoRepository;
 	@InjectMocks
 	private SolicitudService service;
 	
 	@Test
 	void deberiaLanzarExcepcionSiTecnicoInactivo() {
-		Tecnico t = new Tecnico("Juan", false,"");
-		Cliente c=new Cliente(1L,"","",TipoCliente.STANDARD);
-		Solicitud s = new Solicitud(1L,"",EstadoSolicitud.ABIERTA, LocalDateTime.now(),c);
-		when(repository.findById(1L)).thenReturn(Optional.of(s));
+		Tecnico t = new Tecnico("Juan", false, Tecnico.Especialidad.SOFTWARE);
+		Cliente c=new Cliente(1L,"Pepe","pepe@test.com",TipoCliente.STANDARD);
+		Solicitud s = new Solicitud("desc",EstadoSolicitud.ABIERTA, LocalDateTime.now(),c);
+		
+		when(solicitudRepository.findById(1L)).thenReturn(Optional.of(s));
+	    when(tecnicoRepository.findById(2L)).thenReturn(Optional.of(t));
+	    
 		Exception e = assertThrows(IllegalArgumentException.class, () -> {
-		    service.asignarTecnico(1L, t);
+		    service.asignarTecnico(1L, 2L);
 		});
 		System.out.println(e.getMessage());
-		verify(repository, never()).save(any());
+		verify(solicitudRepository, never()).save(any());
 	}
 	
-	
-	// Cuando se asigna un técnico válido, el servicio debe guardar la solicitud
 	@Test
 	void asignarTecnicoCorrectamente() {
-		Tecnico t = new Tecnico("Juan", true,"");
-		Cliente c=new Cliente(1L,"","",TipoCliente.STANDARD);
-		Solicitud s = new Solicitud(1L,"",EstadoSolicitud.ABIERTA, LocalDateTime.now(),c);
+		Tecnico t = new Tecnico("Juan", true,Tecnico.Especialidad.SOFTWARE);
+		Cliente c=new Cliente(1L,"Pepe","pepe@test.com",TipoCliente.STANDARD);
+		Solicitud s = new Solicitud("desc",EstadoSolicitud.ABIERTA, LocalDateTime.now(),c);
 
-	    when(repository.findById(1L)).thenReturn(Optional.of(s));
+	    when(solicitudRepository.findById(1L)).thenReturn(Optional.of(s));
+	    when(tecnicoRepository.findById(2L)).thenReturn(Optional.of(t));
 
-	    service.asignarTecnico(1L, t);
+	    service.asignarTecnico(1L, 2L);
 
 	    assertEquals(t, s.getTecnico());
-	    verify(repository).save(s);
+	    verify(solicitudRepository).save(s);
 	    
 	    System.out.println("Tecnico activo con solicitud " + s.getId() + " asignada");
 	}
-	
-	//Si la solicitud no existe, lanzar excepción
+
 	@Test
 	void lanzarExcepcionSiSolicitudNoExiste() {
-	    when(repository.findById(1L)).thenReturn(Optional.empty());
-		Tecnico t = new Tecnico("Juan", true,"");
+	    when(solicitudRepository.findById(1L)).thenReturn(Optional.empty());
 	    Exception e = assertThrows(IllegalArgumentException.class,
-	        () -> { service.asignarTecnico(1L, t);});
+	        () -> { service.asignarTecnico(1L, 2L);});
 	    System.out.println(e.getMessage());
 	    
-	    verify(repository, never()).save(any());
+	    verify(solicitudRepository, never()).save(any());
+	}
+	
+	@Test
+	void lanzarExcepcionSiTecnicoNoExiste() {
+	    Cliente c = new Cliente(1L,"Pepe","pepe@test.com",TipoCliente.STANDARD);
+	    Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
+
+	    when(solicitudRepository.findById(1L)).thenReturn(Optional.of(s));
+	    when(tecnicoRepository.findById(2L)).thenReturn(Optional.empty());
+
+	    Exception e = assertThrows(IllegalArgumentException.class,
+	            () -> { service.asignarTecnico(1L, 2L);});
+	    System.out.println(e.getMessage());
+	    
+	    verify(solicitudRepository, never()).save(any());
 	}
 }

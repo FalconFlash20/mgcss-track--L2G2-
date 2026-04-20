@@ -3,68 +3,92 @@ package com.mgcss.unit;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.Test;
 
-import com.mgcss.domain.Cliente;
-import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Tecnico;
-import com.mgcss.domain.Cliente.TipoCliente;
-import com.mgcss.domain.Solicitud.EstadoSolicitud;
+import com.mgcss.domain.Tecnico.Especialidad;
+
 
 public class TecnicoTest {
 	@Test
-	public void asignaTecnicoActivo() {
-		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
-		Solicitud s = new Solicitud(1L, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
-		Tecnico t = new Tecnico("Francisco", true, "");
+    public void crearTecnicoCorrecto() {
+        Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
 
-		s.asignarTecnico(t);
-		assertEquals(t, s.getTecnico());
-	}
+        assertEquals("Fran", t.getNombre());
+        assertTrue(t.isActivo());
+        assertEquals(Especialidad.SOFTWARE, t.getEspecialidad());
+    }
+	
 	@Test
-	public void asignaTecnicoInactivo() {
-		Cliente c = new Cliente(1L, "", "", TipoCliente.STANDARD);
-		Solicitud s = new Solicitud(null, "", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
-		Tecnico t = new Tecnico("Jossue", false, "");
-		assertThrows(IllegalArgumentException.class, () -> {
-			s.asignarTecnico(t);
-		});
-	}
+    public void errorCrearTecnico() {
+        // nombre inválido
+        assertThrows(IllegalArgumentException.class, () -> new Tecnico(null, true, Especialidad.SOFTWARE));
+
+        // especialidad null
+        assertThrows(IllegalArgumentException.class, () -> new Tecnico("Fran", true, null));
+    }
+	
 	@Test
-	public void noDesactivarTecnicoYaInactivo() {
-		Tecnico t = new Tecnico("Fran", false, "");
+    public void activarCorrectamente() {
+        Tecnico t = new Tecnico("Fran", false, Especialidad.SOFTWARE);
+
+        t.activar();
+
+        assertTrue(t.isActivo());
+    }
+
+    @Test
+    public void activarYaActivo() {
+        Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
+
+        assertThrows(IllegalStateException.class, () -> t.activar());
+    }
+
+    @Test
+    public void desactivarCorrectamente() {
+        Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
+
+        t.desactivar();
+
+        assertFalse(t.isActivo());
+    }
+    
+	@Test
+	public void desactivarTecnicoYaInactivo() {
+		Tecnico t = new Tecnico("Fran", false, Especialidad.SOFTWARE);
 		assertThrows(IllegalStateException.class, () -> t.desactivar());
 	}
 	@Test
-	public void testCambioEspecialidadCorrecto() {
-	    Tecnico t = new Tecnico("Fran", true, "Java");
-	    t.actualizarEspecialidad("Python");
-	    assertEquals("Python", t.getEspecialidad());
+	public void cambioEspecialidadCorrecto() {
+	    Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
+	    t.actualizarEspecialidad(Especialidad.HARDWARE);
+	    assertEquals(Especialidad.HARDWARE, t.getEspecialidad());
 	}
 
 	@Test
-	public void ExcepcionCambioEspecialidad() {
-	    Tecnico t = new Tecnico("Fran", true, "Java");
+	public void errorCambioEspecialidad() {
+	    Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
 	    
-	    // Error 1: Misma especialidad
-	    assertThrows(IllegalArgumentException.class, () -> t.actualizarEspecialidad("Java"));
-	    
-	    // Error 2: Técnico inactivo
-	    t.desactivar();
-	    assertThrows(IllegalStateException.class, () -> t.actualizarEspecialidad("C++"));
+	 // misma especialidad
+        assertThrows(IllegalArgumentException.class, () -> t.actualizarEspecialidad(Especialidad.SOFTWARE));
+
+        // especialidad null
+        assertThrows(IllegalArgumentException.class, () -> t.actualizarEspecialidad(null));
+
+        // técnico inactivo
+        t.desactivar();
+        assertThrows(IllegalStateException.class, () -> t.actualizarEspecialidad(Especialidad.REDES));
 	}
 	
 	@Test
-	public void testErrorAlDesactivarSeguridadSinEmergencia() {
-	    Tecnico t = new Tecnico("Fran", true, "Seguridad");
+	public void desactivarSeguridadSinEmergencia() {
+	    Tecnico t = new Tecnico("Fran", true, Especialidad.SEGURIDAD);
 	    assertThrows(IllegalStateException.class, () -> t.desactivarSeguro(false));
 	}
 
 	@Test
-	public void testDesactivarSeguridadConEmergencia() {
-	    Tecnico t = new Tecnico("Fran", true, "Seguridad");
+	public void desactivarSeguridadConEmergencia() {
+	    Tecnico t = new Tecnico("Fran", true, Especialidad.SEGURIDAD);
 	    t.desactivarSeguro(true);
 	    assertFalse(t.isActivo());
 	}

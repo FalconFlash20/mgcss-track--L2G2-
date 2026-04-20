@@ -3,7 +3,6 @@ package com.mgcss.domain;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "clientes")
 public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,25 +18,31 @@ public class Cliente {
 		STANDARD, PREMIUM;
 	}
 
+	public Cliente() {}
+	
 	public Cliente(Long id, String nombre, String email, TipoCliente tipoCliente) {
-		this.id = id;
-		this.nombre = nombre;
-		this.email = email;
-		this.tipoCliente = tipoCliente;
-		/*
-		 * if (id != null && id < 0) { throw new
-		 * IllegalArgumentException("ID inválido"); }
-		 * 
-		 * if (nombre == null || nombre.isBlank()) { throw new
-		 * IllegalArgumentException("Nombre obligatorio"); }
-		 * 
-		 * if (email == null || email.isBlank()) { throw new
-		 * IllegalArgumentException("Email obligatorio"); }
-		 * 
-		 * if (tipoCliente == null) { throw new
-		 * IllegalArgumentException("Tipo cliente obligatorio"); }
-		 */
-	}
+
+        if (id != null && id < 0) {
+            throw new IllegalArgumentException("ID inválido");
+        }
+
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException("Nombre obligatorio");
+        }
+
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email obligatorio");
+        }
+
+        if (tipoCliente == null) {
+            throw new IllegalArgumentException("Tipo cliente obligatorio");
+        }
+
+        this.id = id;
+        this.nombre = nombre;
+        this.email = email;
+        this.tipoCliente = tipoCliente;
+    }
 
 	public Long getId() {
 		return id;
@@ -59,12 +64,11 @@ public class Cliente {
 		return bloqueado;
 	}
 
-	
 	public boolean isVerificado() {
 		return verificado;
 	}
 
-	public boolean TienePrioridad() {
+	public boolean tienePrioridad() {
 		return this.tipoCliente == TipoCliente.PREMIUM;
 	}
 
@@ -75,18 +79,16 @@ public class Cliente {
 			this.email = correo;
 	}
 
-	// RN: Los clientes estándar pueden ascender a Premium si su email es
-	// corporativo (.edu o .org)
 	public void ascenderCliente() {
-		if (this.tipoCliente == TipoCliente.STANDARD && (email.endsWith(".org") || email.endsWith(".edu"))) {
-			this.tipoCliente = TipoCliente.PREMIUM;
-		} else if (this.tipoCliente == TipoCliente.PREMIUM) {
-			throw new IllegalStateException("El cliente ya no puede acceder más ");
-		}
-	}
+        if (this.tipoCliente == TipoCliente.PREMIUM) {
+            throw new IllegalStateException("El cliente ya es PREMIUM");
+        }
 
-	// RN: Solo se puede bloquear a un cliente si NO es PREMIUM (los VIP tienen soporte especial).
-	// Si se intenta bloquear a un PREMIUM, lanza excepción.
+        if (email.endsWith(".org") || email.endsWith(".edu")) {
+            this.tipoCliente = TipoCliente.PREMIUM;
+        }
+    }
+
 	public void bloquearCuenta() {
 	    if (this.tipoCliente == TipoCliente.PREMIUM) {
 	        throw new IllegalStateException("No se puede bloquear automáticamente a un cliente PREMIUM. Contacte con administración.");
@@ -94,25 +96,29 @@ public class Cliente {
 	    this.bloqueado = true;
 	}
 
-	// RN: Para desbloquear, el nombre no puede estar vacío y el cliente debe estar bloqueado previamente.
 	public void desbloquearCuenta() {
 	    if (!this.bloqueado) {
 	        throw new IllegalStateException("La cuenta ya está activa.");
 	    }
-	    if (this.nombre == null || this.nombre.trim().isEmpty()) {
-	        throw new IllegalArgumentException("No se puede desbloquear una cuenta sin nombre titular.");
+	    if (this.nombre == null || this.nombre.isBlank()) {
+	        throw new IllegalArgumentException("Nombre inválido");
 	    }
 	    this.bloqueado = false;
 	}
-	// RN: Solo se puede verificar si el email es válido (contiene @) y el nombre no es nulo.
-	// Además, si ya está verificado, no se puede volver a hacer (lanza excepción).
+	
 	public void verificarIdentidad() {
-	    if (this.verificado) {
-	        throw new IllegalStateException("El cliente ya ha sido verificado anteriormente.");
-	    }
-	    if (this.email == null || !this.email.contains("@")) {
-	        throw new IllegalArgumentException("No se puede verificar: Email inválido.");
-	    }
-	    this.verificado = true;
-	}
+        if (this.verificado) {
+            throw new IllegalStateException("Ya verificado");
+        }
+
+        if (this.nombre == null || this.nombre.isBlank()) {
+            throw new IllegalArgumentException("Nombre inválido");
+        }
+
+        if (this.email == null || !this.email.contains("@")) {
+            throw new IllegalArgumentException("Email inválido");
+        }
+
+        this.verificado = true;
+    }
 }

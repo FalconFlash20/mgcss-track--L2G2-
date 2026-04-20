@@ -21,39 +21,36 @@ public class Solicitud {
 	private String descripcion;
 	private LocalDateTime fechaCierre;
 	private boolean urgente;
-	@Transient
+	@ManyToOne
 	private Tecnico tecnico;
-	@Transient
+	@ManyToOne (cascade = CascadeType.PERSIST)
 	private Cliente cliente;
 
 	public Solicitud() {
 	}
 
-	public Solicitud(Long id, String descripcion, EstadoSolicitud estado, LocalDateTime fechaCreacion,
-			Cliente cliente) {
-
-		if (id != null && id < 0) {
-			throw new IllegalArgumentException("ID inválido");
-		}
+	public Solicitud(String descripcion, EstadoSolicitud estado, LocalDateTime fechaCreacion, Cliente cliente) {
 
 		if (estado == null) {
-			throw new IllegalArgumentException("Estado obligatorio");
-		}
+            throw new IllegalArgumentException("Estado obligatorio");
+        }
 
-		if (fechaCreacion == null) {
-			throw new IllegalArgumentException("Fecha obligatoria");
-		}
+        if (fechaCreacion == null) {
+            throw new IllegalArgumentException("Fecha obligatoria");
+        }
 
-		if (fechaCreacion.isAfter(LocalDateTime.now())) {
-			throw new IllegalArgumentException("Fecha no puede ser futura");
-		}
-		
+        if (fechaCreacion.isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Fecha no puede ser futura");
+        }
 
-		this.id = id;
-		this.descripcion = descripcion;
-		this.estado = estado;
-		this.fechaCreacion = fechaCreacion;
-		this.cliente = cliente;
+        if (cliente == null) {
+            throw new IllegalArgumentException("Cliente obligatorio");
+        }
+
+        this.descripcion = descripcion;
+        this.estado = estado;
+        this.fechaCreacion = fechaCreacion;
+        this.cliente = cliente;
 	}
 
 	public Long getId() {
@@ -78,7 +75,7 @@ public class Solicitud {
 			throw new IllegalStateException("Solo se puede cerrar solicitudes si no está en proceso ");
 		}
 		this.estado = EstadoSolicitud.CERRADA;
-
+		this.fechaCierre = LocalDateTime.now();
 	}
 
 	public void iniciarProceso() {
@@ -96,6 +93,10 @@ public class Solicitud {
 		if (this.estado == EstadoSolicitud.CERRADA) {
 			throw new IllegalArgumentException("No se puede asignar un tecnico a una solicitud cerrada");
 		}
+		
+		if (this.tecnico != null) {
+            throw new IllegalStateException("La solicitud ya tiene un tecnico asignado");
+        }
 
 		if (t == null || !t.isActivo()) {
 			throw new IllegalArgumentException("No se puede asignar un tecnico inactivo");
@@ -106,10 +107,11 @@ public class Solicitud {
 	}
 	
 	public void reabrirSolicitud() {
-		if(this.estado!= EstadoSolicitud.CERRADA)
+		if(this.estado != EstadoSolicitud.CERRADA)
 			throw new IllegalStateException("Solo se pueden reabrir solicitudes cerradas");
 		this.estado=EstadoSolicitud.ABIERTA;
 		this.tecnico=null;
+		this.fechaCierre = null;
 	}
 	public String getDescripcion() {
 		return descripcion;
@@ -122,9 +124,7 @@ public class Solicitud {
 	public Cliente getCliente() {
 		return cliente;
 	}
-	// RN: Una solicitud solo se puede marcar como urgente si está ABIERTA o EN_PROCESO.
-	// Además, si el cliente es PREMIUM, se marca como urgente automáticamente.
-	// Si ya es urgente, no se puede volver a marcar .
+	
 	public void marcarComoUrgente() {
 	    if (this.urgente) {
 	        throw new IllegalStateException("La solicitud ya tiene prioridad urgente.");
@@ -133,14 +133,16 @@ public class Solicitud {
 	        throw new IllegalStateException("No se puede dar prioridad a una solicitud cerrada.");
 	    }
 	    
-	    if (this.cliente != null && this.cliente.getTipoCliente() == Cliente.TipoCliente.PREMIUM) {
-	        this.urgente = true;
-	    } else {
-	        // Si no es premium, necesitamos que la descripción sea larga para ser urgente
-	        if (this.descripcion != null && this.descripcion.length() > 20) {
+	    boolean esPremium = cliente.getTipoCliente() == Cliente.TipoCliente.PREMIUM;
+
+        if (esPremium) {
+            this.urgente = true;
+        } else {
+	        // Si no es premium, se necesita que la descripción sea larga para ser urgente
+	        if (this.descripcion != null && this.descripcion.length() > 30) {
 	            this.urgente = true;
 	        } else {
-	            throw new IllegalArgumentException("Descripción demasiado corta para prioridad urgente en clientes estándar.");
+	            throw new IllegalArgumentException("Descripción insuficiente para prioridad urgente");
 	        }
 	    }
 	}
