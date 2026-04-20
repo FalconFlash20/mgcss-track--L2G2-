@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 import com.mgcss.domain.Solicitud;
+import com.mgcss.domain.Cliente;
+import com.mgcss.domain.Cliente.TipoCliente;
 import com.mgcss.domain.Solicitud.EstadoSolicitud;
 import com.mgcss.infrastructure.persistence.JpaSolicitudRepository;
 
@@ -23,8 +25,9 @@ class JpaSolicitudRepositoryTest {
 
     @Test
     void guardarSolicitud() {
+    	Cliente c = new Cliente(null, "Pepe", "pepe@test.com", TipoCliente.STANDARD);
 
-        Solicitud s = new Solicitud(null, EstadoSolicitud.ABIERTA, LocalDateTime.now());
+        Solicitud s = new Solicitud("Descripción de prueba",EstadoSolicitud.ABIERTA, LocalDateTime.now(),c);
 
         Solicitud sBD = repository.save(s);
 
@@ -32,5 +35,6 @@ class JpaSolicitudRepositoryTest {
 
         assertTrue(resultado.isPresent());
         assertEquals(EstadoSolicitud.ABIERTA, resultado.get().getEstado());
+        assertEquals("Pepe", resultado.get().getCliente().getNombre());
     }
 }
