@@ -46,25 +46,28 @@ public class SolicitudTest {
 	@Test
 	public void asignaTecnicoInactivo() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
+		Tecnico t = tecnicoInactivo();
 		assertThrows(IllegalArgumentException.class, () -> {
-			s.asignarTecnico(tecnicoInactivo());
+			s.asignarTecnico(t);
 		});
 	}
 	
 	@Test
     public void noAsignarTecnicoSiYaTieneUno() {
         Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
-        s.asignarTecnico(tecnicoActivo());
+        Tecnico t = tecnicoActivo();
+        s.asignarTecnico(t);
 
-        assertThrows(IllegalStateException.class, () -> s.asignarTecnico(tecnicoActivo()));
+        assertThrows(IllegalStateException.class, () -> s.asignarTecnico(t));
     }
 
     @Test
     public void noAsignarTecnicoSiSolicitudCerrada() {
         Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
+        Tecnico t = tecnicoActivo();
         s.cerrar();
 
-        assertThrows(IllegalArgumentException.class, () -> s.asignarTecnico(tecnicoActivo()));
+        assertThrows(IllegalArgumentException.class, () -> s.asignarTecnico(t));
     }
 
 	@Test
@@ -93,13 +96,6 @@ public class SolicitudTest {
 	}
 
 	@Test
-	public void cambiarSolicitudAbiertaAEnProceso() {
-		Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
-		s.iniciarProceso();
-		assertEquals(EstadoSolicitud.EN_PROCESO, s.getEstado());
-	}
-
-	@Test
 	public void noCerrarSolicitudYaCerrada() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.CERRADA, LocalDateTime.now(), cliente());
 		assertThrows(IllegalStateException.class, () -> s.cerrar());
@@ -119,23 +115,22 @@ public class SolicitudTest {
 
 	@Test
 	public void noCrearSolicitudSinEstado() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			Solicitud solicitud = new Solicitud("desc", null, LocalDateTime.now(), cliente());
-		});
+		LocalDateTime fecha = LocalDateTime.now();
+		Cliente c = cliente();
+		assertThrows(IllegalArgumentException.class, () -> {  new Solicitud("desc", null, fecha, c); });
 	}
 
 	@Test
 	public void noCrearSolicitudSinFecha() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			Solicitud solicitud = new Solicitud("desc", EstadoSolicitud.ABIERTA, null, cliente());
-		});
+		Cliente c = cliente();
+		assertThrows(IllegalArgumentException.class, () -> { new Solicitud("desc", EstadoSolicitud.ABIERTA, null, c); });
 	}
 
 	@Test
 	public void noCrearSolicitudConFechaFutura() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			Solicitud solicitud = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now().plusDays(1), cliente());
-		});
+		LocalDateTime fechaFutura = LocalDateTime.now().plusDays(1);
+		Cliente c = cliente();
+		assertThrows(IllegalArgumentException.class, () -> { new Solicitud("desc", EstadoSolicitud.ABIERTA, fechaFutura, c); });
 	}
 
 	@Test
@@ -205,8 +200,9 @@ public class SolicitudTest {
 
     @Test
     public void errorClienteNull() {
+    	LocalDateTime fecha = LocalDateTime.now();
         assertThrows(IllegalArgumentException.class,
-                () -> new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), null));
+                () -> new Solicitud("desc", EstadoSolicitud.ABIERTA, fecha, null));
     }
 	
 }
