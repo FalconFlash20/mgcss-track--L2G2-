@@ -41,7 +41,7 @@ public class TecnicoTest {
     public void activarYaActivo() {
         Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
 
-        assertThrows(IllegalStateException.class, () -> t.activar());
+        assertThrows(IllegalStateException.class, t::activar);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class TecnicoTest {
 	@Test
 	public void desactivarTecnicoYaInactivo() {
 		Tecnico t = new Tecnico("Fran", false, Especialidad.SOFTWARE);
-		assertThrows(IllegalStateException.class, () -> t.desactivar());
+		assertThrows(IllegalStateException.class, t::desactivar);
 	}
 	@Test
 	public void cambioEspecialidadCorrecto() {
