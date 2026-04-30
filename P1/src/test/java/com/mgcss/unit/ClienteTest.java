@@ -80,7 +80,7 @@ public class ClienteTest {
 	@Test
 	public void ErrorAlDesbloquearCuentaNoBloqueada() {
 		Cliente c = clienteStandard();
-		assertThrows(IllegalStateException.class, () -> c.desbloquearCuenta());
+		assertThrows(IllegalStateException.class, c::desbloquearCuenta);
 	}
 	
 	@Test

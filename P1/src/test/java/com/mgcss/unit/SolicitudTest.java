@@ -29,9 +29,7 @@ public class SolicitudTest {
 	@Test
 	public void noCerrarEnProceso() {
 		Solicitud solicitud = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
-		assertThrows(IllegalStateException.class, () -> { 
-			solicitud.cerrar();
-		});
+		assertThrows(IllegalStateException.class, solicitud::cerrar);
 	}
 
 	@Test
@@ -104,33 +102,33 @@ public class SolicitudTest {
 	@Test
 	public void noIniciarProcesoSiYaEstaEnProceso() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
-		assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
+		assertThrows(IllegalStateException.class, s::iniciarProceso);
 	}
 
 	@Test
 	public void noIniciarProcesoSiEstaCerrada() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.CERRADA, LocalDateTime.now(), cliente());
-		assertThrows(IllegalStateException.class, () -> s.iniciarProceso());
+		assertThrows(IllegalStateException.class, s::iniciarProceso);
 	}
 
 	@Test
 	public void noCrearSolicitudSinEstado() {
 		LocalDateTime fecha = LocalDateTime.now();
 		Cliente c = cliente();
-		assertThrows(IllegalArgumentException.class, () -> {  new Solicitud("desc", null, fecha, c); });
+		assertThrows(IllegalArgumentException.class, () -> new Solicitud("desc", null, fecha, c));
 	}
 
 	@Test
 	public void noCrearSolicitudSinFecha() {
 		Cliente c = cliente();
-		assertThrows(IllegalArgumentException.class, () -> { new Solicitud("desc", EstadoSolicitud.ABIERTA, null, c); });
+		assertThrows(IllegalArgumentException.class, () -> new Solicitud("desc", EstadoSolicitud.ABIERTA, null, c));
 	}
 
 	@Test
 	public void noCrearSolicitudConFechaFutura() {
 		LocalDateTime fechaFutura = LocalDateTime.now().plusDays(1);
 		Cliente c = cliente();
-		assertThrows(IllegalArgumentException.class, () -> { new Solicitud("desc", EstadoSolicitud.ABIERTA, fechaFutura, c); });
+		assertThrows(IllegalArgumentException.class, () -> new Solicitud("desc", EstadoSolicitud.ABIERTA, fechaFutura, c));
 	}
 
 	@Test
