@@ -209,7 +209,7 @@ public class SolicitudTest {
 
         assertEquals(EstadoSolicitud.EN_PROCESO, s.getEstado());
     }
-    .
+    
     @Test
     void deberiaGuardarHistorialEstados() {
         Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
