@@ -1,0 +1,65 @@
+# Change Analysis
+
+## ¿Qué métodos del dominio se ven afectados?
+
+Los métodos de la entidad `Solicitud` relacionados con la gestión de estados:
+
+- iniciarProceso()
+- cerrar()
+- reabrirSolicitud()
+
+  Además, se ve afectado la lógica de asignar un técnico, y la de gestión de fecha de cierre.
+---
+
+## ¿Qué reglas actuales cambian?
+
+Regla actual:
+- El estado CERRADA se considera un estado final sin transiciones posibles.
+
+Nuevo comportamiento:
+- Una solicitud en estado CERRADA puede pasar a EN_PROCESO mediante el método reabrirSolicitud().
+
+Reglas que se mantienen:
+- Solo una solicitud en estado ABIERTA puede pasar a EN_PROCESO.
+- Solo una solicitud en estado EN_PROCESO puede cerrarse.
+  
+---
+
+## ¿Qué tests deberían romperse?
+
+- Tests que validaban que una solicitud en estado CERRADA no podía cambiar de estado.
+- Tests que asumían que CERRADA era un estado final.
+- Tests de transición de estados que no contemplaban la reapertura.
+
+---
+
+## ¿Qué parte del modelo debe extenderse?
+
+La entidad Solicitud debe extenderse para incluir:
+
+- La modificación del método: reabrirSolicitud()
+- Una estructura para almacenar el histórico de estados, por ejemplo:
+  - List<EstadoSolicitud> historialEstados
+
+---
+
+## ¿Qué impacto tiene en persistencia?
+
+Dependerá de la decisión de diseño:
+
+### Opción 1 – No persistir histórico
+- No se realizan cambios en la base de datos.
+- El histórico solo existe en memoria.
+  
+### Opción 2 – Persistir histórico
+- Se requiere modificar el modelo de datos.
+
+Hemos decidido persistir el histórico de datos porque:
+- Ayuda a mantener la simplicidad del modelo
+Impactos:
+- Cambios en mapeo JPA
+- Necesidad de nuevos tests de integración
+- Incremento de complejidad
+
+---
+Por último,cambiamos el nombre del método reabrirSolicitud() a reabrir(), ya que es lo que nos solicita la práctica.
