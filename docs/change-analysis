@@ -54,9 +54,12 @@ Dependerá de la decisión de diseño:
 ### Opción 2 – Persistir histórico
 - Se requiere modificar el modelo de datos.
 
+Hemos decidido persistir el histórico de datos porque:
+- Ayuda a mantener la simplicidad del modelo
 Impactos:
 - Cambios en mapeo JPA
 - Necesidad de nuevos tests de integración
 - Incremento de complejidad
 
 ---
+Por último,cambiamos el nombre del método reabrirSolicitud() a reabrir(), ya que es lo que nos solicita la práctica.
