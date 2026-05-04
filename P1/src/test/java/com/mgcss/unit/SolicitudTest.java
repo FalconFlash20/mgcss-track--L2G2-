@@ -197,7 +197,7 @@ public class SolicitudTest {
         assertThrows(IllegalArgumentException.class,
                 () -> new Solicitud("desc", EstadoSolicitud.ABIERTA, fecha, null));
     }
-    .
+    
     @Test
     void deberiaReabrirSolicitudCerrada() {
         Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
