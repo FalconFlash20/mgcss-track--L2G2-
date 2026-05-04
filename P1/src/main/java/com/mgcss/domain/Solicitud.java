@@ -15,9 +15,10 @@ public class Solicitud {
 	private LocalDateTime fechaCreacion;
 	
 	@ElementCollection
+	@CollectionTable(name = "solicitud_historial", joinColumns = @JoinColumn(name = "solicitud_id"))
+	@Column(name = "estado")
 	@Enumerated(EnumType.STRING)
 	private List<EstadoSolicitud> historialEstados = new ArrayList<>();
-	
 	public enum EstadoSolicitud {
 		ABIERTA, EN_PROCESO, CERRADA
 	}
