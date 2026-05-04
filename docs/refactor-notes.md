@@ -58,8 +58,13 @@ Existían dos tests que validaban el mismo comportamiento:
 - cambiarSolicitudAbiertaAEnProceso()
 - iniciarProcesoCorrectamente()
 
+Y:
+- noIniciarProcesoSiNoAbierta()
+- noIniciarProcesoSiEstaCerrada()
+
 ### Análisis
-Ambos métodos comprobaban la transición de estado de ABIERTA a EN_PROCESO, lo que supone duplicación de lógica de test.
+Los dos primeros métodos comprobaban la transición de estado de ABIERTA a EN_PROCESO, lo que supone duplicación de lógica de test.
+Los dos últimos comprobaba que no se podía iniciar un proceso si la solicitud está cerrada.
 
 ### Refactor aplicado
 Se elimina uno de los métodos duplicados, manteniendo un único test representativo.
