@@ -118,8 +118,6 @@ public class Solicitud {
 		if(this.estado != EstadoSolicitud.CERRADA)
 			throw new IllegalStateException("Solo se pueden reabrir solicitudes cerradas");
 		cambiarEstado(EstadoSolicitud.EN_PROCESO);
-		//this.tecnico=null;
-		//this.fechaCierre = null;
 	}
 	public String getDescripcion() {
 		return descripcion;

@@ -130,21 +130,6 @@ public class SolicitudTest {
 		assertThrows(IllegalArgumentException.class, () -> s.asignarTecnico(null));
 	}
 	
-	/*
-	@Test
-	public void reabrir() {
-		Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
-        s.asignarTecnico(tecnicoActivo());
-        s.cerrar();
-
-        s.reabrir();
-
-        assertEquals(EstadoSolicitud.ABIERTA, s.getEstado());
-        assertNull(s.getTecnico());
-        assertNull(s.getFechaCierre());
-	}
-	*/
-	
 	@Test
 	void marcarUrgenteClientePremium() {
 	    Cliente vip = new Cliente(1L, "Empresa", "info@empresa.com", Cliente.TipoCliente.PREMIUM);
