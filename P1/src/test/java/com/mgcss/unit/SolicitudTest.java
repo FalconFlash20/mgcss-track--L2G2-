@@ -80,9 +80,7 @@ public class SolicitudTest {
 	@Test
     public void noIniciarProcesoSiNoAbierta() {
         Solicitud s = new Solicitud("desc", EstadoSolicitud.CERRADA, LocalDateTime.now(), cliente());
-        assertThrows(IllegalStateException.class, () -> {
-            s.iniciarProceso();
-        });
+        assertThrows(IllegalStateException.class, s::iniciarProceso);
     }
 	
 	@Test
@@ -96,7 +94,7 @@ public class SolicitudTest {
 	@Test
 	public void noCerrarSolicitudYaCerrada() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.CERRADA, LocalDateTime.now(), cliente());
-		assertThrows(IllegalStateException.class, () -> s.cerrar());
+		assertThrows(IllegalStateException.class, s::cerrar);
 	}
 
 	@Test
