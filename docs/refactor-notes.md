@@ -196,3 +196,44 @@ Este refactor se ha aplicado en los siguientes métodos:
 
 ---
 
+## Problema 6 – Código comentado (Dead Code)
+
+### Descripción
+Se detectaron bloques de código comentado tanto en la clase de dominio como en los tests.
+
+### Código antes
+
+```java
+// this.tecnico = null;
+// this.fechaCierre = null;
+/*
+@Test
+public void reabrir() {
+    Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
+    s.asignarTecnico(tecnicoActivo());
+    s.cerrar();
+
+    s.reabrir();
+
+    assertEquals(EstadoSolicitud.ABIERTA, s.getEstado());
+    assertNull(s.getTecnico());
+    assertNull(s.getFechaCierre());
+}
+*/
+```
+
+### Análisis
+El código comentado no aporta valor al código, dificulta la lectura, es un claro Code Smell.
+
+### Refactor aplicado
+Se eliminaron completamente los bloques de código comentado.
+
+### Resultado
+- Código más directo y claro 
+
+### Casos afectados
+- Método reabrir() en Solicitud
+- Test antiguo reabrir() en SolicitudTest
+
+---
+
