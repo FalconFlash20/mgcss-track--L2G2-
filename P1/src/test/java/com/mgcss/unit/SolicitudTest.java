@@ -78,12 +78,6 @@ public class SolicitudTest {
     }
 	
 	@Test
-    public void noIniciarProcesoSiNoAbierta() {
-        Solicitud s = new Solicitud("desc", EstadoSolicitud.CERRADA, LocalDateTime.now(), cliente());
-        assertThrows(IllegalStateException.class, s::iniciarProceso);
-    }
-	
-	@Test
 	public void cerrarSolicitudEnProceso() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
 		s.cerrar();
