@@ -1,6 +1,8 @@
 package com.mgcss.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -11,7 +13,11 @@ public class Solicitud {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private LocalDateTime fechaCreacion;
-
+	
+	@ElementCollection
+	@Enumerated(EnumType.STRING)
+	private List<EstadoSolicitud> historialEstados = new ArrayList<>();
+	
 	public enum EstadoSolicitud {
 		ABIERTA, EN_PROCESO, CERRADA
 	}
@@ -51,6 +57,7 @@ public class Solicitud {
         this.estado = estado;
         this.fechaCreacion = fechaCreacion;
         this.cliente = cliente;
+        this.historialEstados.add(estado);
 	}
 
 	public Long getId() {
@@ -72,9 +79,9 @@ public class Solicitud {
 
 	public void cerrar() {
 		if (this.estado != EstadoSolicitud.EN_PROCESO) {
-			throw new IllegalStateException("Solo se puede cerrar solicitudes si no está en proceso ");
+			throw new IllegalStateException("Solo se puede cerrar si está en proceso");
 		}
-		this.estado = EstadoSolicitud.CERRADA;
+		cambiarEstado(EstadoSolicitud.CERRADA);
 		this.fechaCierre = LocalDateTime.now();
 	}
 
@@ -82,7 +89,7 @@ public class Solicitud {
 		if (this.estado != EstadoSolicitud.ABIERTA) {
 			throw new IllegalStateException("Solo se puede iniciar si está ABIERTA");
 		}
-		this.estado = EstadoSolicitud.EN_PROCESO;
+		cambiarEstado(EstadoSolicitud.EN_PROCESO);
 	}
 
 	public Tecnico getTecnico() {
@@ -106,12 +113,12 @@ public class Solicitud {
 
 	}
 	
-	public void reabrirSolicitud() {
+	public void reabrir() {
 		if(this.estado != EstadoSolicitud.CERRADA)
 			throw new IllegalStateException("Solo se pueden reabrir solicitudes cerradas");
-		this.estado=EstadoSolicitud.ABIERTA;
-		this.tecnico=null;
-		this.fechaCierre = null;
+		cambiarEstado(EstadoSolicitud.EN_PROCESO);
+		//this.tecnico=null;
+		//this.fechaCierre = null;
 	}
 	public String getDescripcion() {
 		return descripcion;
@@ -145,6 +152,15 @@ public class Solicitud {
 	            throw new IllegalArgumentException("Descripción insuficiente para prioridad urgente");
 	        }
 	    }
+	}
+	
+	public List<EstadoSolicitud> getHistorialEstados() {
+		return new ArrayList<>(historialEstados);
+	}
+	
+	private void cambiarEstado(EstadoSolicitud nuevoEstado) {
+	    this.estado = nuevoEstado;
+	    this.historialEstados.add(nuevoEstado);
 	}
 
 }

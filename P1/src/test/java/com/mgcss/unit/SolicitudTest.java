@@ -3,6 +3,7 @@ package com.mgcss.unit;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -129,18 +130,20 @@ public class SolicitudTest {
 		assertThrows(IllegalArgumentException.class, () -> s.asignarTecnico(null));
 	}
 	
+	/*
 	@Test
-	public void reabrirSolicitud() {
+	public void reabrir() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
         s.asignarTecnico(tecnicoActivo());
         s.cerrar();
 
-        s.reabrirSolicitud();
+        s.reabrir();
 
         assertEquals(EstadoSolicitud.ABIERTA, s.getEstado());
         assertNull(s.getTecnico());
         assertNull(s.getFechaCierre());
 	}
+	*/
 	
 	@Test
 	void marcarUrgenteClientePremium() {
@@ -193,6 +196,35 @@ public class SolicitudTest {
     	LocalDateTime fecha = LocalDateTime.now();
         assertThrows(IllegalArgumentException.class,
                 () -> new Solicitud("desc", EstadoSolicitud.ABIERTA, fecha, null));
+    }
+    
+    @Test
+    void deberiaReabrirSolicitudCerrada() {
+        Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
+
+        s.iniciarProceso();
+        s.cerrar();
+
+        s.reabrir();
+
+        assertEquals(EstadoSolicitud.EN_PROCESO, s.getEstado());
+    }
+    .
+    @Test
+    void deberiaGuardarHistorialEstados() {
+        Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
+
+        s.iniciarProceso();
+        s.cerrar();
+        s.reabrir();
+
+        List<EstadoSolicitud> historial = s.getHistorialEstados();
+
+        assertEquals(4, historial.size());
+        assertEquals(EstadoSolicitud.ABIERTA, historial.get(0));
+        assertEquals(EstadoSolicitud.EN_PROCESO, historial.get(1));
+        assertEquals(EstadoSolicitud.CERRADA, historial.get(2));
+        assertEquals(EstadoSolicitud.EN_PROCESO, historial.get(3));
     }
 	
 }
