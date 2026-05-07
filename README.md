@@ -3,3 +3,8 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=FalconFlash20_mgcss-track--L2G2-)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
 [![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=coverage)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
