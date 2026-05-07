@@ -27,7 +27,7 @@ public class Solicitud {
 	private EstadoSolicitud estado;
 	private String descripcion;
 	private LocalDateTime fechaCierre;
-	private LocalDateTime SLA;
+	private LocalDateTime tiempoej;
 	private boolean urgente;
 	@ManyToOne
 	private Tecnico tecnico;
@@ -61,10 +61,10 @@ public class Solicitud {
         this.cliente = cliente;
         this.historialEstados.add(estado);
         if(this.cliente.getTipoCliente()==Cliente.TipoCliente.PREMIUM) {
-        	this.SLA=this.fechaCreacion.plusHours(48);
+        	this.tiempoej=this.fechaCreacion.plusHours(48);
         }
         else {
-        	this.SLA=this.fechaCreacion.plusHours(96);
+        	this.tiempoej=this.fechaCreacion.plusHours(96);
         }
 	}
 	
@@ -140,7 +140,7 @@ public class Solicitud {
 	
 	
 	public LocalDateTime getSLA() {
-		return SLA;
+		return tiempoej;
 	}
 
 	public void marcarComoUrgente() {
