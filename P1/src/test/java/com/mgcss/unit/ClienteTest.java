@@ -17,17 +17,17 @@ public class ClienteTest {
     }
 	
     @Test
-    public void premiumTienePrioridad() {
+     void premiumTienePrioridad() {
         assertTrue(clientePremium().tienePrioridad());
     }
 
     @Test
-    public void estandarSinPrioridad() {
+     void estandarSinPrioridad() {
         assertFalse(clienteStandard().tienePrioridad());
     }
 
     @Test
-    public void ascenderClienteCorrecto() {
+     void ascenderClienteCorrecto() {
         Cliente c = new Cliente(1L, "Pepe", "pepe@empresa.org", TipoCliente.STANDARD);
 
         c.ascenderCliente();
@@ -36,7 +36,7 @@ public class ClienteTest {
     }
 
     @Test
-    public void errorAscenderCliente() {
+     void errorAscenderCliente() {
         Cliente c = clienteStandard();
 
         c.ascenderCliente();
@@ -45,14 +45,14 @@ public class ClienteTest {
     }
 
     @Test
-    public void errorAscenderSiYaEsPremium() {
+     void errorAscenderSiYaEsPremium() {
         Cliente c = clientePremium();
 
         assertThrows(IllegalStateException.class, c::ascenderCliente);
     }
 
     @Test
-    public void bloquearClienteStandard() {
+     void bloquearClienteStandard() {
         Cliente c = clienteStandard();
 
         c.bloquearCuenta();
@@ -61,14 +61,14 @@ public class ClienteTest {
     }
 
     @Test
-    public void errorBloquearClientePremium() {
+     void errorBloquearClientePremium() {
         Cliente c = clientePremium();
 
         assertThrows(IllegalStateException.class, c::bloquearCuenta);
     }
 
     @Test
-    public void desbloquearCorrectamente() {
+     void desbloquearCorrectamente() {
         Cliente c = clienteStandard();
         c.bloquearCuenta();
 
@@ -78,27 +78,27 @@ public class ClienteTest {
     }
 
 	@Test
-	public void ErrorAlDesbloquearCuentaNoBloqueada() {
+	 void ErrorAlDesbloquearCuentaNoBloqueada() {
 		Cliente c = clienteStandard();
 		assertThrows(IllegalStateException.class, c::desbloquearCuenta);
 	}
 	
 	@Test
-	public void verificarConExito() {
+	 void verificarConExito() {
 		Cliente c = clienteStandard();
 		c.verificarIdentidad();
 	    assertTrue(c.isVerificado());
 	}
 
 	@Test
-    public void errorVerificarEmailInvalido() {
+     void errorVerificarEmailInvalido() {
         Cliente c = new Cliente(1L, "Pepe", "correo", TipoCliente.STANDARD);
 
         assertThrows(IllegalArgumentException.class, c::verificarIdentidad);
     }
 
     @Test
-    public void errorVerificarDosVeces() {
+     void errorVerificarDosVeces() {
         Cliente c = clienteStandard();
 
         c.verificarIdentidad();
@@ -107,7 +107,7 @@ public class ClienteTest {
     }
 	
 	@Test
-    public void actualizarDatosCompleto() {
+     void actualizarDatosCompleto() {
         Cliente c = clienteStandard();
 
         c.actualizarDatos("Nuevo", "nuevo@test.com");
@@ -117,7 +117,7 @@ public class ClienteTest {
     }
 
     @Test
-    public void actualizarSoloNombre() {
+     void actualizarSoloNombre() {
         Cliente c = clienteStandard();
 
         c.actualizarDatos("Nuevo", null);
@@ -127,7 +127,7 @@ public class ClienteTest {
     }
 
     @Test
-    public void actualizarSoloEmail() {
+     void actualizarSoloEmail() {
         Cliente c = clienteStandard();
 
         c.actualizarDatos(" ", "nuevo@test.com");
@@ -137,7 +137,7 @@ public class ClienteTest {
     }
     
     @Test
-    public void noActualizarDatosInvalidos() {
+     void noActualizarDatosInvalidos() {
         Cliente c = clienteStandard();
 
         c.actualizarDatos(null, "");
@@ -147,19 +147,19 @@ public class ClienteTest {
     }
     
     @Test
-    public void clienteNombreNull() {
+     void clienteNombreNull() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Cliente(1L, null, "test@test.com", TipoCliente.STANDARD));
     }
 
     @Test
-    public void clienteEmailNull() {
+     void clienteEmailNull() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Cliente(1L, "Pepe", null, TipoCliente.STANDARD));
     }
 
     @Test
-    public void clienteTipoNull() {
+     void clienteTipoNull() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Cliente(1L, "Pepe", "test@test.com", null));
     }

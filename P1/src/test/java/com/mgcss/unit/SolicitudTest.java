@@ -28,13 +28,13 @@ public class SolicitudTest {
         return new Tecnico("Alejandro", false, Especialidad.SOFTWARE);
     }
 	@Test
-	public void noCerrarEnProceso() {
+	 void noCerrarEnProceso() {
 		Solicitud solicitud = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
 		assertThrows(IllegalStateException.class, solicitud::cerrar);
 	}
 
 	@Test
-	public void asignaTecnicoActivo() {
+	 void asignaTecnicoActivo() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
 		Tecnico t = tecnicoActivo();
 
@@ -43,7 +43,7 @@ public class SolicitudTest {
         assertEquals(t, s.getTecnico());
 	}
 	@Test
-	public void asignaTecnicoInactivo() {
+	 void asignaTecnicoInactivo() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
 		Tecnico t = tecnicoInactivo();
 		assertThrows(IllegalArgumentException.class, () -> {
@@ -52,7 +52,7 @@ public class SolicitudTest {
 	}
 	
 	@Test
-    public void noAsignarTecnicoSiYaTieneUno() {
+     void noAsignarTecnicoSiYaTieneUno() {
         Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
         Tecnico t = tecnicoActivo();
         s.asignarTecnico(t);
@@ -61,7 +61,7 @@ public class SolicitudTest {
     }
 
     @Test
-    public void noAsignarTecnicoSiSolicitudCerrada() {
+     void noAsignarTecnicoSiSolicitudCerrada() {
         Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
         Tecnico t = tecnicoActivo();
         s.cerrar();
@@ -70,7 +70,7 @@ public class SolicitudTest {
     }
 
 	@Test
-    public void iniciarProcesoCorrectamente() {
+     void iniciarProcesoCorrectamente() {
         Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
 
         s.iniciarProceso();
@@ -79,7 +79,7 @@ public class SolicitudTest {
     }
 	
 	@Test
-	public void cerrarSolicitudEnProceso() {
+	 void cerrarSolicitudEnProceso() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
 		s.cerrar();
 		assertEquals(EstadoSolicitud.CERRADA, s.getEstado());
@@ -87,45 +87,45 @@ public class SolicitudTest {
 	}
 
 	@Test
-	public void noCerrarSolicitudYaCerrada() {
+	 void noCerrarSolicitudYaCerrada() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.CERRADA, LocalDateTime.now(), cliente());
 		assertThrows(IllegalStateException.class, s::cerrar);
 	}
 
 	@Test
-	public void noIniciarProcesoSiYaEstaEnProceso() {
+	 void noIniciarProcesoSiYaEstaEnProceso() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
 		assertThrows(IllegalStateException.class, s::iniciarProceso);
 	}
 
 	@Test
-	public void noIniciarProcesoSiEstaCerrada() {
+	 void noIniciarProcesoSiEstaCerrada() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.CERRADA, LocalDateTime.now(), cliente());
 		assertThrows(IllegalStateException.class, s::iniciarProceso);
 	}
 
 	@Test
-	public void noCrearSolicitudSinEstado() {
+	 void noCrearSolicitudSinEstado() {
 		LocalDateTime fecha = LocalDateTime.now();
 		Cliente c = cliente();
 		assertThrows(IllegalArgumentException.class, () -> new Solicitud("desc", null, fecha, c));
 	}
 
 	@Test
-	public void noCrearSolicitudSinFecha() {
+	 void noCrearSolicitudSinFecha() {
 		Cliente c = cliente();
 		assertThrows(IllegalArgumentException.class, () -> new Solicitud("desc", EstadoSolicitud.ABIERTA, null, c));
 	}
 
 	@Test
-	public void noCrearSolicitudConFechaFutura() {
+	 void noCrearSolicitudConFechaFutura() {
 		LocalDateTime fechaFutura = LocalDateTime.now().plusDays(1);
 		Cliente c = cliente();
 		assertThrows(IllegalArgumentException.class, () -> new Solicitud("desc", EstadoSolicitud.ABIERTA, fechaFutura, c));
 	}
 
 	@Test
-	public void noAsignarTecnicoNull() {
+	 void noAsignarTecnicoNull() {
 		Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
 		assertThrows(IllegalArgumentException.class, () -> s.asignarTecnico(null));
 	}
@@ -140,7 +140,7 @@ public class SolicitudTest {
 	}
 
 	@Test
-    public void marcarUrgenteClienteEstandar() {
+     void marcarUrgenteClienteEstandar() {
         Solicitud s = new Solicitud("Descripción suficientemente larga para ser urgente con cliente estandar",
                 EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
 
@@ -150,14 +150,14 @@ public class SolicitudTest {
     }
 
     @Test
-    public void errorUrgenteClienteEstandar() {
+     void errorUrgenteClienteEstandar() {
         Solicitud s = new Solicitud("corta", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
 
         assertThrows(IllegalArgumentException.class, s::marcarComoUrgente);
     }
     
     @Test
-    public void errorUrgenteSiYaEsUrgente() {
+     void errorUrgenteSiYaEsUrgente() {
         Solicitud s = new Solicitud("Descripción suficientemente larga para ser urgente con cliente estandar",
                 EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
 
@@ -167,7 +167,7 @@ public class SolicitudTest {
     }
 
     @Test
-    public void errorUrgenteSiEstaCerrada() {
+     void errorUrgenteSiEstaCerrada() {
         Solicitud s = new Solicitud("Descripción suficientemente larga para ser urgente con cliente estandar",
                 EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
 
@@ -177,7 +177,7 @@ public class SolicitudTest {
     }
 
     @Test
-    public void errorClienteNull() {
+     void errorClienteNull() {
     	LocalDateTime fecha = LocalDateTime.now();
         assertThrows(IllegalArgumentException.class,
                 () -> new Solicitud("desc", EstadoSolicitud.ABIERTA, fecha, null));
@@ -211,5 +211,20 @@ public class SolicitudTest {
         assertEquals(EstadoSolicitud.CERRADA, historial.get(2));
         assertEquals(EstadoSolicitud.EN_PROCESO, historial.get(3));
     }
-	
+    @Test
+    void verificarSlaClientePremium() {
+        Cliente premium = new Cliente(1L, "Ana", "ana@empresa.org", Cliente.TipoCliente.PREMIUM);
+        LocalDateTime ahora = LocalDateTime.now();
+        Solicitud s = new Solicitud("Reparar servidor", EstadoSolicitud.ABIERTA, ahora, premium);
+        assertEquals(ahora.plusHours(48), s.getSLA(), "El SLA para Premium debe ser de 24h");
+    }
+    
+    @Test
+    void verificarSlaClienteStandard() {
+        Cliente standard = new Cliente(2L, "Juan", "juan@gmail.com", Cliente.TipoCliente.STANDARD);
+        LocalDateTime ahora = LocalDateTime.now();
+        Solicitud s = new Solicitud("Duda factura", EstadoSolicitud.ABIERTA, ahora, standard);
+        assertEquals(ahora.plusHours(96), s.getSLA(), "El SLA para Standard debe ser de 72h");
+        
+    }
 }

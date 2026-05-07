@@ -11,7 +11,7 @@ import com.mgcss.domain.Tecnico.Especialidad;
 
 public class TecnicoTest {
 	@Test
-    public void crearTecnicoCorrecto() {
+     void crearTecnicoCorrecto() {
         Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
 
         assertEquals("Fran", t.getNombre());
@@ -20,7 +20,7 @@ public class TecnicoTest {
     }
 	
 	@Test
-    public void errorCrearTecnico() {
+     void errorCrearTecnico() {
         // nombre inválido
         assertThrows(IllegalArgumentException.class, () -> new Tecnico(null, true, Especialidad.SOFTWARE));
 
@@ -29,7 +29,7 @@ public class TecnicoTest {
     }
 	
 	@Test
-    public void activarCorrectamente() {
+     void activarCorrectamente() {
         Tecnico t = new Tecnico("Fran", false, Especialidad.SOFTWARE);
 
         t.activar();
@@ -38,14 +38,14 @@ public class TecnicoTest {
     }
 
     @Test
-    public void activarYaActivo() {
+     void activarYaActivo() {
         Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
 
         assertThrows(IllegalStateException.class, t::activar);
     }
 
     @Test
-    public void desactivarCorrectamente() {
+     void desactivarCorrectamente() {
         Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
 
         t.desactivar();
@@ -54,19 +54,19 @@ public class TecnicoTest {
     }
     
 	@Test
-	public void desactivarTecnicoYaInactivo() {
+	 void desactivarTecnicoYaInactivo() {
 		Tecnico t = new Tecnico("Fran", false, Especialidad.SOFTWARE);
 		assertThrows(IllegalStateException.class, t::desactivar);
 	}
 	@Test
-	public void cambioEspecialidadCorrecto() {
+	 void cambioEspecialidadCorrecto() {
 	    Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
 	    t.actualizarEspecialidad(Especialidad.HARDWARE);
 	    assertEquals(Especialidad.HARDWARE, t.getEspecialidad());
 	}
 
 	@Test
-	public void errorCambioEspecialidad() {
+	 void errorCambioEspecialidad() {
 	    Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);
 	    
 	 // misma especialidad
@@ -81,15 +81,16 @@ public class TecnicoTest {
 	}
 	
 	@Test
-	public void desactivarSeguridadSinEmergencia() {
+	 void desactivarSeguridadSinEmergencia() {
 	    Tecnico t = new Tecnico("Fran", true, Especialidad.SEGURIDAD);
 	    assertThrows(IllegalStateException.class, () -> t.desactivarSeguro(false));
 	}
 
 	@Test
-	public void desactivarSeguridadConEmergencia() {
+	 void desactivarSeguridadConEmergencia() {
 	    Tecnico t = new Tecnico("Fran", true, Especialidad.SEGURIDAD);
 	    t.desactivarSeguro(true);
 	    assertFalse(t.isActivo());
 	}
+	
 }
