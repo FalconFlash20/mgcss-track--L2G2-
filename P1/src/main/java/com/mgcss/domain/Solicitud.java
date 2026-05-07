@@ -138,6 +138,11 @@ public class Solicitud {
 		return cliente;
 	}
 	
+	
+	public LocalDateTime getSLA() {
+		return SLA;
+	}
+
 	public void marcarComoUrgente() {
 	    if (this.urgente) {
 	        throw new IllegalStateException("La solicitud ya tiene prioridad urgente.");
