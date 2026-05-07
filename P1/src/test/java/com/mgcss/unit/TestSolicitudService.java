@@ -87,7 +87,6 @@ public class TestSolicitudService {
 	    Exception e = assertThrows(IllegalArgumentException.class,
 	            () -> { service.asignarTecnico(1L, 2L);});
 	    System.out.println(e.getMessage());
-	    
 	    verify(solicitudRepository, never()).save(any());
 	}
 }
