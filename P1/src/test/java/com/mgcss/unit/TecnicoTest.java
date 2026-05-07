@@ -92,4 +92,5 @@ public class TecnicoTest {
 	    t.desactivarSeguro(true);
 	    assertFalse(t.isActivo());
 	}
+	
 }

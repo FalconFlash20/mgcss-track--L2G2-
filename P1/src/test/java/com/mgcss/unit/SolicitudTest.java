@@ -211,5 +211,20 @@ public class SolicitudTest {
         assertEquals(EstadoSolicitud.CERRADA, historial.get(2));
         assertEquals(EstadoSolicitud.EN_PROCESO, historial.get(3));
     }
-	
+    @Test
+    void verificarSlaClientePremium() {
+        Cliente premium = new Cliente(1L, "Ana", "ana@empresa.org", Cliente.TipoCliente.PREMIUM);
+        LocalDateTime ahora = LocalDateTime.now();
+        Solicitud s = new Solicitud("Reparar servidor", EstadoSolicitud.ABIERTA, ahora, premium);
+        assertEquals(ahora.plusHours(48), s.getSLA(), "El SLA para Premium debe ser de 24h");
+    }
+    
+    @Test
+    void verificarSlaClienteStandard() {
+        Cliente standard = new Cliente(2L, "Juan", "juan@gmail.com", Cliente.TipoCliente.STANDARD);
+        LocalDateTime ahora = LocalDateTime.now();
+        Solicitud s = new Solicitud("Duda factura", EstadoSolicitud.ABIERTA, ahora, standard);
+        assertEquals(ahora.plusHours(96), s.getSLA(), "El SLA para Standard debe ser de 72h");
+        
+    }
 }
