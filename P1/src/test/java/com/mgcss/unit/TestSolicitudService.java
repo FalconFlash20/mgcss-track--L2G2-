@@ -25,7 +25,7 @@ import com.mgcss.service.SolicitudService;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("unit")
-public class TestSolicitudService {
+ class TestSolicitudService {
 	@Mock
 	private SolicitudRepository solicitudRepository;
 	@Mock
