@@ -3,10 +3,10 @@ package com.mgcss.domain;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 
 
-public interface TecnicoRepository extends Repository<Tecnico,Long>{
+public interface TecnicoRepository extends CrudRepository<Tecnico,Long>{
 	/*Tecnico save(Tecnico tecnico);
 	Optional<Tecnico> findById(Long id);
 	List<Tecnico> findAll();*/

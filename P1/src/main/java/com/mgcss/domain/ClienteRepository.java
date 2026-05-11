@@ -2,10 +2,10 @@ package com.mgcss.domain;
 
 import java.util.*;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 
 
-public interface ClienteRepository extends Repository<Cliente,Long>{
+public interface ClienteRepository extends CrudRepository<Cliente,Long>{
   /*  Cliente save(Cliente cliente);
     Optional<Cliente> findById(Long id);
     List<Cliente> findAll();*/
