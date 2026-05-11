@@ -3,7 +3,9 @@ package com.mgcss.domain;
 import java.util.List;
 import java.util.Optional;
 
-public interface SolicitudRepository {
+import org.springframework.data.repository.Repository;
+
+public interface SolicitudRepository extends Repository<Solicitud,Long>{
 	/*Solicitud save(Solicitud solicitud);
 	Optional<Solicitud> findById(Long id);
 	List<Solicitud> findAll();*/
