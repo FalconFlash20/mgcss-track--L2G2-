@@ -1,6 +1,10 @@
 package com.mgcss.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import com.mgcss.domain.Cliente;
+import com.mgcss.domain.ClienteRepository;
 import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Solicitud.EstadoSolicitud;
 import com.mgcss.domain.SolicitudRepository;
@@ -10,13 +14,18 @@ import com.mgcss.domain.TecnicoRepository;
 public class SolicitudService {
 	private final SolicitudRepository solicitudRepository;
 	private final TecnicoRepository tecnicoRepository;
+	private final ClienteRepository clienteRepository;
     
-    public SolicitudService(SolicitudRepository solicitudRepository, TecnicoRepository tecnicoRepository) {
-    	this.solicitudRepository = solicitudRepository;
-    	this.tecnicoRepository = tecnicoRepository;
-    }
+
     
-    public void asignarTecnico(Long solicitudId, Long tecnicoId) {
+    public SolicitudService(SolicitudRepository solicitudRepository, TecnicoRepository tecnicoRepository,
+			ClienteRepository clienteRepository) {
+		this.solicitudRepository = solicitudRepository;
+		this.tecnicoRepository = tecnicoRepository;
+		this.clienteRepository = clienteRepository;
+	}
+    
+	public void asignarTecnico(Long solicitudId, Long tecnicoId) {
 
         Solicitud solicitud = solicitudRepository.findById(solicitudId).orElseThrow(()-> 
         new IllegalArgumentException("Solicitud no encontrada con ese ID"));
@@ -28,8 +37,10 @@ public class SolicitudService {
 
         solicitudRepository.save(solicitud);
     }
-    public void crearSolicitud(Solicitud s) {
-    	solicitudRepository.save(s);
+    public Solicitud crearSolicitud(String descripcion, Long clienteId) {
+    	Cliente c= clienteRepository.findById(clienteId).orElseThrow(()-> new IllegalArgumentException("Cliente no encontrado"));
+    	Solicitud s=new Solicitud(descripcion, EstadoSolicitud.ABIERTA,LocalDateTime.now(),c);
+    	return solicitudRepository.save(s);
     }
     public Solicitud consultarSolicitud(Long SolicitudId) {
     	return solicitudRepository.findById(SolicitudId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar la solicitud"));

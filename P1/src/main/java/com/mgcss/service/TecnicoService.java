@@ -11,8 +11,8 @@ public class TecnicoService {
 	public TecnicoService(TecnicoRepository tecnicoRepository) {
 		this.tecnicoRepository = tecnicoRepository;
 	}
-	public void crearTecnico(Tecnico t) {
-		tecnicoRepository.save(t);
+	public Tecnico crearTecnico(Tecnico t) {
+		return tecnicoRepository.save(t);
 	}
 	public Tecnico consultarTecnico(Long TecnicoId) {
     	return tecnicoRepository.findById(TecnicoId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar el tecnico"));		
@@ -30,5 +30,10 @@ public class TecnicoService {
 		t.desactivar();
 		tecnicoRepository.save(t);
 	}
+	public void actualizarEspecialidad(Long id, Tecnico.Especialidad nueva) {
+        Tecnico t = consultarTecnico(id);
+        t.actualizarEspecialidad(nueva);
+        tecnicoRepository.save(t);
+    }
 	
 }
