@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TecnicoRepository {
-	Tecnico save(Tecnico tecnico);
+	/*Tecnico save(Tecnico tecnico);
 	Optional<Tecnico> findById(Long id);
-	List<Tecnico> findAll();
+	List<Tecnico> findAll();*/
+	<S extends Tecnico> S save(S entity);
+    Optional<Tecnico> findById(Long id);
+    List<Tecnico> findAll();
 }
 
