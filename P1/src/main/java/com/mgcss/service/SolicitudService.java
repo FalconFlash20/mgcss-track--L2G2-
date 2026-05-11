@@ -32,7 +32,7 @@ public class SolicitudService {
     	solicitudRepository.save(s);
     }
     public Solicitud consultarSolicitud(Long SolicitudId) {
-    	return solicitudRepository.findById(SolicitudId).orElseThrow(() -> new IllegalArgumentException("No se ha podido reabrir la solicitud"));
+    	return solicitudRepository.findById(SolicitudId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar la solicitud"));
     }
     public void cambiar(Long SolicitudId, EstadoSolicitud estado) {
     	Solicitud s=consultarSolicitud(SolicitudId);
