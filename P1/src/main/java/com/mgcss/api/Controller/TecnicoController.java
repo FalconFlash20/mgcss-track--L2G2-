@@ -36,7 +36,7 @@ public class TecnicoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TecnicoResponseDTO> consultar(@PathVariable Long id) {
+    public ResponseEntity<TecnicoResponseDTO> consultar(@PathVariable("id") Long id) {
         Tecnico t = tecnicoService.consultarTecnico(id);
         return ResponseEntity.ok(mapear(t));
     }
@@ -49,21 +49,21 @@ public class TecnicoController {
     }
 
     @PutMapping("/{id}/activar")
-    public ResponseEntity<TecnicoResponseDTO> activar(@PathVariable Long id) {
+    public ResponseEntity<TecnicoResponseDTO> activar(@PathVariable("id") Long id) {
         tecnicoService.activar(id);
         Tecnico t=tecnicoService.consultarTecnico(id);
         return ResponseEntity.ok(mapear(t));
     }
 
     @PutMapping("/{id}/desactivar")
-    public ResponseEntity<TecnicoResponseDTO> desactivar(@PathVariable Long id) {
+    public ResponseEntity<TecnicoResponseDTO> desactivar(@PathVariable("id") Long id) {
         tecnicoService.desactivar(id);
         Tecnico t=tecnicoService.consultarTecnico(id);
         return ResponseEntity.ok(mapear(t));
     }
     
     @PutMapping("/{id}/especialidad")
-    public ResponseEntity<TecnicoResponseDTO> actualizarEspecialidad(@PathVariable Long id, @RequestParam String nuevaesp) {       
+    public ResponseEntity<TecnicoResponseDTO> actualizarEspecialidad(@PathVariable("id") Long id, @RequestParam("nuevaesp") String nuevaesp) {       
         Tecnico.Especialidad esp = Tecnico.Especialidad.valueOf(nuevaesp.toUpperCase());       
         tecnicoService.actualizarEspecialidad(id, esp);
         Tecnico t=tecnicoService.consultarTecnico(id);
