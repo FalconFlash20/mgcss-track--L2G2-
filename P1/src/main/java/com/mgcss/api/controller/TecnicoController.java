@@ -1,4 +1,4 @@
-package com.mgcss.api.Controller;
+package com.mgcss.api.controller;
 
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.mgcss.api.DTO.TecnicoRequestDTO;
-import com.mgcss.api.DTO.TecnicoResponseDTO;
+
+import com.mgcss.api.dto.TecnicoRequestDTO;
+import com.mgcss.api.dto.TecnicoResponseDTO;
 import com.mgcss.domain.Tecnico;
 import com.mgcss.service.TecnicoService;
 

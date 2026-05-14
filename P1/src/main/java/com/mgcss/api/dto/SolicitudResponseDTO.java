@@ -1,4 +1,4 @@
-package com.mgcss.api.DTO;
+package com.mgcss.api.dto;
 
 import java.time.LocalDateTime;
 

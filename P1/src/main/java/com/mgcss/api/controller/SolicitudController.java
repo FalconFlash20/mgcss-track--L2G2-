@@ -1,4 +1,4 @@
-package com.mgcss.api.Controller;
+package com.mgcss.api.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mgcss.api.DTO.SolicitudRequestDTO;
-import com.mgcss.api.DTO.SolicitudResponseDTO;
+import com.mgcss.api.dto.SolicitudRequestDTO;
+import com.mgcss.api.dto.SolicitudResponseDTO;
 import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Solicitud.EstadoSolicitud;
 import com.mgcss.service.SolicitudService;

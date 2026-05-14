@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.mgcss.api.Controller.ClienteController;
+import com.mgcss.api.controller.ClienteController;
 import com.mgcss.domain.Cliente;
 import com.mgcss.service.ClienteService;
 
