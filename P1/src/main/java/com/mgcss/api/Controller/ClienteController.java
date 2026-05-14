@@ -19,10 +19,10 @@ import com.mgcss.service.ClienteService;
 
 @RestController
 @RequestMapping("/api/clientes")
-public class CLienteController {
+public class ClienteController {
 	private final ClienteService clienteservice;
 
-	public CLienteController(ClienteService clienteservice) {
+	public ClienteController(ClienteService clienteservice) {
 		this.clienteservice = clienteservice;
 	}
 	
@@ -34,7 +34,7 @@ public class CLienteController {
         return ResponseEntity.ok(mapear(guardado));
     }
 	@GetMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> consultar(@PathVariable Long id) {
+    public ResponseEntity<ClienteResponseDTO> consultar(@PathVariable("id") Long id) {
         Cliente c = clienteservice.consultarCliente(id);
         return ResponseEntity.ok(mapear(c));
     }
@@ -47,33 +47,27 @@ public class CLienteController {
     }
 
     @PutMapping("/{id}/ascender")
-    public ResponseEntity<ClienteResponseDTO> ascender(@PathVariable Long id) {
+    public ResponseEntity<ClienteResponseDTO> ascender(@PathVariable("id") Long id) {
         clienteservice.ascender(id);
         Cliente c=clienteservice.consultarCliente(id);
         return ResponseEntity.ok(mapear(c));
     }
 
     @PutMapping("/{id}/bloquear")
-    public ResponseEntity<ClienteResponseDTO> bloquear(@PathVariable Long id) {
+    public ResponseEntity<ClienteResponseDTO> bloquear(@PathVariable("id") Long id) {
         clienteservice.bloquear(id);
         Cliente c=clienteservice.consultarCliente(id);
         return ResponseEntity.ok(mapear(c));
     }
     @PutMapping("/{id}/desbloquear")
-    public ResponseEntity<ClienteResponseDTO> desbloquear(@PathVariable Long id) {
+    public ResponseEntity<ClienteResponseDTO> desbloquear(@PathVariable("id") Long id) {
         clienteservice.desbloquear(id);
         Cliente c=clienteservice.consultarCliente(id);
         return ResponseEntity.ok(mapear(c));
     }
 
     private ClienteResponseDTO mapear(Cliente c) {
-        return new ClienteResponseDTO(
-            c.getId(),
-            c.getNombre(),
-            c.getEmail(),
-            c.isBloqueado(),
-            c.isVerificado(),
-            c.getTipoCliente().toString()
-        );
+        return new ClienteResponseDTO(c.getId(), c.getNombre(), c.getEmail(),
+            c.isBloqueado(), c.isVerificado(), c.getTipoCliente().toString());
     }
 }
