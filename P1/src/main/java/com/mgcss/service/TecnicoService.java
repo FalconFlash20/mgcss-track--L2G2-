@@ -17,19 +17,19 @@ public class TecnicoService {
 	public Tecnico crearTecnico(Tecnico t) {
 		return tecnicoRepository.save(t);
 	}
-	public Tecnico consultarTecnico(Long TecnicoId) {
-    	return tecnicoRepository.findById(TecnicoId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar el tecnico"));		
+	public Tecnico consultarTecnico(Long tId) {
+    	return tecnicoRepository.findById(tId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar el tecnico"));		
 	}
 	public List<Tecnico> listarTecnicos() {
 		return tecnicoRepository.findAll();
 	}
-	public void activar(Long TecnicoId) {
-		Tecnico t=consultarTecnico(TecnicoId);
+	public void activar(Long tId) {
+		Tecnico t=consultarTecnico(tId);
 		t.activar();
 		tecnicoRepository.save(t);
 	}
-	public void desactivar(Long TecnicoId) {
-		Tecnico t=consultarTecnico(TecnicoId);
+	public void desactivar(Long tId) {
+		Tecnico t=consultarTecnico(tId);
 		t.desactivar();
 		tecnicoRepository.save(t);
 	}

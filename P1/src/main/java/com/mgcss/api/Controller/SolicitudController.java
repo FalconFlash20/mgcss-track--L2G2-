@@ -44,7 +44,7 @@ public class SolicitudController {
 
 	@GetMapping
 	public List<SolicitudResponseDTO> listar(){
-		return solicitudservice.listar().stream().map(this::mapear).collect(Collectors.toList());
+		return solicitudservice.listar().stream().map(this::mapear).toList();
 	}
 	
 	@PatchMapping("/{id}/reabrir")
@@ -68,8 +68,16 @@ public class SolicitudController {
 	}
 	
 	private SolicitudResponseDTO mapear(Solicitud s) {
-		return new SolicitudResponseDTO(s.getId(), s.getDescripcion(), s.getEstado().toString(), s.getFechaCierre(), null, s.isUrgente(), s.getTecnico(), s.getCliente());
-		
+		return new SolicitudResponseDTO.Builder()
+	            .id(s.getId())
+	            .descripcion(s.getDescripcion())
+	            .estado(s.getEstado().toString())
+	            .fechaCierre(s.getFechaCierre())
+	            .tiempoej(s.getSLA())
+	            .urgente(s.isUrgente())
+	            .tecnico(s.getTecnico())
+	            .cliente(s.getCliente())
+	            .build();
 	}
 	
 }

@@ -22,7 +22,7 @@ import com.mgcss.domain.Cliente;
 import com.mgcss.service.ClienteService;
 
 @WebMvcTest(ClienteController.class)
-public class ClienteControllerTest {
+ class ClienteControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

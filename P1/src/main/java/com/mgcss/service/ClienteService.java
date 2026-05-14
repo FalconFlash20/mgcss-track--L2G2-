@@ -17,8 +17,8 @@ public class ClienteService {
 	public Cliente crearCliente(Cliente c) {
 		return clienterepository.save(c);
 	}
-	public Cliente consultarCliente(Long ClienteId) {
-    	return clienterepository.findById(ClienteId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar el cliente"));		
+	public Cliente consultarCliente(Long cId) {
+    	return clienterepository.findById(cId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar el cliente"));		
 	}
 	public List<Cliente> listar() {
 		return clienterepository.findAll();

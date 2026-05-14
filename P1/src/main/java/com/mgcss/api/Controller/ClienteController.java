@@ -43,7 +43,7 @@ public class ClienteController {
     public List<ClienteResponseDTO> listar() {
         return clienteservice.listar().stream()
                 .map(this::mapear)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @PutMapping("/{id}/ascender")

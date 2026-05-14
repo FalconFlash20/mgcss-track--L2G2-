@@ -22,7 +22,7 @@ import com.mgcss.domain.Tecnico;
 import com.mgcss.service.TecnicoService;
 
 @WebMvcTest(TecnicoController.class)
-public class TecnicoControllerTest {
+ class TecnicoControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

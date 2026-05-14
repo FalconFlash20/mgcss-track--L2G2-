@@ -40,16 +40,16 @@ public class SolicitudService {
 
         solicitudRepository.save(solicitud);
     }
-    public Solicitud crearSolicitud(String descripcion, Long clienteId) {
-    	Cliente c= clienteRepository.findById(clienteId).orElseThrow(()-> new IllegalArgumentException("Cliente no encontrado"));
+    public Solicitud crearSolicitud(String descripcion, Long cId) {
+    	Cliente c= clienteRepository.findById(cId).orElseThrow(()-> new IllegalArgumentException("Cliente no encontrado"));
     	Solicitud s=new Solicitud(descripcion, EstadoSolicitud.ABIERTA,LocalDateTime.now(),c);
     	return solicitudRepository.save(s);
     }
-    public Solicitud consultarSolicitud(Long SolicitudId) {
-    	return solicitudRepository.findById(SolicitudId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar la solicitud"));
+    public Solicitud consultarSolicitud(Long sId) {
+    	return solicitudRepository.findById(sId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar la solicitud"));
     }
-    public void cambiarEstado(Long SolicitudId, EstadoSolicitud estado) {
-    	Solicitud s=consultarSolicitud(SolicitudId);
+    public void cambiarEstado(Long sId, EstadoSolicitud estado) {
+    	Solicitud s=consultarSolicitud(sId);
     	if(estado==EstadoSolicitud.CERRADA) {
     		s.cerrar();
     	} else if(estado==EstadoSolicitud.EN_PROCESO) {
@@ -57,8 +57,8 @@ public class SolicitudService {
     	}
     	solicitudRepository.save(s);
     }
-    public void reabrirSolicitud(Long SolicitudId) {
-    	Solicitud s=consultarSolicitud(SolicitudId);
+    public void reabrirSolicitud(Long sId) {
+    	Solicitud s=consultarSolicitud(sId);
     	s.reabrir();
     	solicitudRepository.save(s);
     }

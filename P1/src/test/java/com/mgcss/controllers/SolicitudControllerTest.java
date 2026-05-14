@@ -25,7 +25,7 @@ import com.mgcss.domain.Solicitud.EstadoSolicitud;
 import com.mgcss.service.SolicitudService;
 
 @WebMvcTest(SolicitudController.class)
-public class SolicitudControllerTest {
+ class SolicitudControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

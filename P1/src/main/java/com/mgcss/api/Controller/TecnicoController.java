@@ -45,7 +45,7 @@ public class TecnicoController {
     public List<TecnicoResponseDTO> listar() {
         return tecnicoService.listarTecnicos().stream()
                 .map(this::mapear)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @PutMapping("/{id}/activar")
