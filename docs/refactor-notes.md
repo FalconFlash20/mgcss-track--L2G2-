@@ -223,10 +223,10 @@ public void reabrir() {
 ```
 
 ### Análisis
-El código comentado no aporta valor al código, dificulta la lectura, es un claro Code Smell.
+El código comentado no aporta valor al código, dificulta la lectura, es un claro Code Smell
 
 ### Refactor aplicado
-Se eliminaron completamente los bloques de código comentado.
+Se eliminaron completamente los bloques de código comentado
 
 ### Resultado
 - Código más directo y claro 
@@ -236,4 +236,76 @@ Se eliminaron completamente los bloques de código comentado.
 - Test antiguo reabrir() en SolicitudTest
 
 ---
+## Problema 7 – Optimización SolicitudResponseDTO
+
+### Descripción
+Se detectó el uso de `.collect(Collectors.toList())` para finalizar el procesamiento de Streams en los controladores, en lugar del método más moderno `.toList()`
+
+```java
+@GetMapping
+public List<TecnicoResponseDTO> listar() {
+    return tecnicoService.listarTecnicos().stream()
+            .map(this::mapear)
+            .collect(Collectors.toList());
+}
+```
+
+### Análisis
+El método `.toList()` es preferible sobre `.collect(Collectors.toList())` por tres razones:
+1. Código más corto y legible
+2. Devuelve una lista inmutable
+3. Mejor eficiencia al no requerir la instancia de `Collector()`
+
+### Refactor aplicado
+Se sustituyeron todas las ocurrencias de `.collect(Collectors.toList())` por el método directo `.toList()`
+
+### Resultado
+- Código más limpio
+- Garantiza
+### Casos afectados
+-Clase SolicitudResponseDTO
+- mapear() en SolicitudController
+---
+## Problema 8 – Uso ineficiente de Collectors en Stream
+
+### Descripción
+Se detectaron bloques de código comentado tanto en la clase de dominio como en los tests.
+
+### Código antes
+
+```java
+// this.tecnico = null;
+// this.fechaCierre = null;
+/*
+@Test
+public void reabrir() {
+    Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente());
+    s.asignarTecnico(tecnicoActivo());
+    s.cerrar();
+
+    s.reabrir();
+
+    assertEquals(EstadoSolicitud.ABIERTA, s.getEstado());
+    assertNull(s.getTecnico());
+    assertNull(s.getFechaCierre());
+}
+*/
+```
+
+### Análisis
+El código comentado no aporta valor al código, dificulta la lectura, es un claro Code Smell.
+
+### Refactor aplicado
+Se eliminaron completamente los bloques de código comentado.
+
+### Resultado
+- Código más directo y claro
+- Garantiza la inmutabilidad de las listas devueltas
+
+### Casos afectados
+- Método listar() en los tres Controller
+
+---
+
+
 
