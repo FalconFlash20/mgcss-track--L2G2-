@@ -28,39 +28,39 @@ public class SolicitudResponseDTO {
 		this.cliente = cliente;
 	}
 
-	public LocalDateTime FechaCierre() {
+	public LocalDateTime getFechaCierre() {
 		return fechaCierre;
 	}
 
-	public LocalDateTime Tiempoej() {
+	public LocalDateTime getTiempoej() {
 		return tiempoej;
 	}
 
-	public boolean Urgente() {
+	public boolean getUrgente() {
 		return urgente;
 	}
 
 
-	public Tecnico Tecnico() {
+	public Tecnico getTecnico() {
 		return tecnico;
 	}
 
 
-	public Cliente Cliente() {
+	public Cliente getCliente() {
 		return cliente;
 	}
 
 
-	public Long Id() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public String Estado() {
+	public String getEstado() {
 		return estado;
 	}
 
-	public String Descripcion() {
+	public String getDescripcion() {
 		return descripcion;
 	}
 	

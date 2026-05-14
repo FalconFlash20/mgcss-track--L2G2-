@@ -28,8 +28,8 @@ public class CLienteController {
 	
 	@PostMapping
     public ResponseEntity<ClienteResponseDTO> crear(@RequestBody @Validated ClienteRequestDTO dto) {
-        Cliente.TipoCliente tipo = Cliente.TipoCliente.valueOf(dto.TipoCLiente().toUpperCase());
-        Cliente nuevo = new Cliente(null, dto.Nombre(), dto.Email(), tipo);
+        Cliente.TipoCliente tipo = Cliente.TipoCliente.valueOf(dto.getTipoCLiente().toUpperCase());
+        Cliente nuevo = new Cliente(null, dto.getNombre(), dto.getEmail(), tipo);
         Cliente guardado = clienteservice.crearCliente(nuevo);
         return ResponseEntity.ok(mapear(guardado));
     }
@@ -59,7 +59,7 @@ public class CLienteController {
         Cliente c=clienteservice.consultarCliente(id);
         return ResponseEntity.ok(mapear(c));
     }
-    @PutMapping("/{id}/bloquear")
+    @PutMapping("/{id}/desbloquear")
     public ResponseEntity<ClienteResponseDTO> desbloquear(@PathVariable Long id) {
         clienteservice.desbloquear(id);
         Cliente c=clienteservice.consultarCliente(id);

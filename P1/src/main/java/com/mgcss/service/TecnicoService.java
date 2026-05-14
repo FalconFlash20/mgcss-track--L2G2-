@@ -2,9 +2,12 @@ package com.mgcss.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.mgcss.domain.Tecnico;
 import com.mgcss.domain.TecnicoRepository;
 
+@Service
 public class TecnicoService {
 	private final TecnicoRepository tecnicoRepository;
 

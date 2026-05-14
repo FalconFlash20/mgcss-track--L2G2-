@@ -2,9 +2,12 @@ package com.mgcss.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.mgcss.domain.Cliente;
 import com.mgcss.domain.ClienteRepository;
 
+@Service
 public class ClienteService {
 	private final ClienteRepository clienterepository;
 

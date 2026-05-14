@@ -3,6 +3,8 @@ package com.mgcss.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.mgcss.domain.Cliente;
 import com.mgcss.domain.ClienteRepository;
 import com.mgcss.domain.Solicitud;
@@ -11,6 +13,7 @@ import com.mgcss.domain.SolicitudRepository;
 import com.mgcss.domain.Tecnico;
 import com.mgcss.domain.TecnicoRepository;
 
+@Service
 public class SolicitudService {
 	private final SolicitudRepository solicitudRepository;
 	private final TecnicoRepository tecnicoRepository;

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.mgcss.api.DTO.TecnicoRequestDTO;
 import com.mgcss.api.DTO.TecnicoResponseDTO;
-import com.mgcss.domain.Cliente;
 import com.mgcss.domain.Tecnico;
 import com.mgcss.service.TecnicoService;
 
@@ -30,8 +29,8 @@ public class TecnicoController {
 
     @PostMapping
     public ResponseEntity<TecnicoResponseDTO> crear(@RequestBody @Validated TecnicoRequestDTO dto) {
-        Tecnico.Especialidad esp = Tecnico.Especialidad.valueOf(dto.Especialidad().toUpperCase());
-        Tecnico t = new Tecnico(dto.Nombre(), true, esp);
+        Tecnico.Especialidad esp = Tecnico.Especialidad.valueOf(dto.getEspecialidad().toUpperCase());
+        Tecnico t = new Tecnico(dto.getNombre(), true, esp);
         Tecnico guardado = tecnicoService.crearTecnico(t);
         return ResponseEntity.ok(mapear(guardado));
     }

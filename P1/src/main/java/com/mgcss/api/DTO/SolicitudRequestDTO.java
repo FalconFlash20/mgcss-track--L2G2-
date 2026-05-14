@@ -2,20 +2,23 @@ package com.mgcss.api.DTO;
 
 public class SolicitudRequestDTO {
 
-    private final String descripcion;
-    private final Long clienteId;
+    private String descripcion;
+    private Long clienteId;
     
-
+    public SolicitudRequestDTO() {
+    	
+    }
+    
     public SolicitudRequestDTO(String descripcion,Long clienteId) {
         this.descripcion = descripcion;
         this.clienteId = clienteId;
     }
 
-    public String descripcion() {
+    public String getDescripcion() {
         return descripcion;
     }
 
-    public Long clienteId() {
+    public Long getClienteId() {
         return clienteId;
     }
 }

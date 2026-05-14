@@ -4,16 +4,20 @@ public class TecnicoRequestDTO {
 	private String nombre;
 	private String especialidad;
 	
+	public TecnicoRequestDTO() {
+		
+	}
+	
 	public TecnicoRequestDTO(String nombre, String especialidad) {
 		this.nombre = nombre;
 		this.especialidad = especialidad;
 	}
 
-	public String Nombre() {
+	public String getNombre() {
 		return nombre;
 	}
 
-	public String Especialidad() {
+	public String getEspecialidad() {
 		return especialidad;
 	}
 }

@@ -17,22 +17,22 @@ public class ClienteResponseDTO {
 		this.verificado = verificado;
 		this.tipoCliente = tipoCliente;
 	}
-	public Long Id() {
+	public Long getId() {
 		return id;
 	}
-	public String Nombre() {
+	public String getNombre() {
 		return nombre;
 	}
-	public String Email() {
+	public String getEmail() {
 		return email;
 	}
-	public boolean Bloqueado() {
+	public boolean getBloqueado() {
 		return bloqueado;
 	}
-	public boolean Verificado() {
+	public boolean getVerificado() {
 		return verificado;
 	}
-	public String TipoCliente() {
+	public String getTipoCliente() {
 		return tipoCliente;
 	}
 }

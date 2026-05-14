@@ -32,12 +32,12 @@ public class SolicitudController {
 
 	@PostMapping
 	public ResponseEntity<SolicitudResponseDTO> crearSolicitud(@RequestBody @Validated SolicitudRequestDTO dto){
-		Solicitud s=solicitudservice.crearSolicitud(dto.descripcion(), dto.clienteId());
+		Solicitud s=solicitudservice.crearSolicitud(dto.getDescripcion(), dto.getClienteId());
 		return ResponseEntity.ok(mapear(s));
 	}
 	
-	@GetMapping("/{id")
-	public ResponseEntity<SolicitudResponseDTO> consultar(@PathVariable Long id){
+	@GetMapping("/{id}")
+	public ResponseEntity<SolicitudResponseDTO> consultar(@PathVariable("id") Long id){
 		Solicitud s=solicitudservice.consultarSolicitud(id);
 		return ResponseEntity.ok(mapear(s));
 	}
@@ -48,20 +48,20 @@ public class SolicitudController {
 	}
 	
 	@PatchMapping("/{id}/reabrir")
-	public ResponseEntity<SolicitudResponseDTO> reabrirSolicitud(@PathVariable Long id) {
+	public ResponseEntity<SolicitudResponseDTO> reabrirSolicitud(@PathVariable("id") Long id) {
 	    solicitudservice.reabrirSolicitud(id);
 	    Solicitud s = solicitudservice.consultarSolicitud(id);
 	    return ResponseEntity.ok(mapear(s));
 	}
 	@PutMapping("/{id}/asignarTecnico")
-	public ResponseEntity<SolicitudResponseDTO> asignarTecnico(@PathVariable Long id,@RequestParam Long tecnicoId) {
+	public ResponseEntity<SolicitudResponseDTO> asignarTecnico(@PathVariable("id") Long id,@RequestParam("tecnicoId") Long tecnicoId) {
 	    solicitudservice.asignarTecnico(id, tecnicoId);
 	    Solicitud s = solicitudservice.consultarSolicitud(id);
 	    return ResponseEntity.ok(mapear(s));
 	}
 
 	@PutMapping("/{id}/cambiarEstado")
-	public ResponseEntity<SolicitudResponseDTO> cambiarEstado(@PathVariable Long id,@RequestParam String estado) {
+	public ResponseEntity<SolicitudResponseDTO> cambiarEstado(@PathVariable("id") Long id,@RequestParam("estado") String estado) {
 	    solicitudservice.cambiarEstado(id, EstadoSolicitud.valueOf(estado));
 	    Solicitud s = solicitudservice.consultarSolicitud(id);
 	    return ResponseEntity.ok(mapear(s));

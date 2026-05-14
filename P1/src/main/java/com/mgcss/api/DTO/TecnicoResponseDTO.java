@@ -1,7 +1,5 @@
 package com.mgcss.api.DTO;
 
-import com.mgcss.domain.Tecnico.Especialidad;
-
 public class TecnicoResponseDTO {
 	private Long id;
 	private String nombre;
@@ -14,16 +12,16 @@ public class TecnicoResponseDTO {
 		this.activo = activo;
 		this.especialidad = especialidad;
 	}
-	public Long Id() {
+	public Long getId() {
 		return id;
 	}
-	public String Nombre() {
+	public String getNombre() {
 		return nombre;
 	}
-	public boolean Activo() {
+	public boolean getActivo() {
 		return activo;
 	}
-	public String Especialidad() {
+	public String getEspecialidad() {
 		return especialidad;
 	}	
 }
