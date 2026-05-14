@@ -5,7 +5,6 @@ public class TecnicoRequestDTO {
 	private String especialidad;
 	
 	public TecnicoRequestDTO(String nombre, String especialidad) {
-		super();
 		this.nombre = nombre;
 		this.especialidad = especialidad;
 	}

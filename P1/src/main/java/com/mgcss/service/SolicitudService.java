@@ -45,7 +45,7 @@ public class SolicitudService {
     public Solicitud consultarSolicitud(Long SolicitudId) {
     	return solicitudRepository.findById(SolicitudId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar la solicitud"));
     }
-    public void cambiar(Long SolicitudId, EstadoSolicitud estado) {
+    public void cambiarEstado(Long SolicitudId, EstadoSolicitud estado) {
     	Solicitud s=consultarSolicitud(SolicitudId);
     	if(estado==EstadoSolicitud.CERRADA) {
     		s.cerrar();

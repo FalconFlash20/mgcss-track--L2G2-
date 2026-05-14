@@ -2,14 +2,12 @@ package com.mgcss.api.Controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.jspecify.annotations.Nullable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +34,7 @@ public class CLienteController {
         return ResponseEntity.ok(mapear(guardado));
     }
 	@GetMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> obtener(@PathVariable Long id) {
+    public ResponseEntity<ClienteResponseDTO> consultar(@PathVariable Long id) {
         Cliente c = clienteservice.consultarCliente(id);
         return ResponseEntity.ok(mapear(c));
     }
@@ -48,21 +46,24 @@ public class CLienteController {
                 .collect(Collectors.toList());
     }
 
-    @PatchMapping("/{id}/ascender")
-    public ResponseEntity<Void> ascender(@PathVariable Long id) {
+    @PutMapping("/{id}/ascender")
+    public ResponseEntity<ClienteResponseDTO> ascender(@PathVariable Long id) {
         clienteservice.ascender(id);
-        return ResponseEntity.noContent().build();
+        Cliente c=clienteservice.consultarCliente(id);
+        return ResponseEntity.ok(mapear(c));
     }
 
-    @PatchMapping("/{id}/bloquear")
-    public ResponseEntity<Void> bloquear(@PathVariable Long id) {
+    @PutMapping("/{id}/bloquear")
+    public ResponseEntity<ClienteResponseDTO> bloquear(@PathVariable Long id) {
         clienteservice.bloquear(id);
-        return ResponseEntity.noContent().build();
+        Cliente c=clienteservice.consultarCliente(id);
+        return ResponseEntity.ok(mapear(c));
     }
-    @PatchMapping("/{id}/bloquear")
-    public ResponseEntity<Void> desbloquear(@PathVariable Long id) {
+    @PutMapping("/{id}/bloquear")
+    public ResponseEntity<ClienteResponseDTO> desbloquear(@PathVariable Long id) {
         clienteservice.desbloquear(id);
-        return ResponseEntity.noContent().build();
+        Cliente c=clienteservice.consultarCliente(id);
+        return ResponseEntity.ok(mapear(c));
     }
 
     private ClienteResponseDTO mapear(Cliente c) {

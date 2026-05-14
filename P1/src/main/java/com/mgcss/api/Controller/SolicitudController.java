@@ -6,16 +6,19 @@ import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mgcss.api.DTO.SolicitudRequestDTO;
 import com.mgcss.api.DTO.SolicitudResponseDTO;
 import com.mgcss.domain.Solicitud;
-import com.mgcss.service.ClienteService;
+import com.mgcss.domain.Solicitud.EstadoSolicitud;
 import com.mgcss.service.SolicitudService;
 
 @RestController
@@ -42,6 +45,26 @@ public class SolicitudController {
 	@GetMapping
 	public List<SolicitudResponseDTO> listar(){
 		return solicitudservice.listar().stream().map(this::mapear).collect(Collectors.toList());
+	}
+	
+	@PatchMapping("/{id}/reabrir")
+	public ResponseEntity<SolicitudResponseDTO> reabrirSolicitud(@PathVariable Long id) {
+	    solicitudservice.reabrirSolicitud(id);
+	    Solicitud s = solicitudservice.consultarSolicitud(id);
+	    return ResponseEntity.ok(mapear(s));
+	}
+	@PutMapping("/{id}/asignarTecnico")
+	public ResponseEntity<SolicitudResponseDTO> asignarTecnico(@PathVariable Long id,@RequestParam Long tecnicoId) {
+	    solicitudservice.asignarTecnico(id, tecnicoId);
+	    Solicitud s = solicitudservice.consultarSolicitud(id);
+	    return ResponseEntity.ok(mapear(s));
+	}
+
+	@PutMapping("/{id}/cambiarEstado")
+	public ResponseEntity<SolicitudResponseDTO> cambiarEstado(@PathVariable Long id,@RequestParam String estado) {
+	    solicitudservice.cambiarEstado(id, EstadoSolicitud.valueOf(estado));
+	    Solicitud s = solicitudservice.consultarSolicitud(id);
+	    return ResponseEntity.ok(mapear(s));
 	}
 	
 	private SolicitudResponseDTO mapear(Solicitud s) {
