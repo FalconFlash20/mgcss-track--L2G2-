@@ -18,7 +18,10 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+<<<<<<< HEAD
 
+=======
+>>>>>>> c830738 (fix: rename api package directories)
 import com.mgcss.api.controller.SolicitudController;
 import com.mgcss.domain.Cliente;
 import com.mgcss.domain.Solicitud;
