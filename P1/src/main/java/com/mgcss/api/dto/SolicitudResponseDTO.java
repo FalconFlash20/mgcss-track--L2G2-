@@ -16,6 +16,7 @@ public class SolicitudResponseDTO {
 	private Tecnico tecnico;
 	private Cliente cliente;
 	
+<<<<<<< HEAD
 	public SolicitudResponseDTO(Builder b) {
 		this.id = b.id;
 		this.descripcion = b.descripcion;
@@ -25,6 +26,18 @@ public class SolicitudResponseDTO {
 		this.urgente = b.urgente;
 		this.tecnico = b.tecnico;
 		this.cliente = b.cliente;
+=======
+	public SolicitudResponseDTO(Long id, String descripcion, String estado, LocalDateTime fechaCierre,
+			LocalDateTime tiempoej, boolean urgente, Tecnico tecnico, Cliente cliente) {
+		this.id = id;
+		this.descripcion = descripcion;
+		this.estado = estado;
+		this.fechaCierre = fechaCierre;
+		this.tiempoej = tiempoej;
+		this.urgente = urgente;
+		this.tecnico = tecnico;
+		this.cliente = cliente;
+>>>>>>> 1653fc6 (fix: rename api package directories)
 	}
 
 	public LocalDateTime getFechaCierre() {
@@ -62,6 +75,7 @@ public class SolicitudResponseDTO {
 	public String getDescripcion() {
 		return descripcion;
 	}
+<<<<<<< HEAD
 	public static class Builder {
         private Long id;
         private String descripcion;
@@ -85,6 +99,8 @@ public class SolicitudResponseDTO {
             return new SolicitudResponseDTO(this);
         }
     }
+=======
+>>>>>>> 1653fc6 (fix: rename api package directories)
 	
 	
 
