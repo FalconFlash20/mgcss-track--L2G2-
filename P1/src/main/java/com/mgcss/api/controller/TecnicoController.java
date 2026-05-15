@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-<<<<<<< HEAD
 
-=======
->>>>>>> 1653fc6 (fix: rename api package directories)
 import com.mgcss.api.dto.TecnicoRequestDTO;
 import com.mgcss.api.dto.TecnicoResponseDTO;
 import com.mgcss.domain.Tecnico;
