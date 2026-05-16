@@ -18,6 +18,7 @@ import com.mgcss.domain.Cliente;
 import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Solicitud.EstadoSolicitud;
 import com.mgcss.domain.Tecnico;
+import com.mgcss.infrastructure.persistence.JpaClienteRepository;
 import com.mgcss.infrastructure.persistence.JpaSolicitudRepository;
 import com.mgcss.infrastructure.persistence.JpaTecnicoRepository;
 import com.mgcss.domain.Cliente.TipoCliente;
@@ -30,6 +31,8 @@ import com.mgcss.service.SolicitudService;
 	private JpaSolicitudRepository solicitudRepository;
 	@Mock
 	private JpaTecnicoRepository tecnicoRepository;
+	@Mock
+	private JpaClienteRepository clienteRepository;
 	@InjectMocks
 	private SolicitudService service;
 	
@@ -80,13 +83,32 @@ import com.mgcss.service.SolicitudService;
 	void lanzarExcepcionSiTecnicoNoExiste() {
 	    Cliente c = new Cliente(1L,"Pepe","pepe@test.com",TipoCliente.STANDARD);
 	    Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), c);
-
 	    when(solicitudRepository.findById(1L)).thenReturn(Optional.of(s));
 	    when(tecnicoRepository.findById(2L)).thenReturn(Optional.empty());
-
 	    Exception e = assertThrows(IllegalArgumentException.class,
 	            () -> { service.asignarTecnico(1L, 2L);});
 	    System.out.println(e.getMessage());
 	    verify(solicitudRepository, never()).save(any());
+	}
+	@Test
+	void lanzarExcepcionSiReabrirSolicitudNo() {
+	    Cliente cliente = new Cliente(1L, "Fran", "fran@pccom.com", Cliente.TipoCliente.STANDARD);
+	    Solicitud solicitudAbierta = solicitudRepository.save(new Solicitud("Reparación gráfica",EstadoSolicitud.ABIERTA,LocalDateTime.now(), cliente));
+	    assertThrows(RuntimeException.class, () -> {
+	        service.reabrirSolicitud(solicitudAbierta.getId());
+	    });
+	}
+	@Test
+	void lanzarExcepcionSiAsignasTecnicoASolCerrada() {
+		Tecnico t = new Tecnico("Juan", true, Tecnico.Especialidad.SOFTWARE);
+		Cliente c = new Cliente(1L, "Pepe", "pepe@test.com", TipoCliente.STANDARD);
+		Solicitud s = new Solicitud("desc", EstadoSolicitud.CERRADA, LocalDateTime.now(), c);	
+		when(solicitudRepository.findById(1L)).thenReturn(Optional.of(s));
+		when(tecnicoRepository.findById(2L)).thenReturn(Optional.of(t));
+		Exception e = assertThrows(IllegalArgumentException.class, () -> {
+			service.asignarTecnico(1L, 2L);
+		});	
+		System.out.println(e.getMessage());
+		verify(solicitudRepository, never()).save(any());
 	}
 }
