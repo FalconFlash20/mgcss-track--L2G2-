@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.mgcss.domain.Cliente;
-import com.mgcss.domain.ClienteRepository;
+import com.mgcss.infrastructure.persistence.JpaClienteRepository;
 
 @Service
 public class ClienteService {
-	private final ClienteRepository clienterepository;
+	private final JpaClienteRepository clienterepository;
 
-	public ClienteService(ClienteRepository cliente) {
+	public ClienteService(JpaClienteRepository cliente) {
 		this.clienterepository = cliente;
 	}
 	public Cliente crearCliente(Cliente c) {

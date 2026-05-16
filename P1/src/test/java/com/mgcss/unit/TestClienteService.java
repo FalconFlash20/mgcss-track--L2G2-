@@ -14,14 +14,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.mgcss.domain.Cliente;
 import com.mgcss.domain.Cliente.TipoCliente;
-import com.mgcss.domain.ClienteRepository;
+import com.mgcss.infrastructure.persistence.JpaClienteRepository;
 import com.mgcss.service.ClienteService;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("unit")
 class TestClienteService {
 	@Mock
-    private ClienteRepository clienteRepository;
+    private JpaClienteRepository clienteRepository;
     @InjectMocks
     private ClienteService service;
     @Test

@@ -6,23 +6,23 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.mgcss.domain.Cliente;
-import com.mgcss.domain.ClienteRepository;
 import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Solicitud.EstadoSolicitud;
-import com.mgcss.domain.SolicitudRepository;
 import com.mgcss.domain.Tecnico;
-import com.mgcss.domain.TecnicoRepository;
+import com.mgcss.infrastructure.persistence.JpaClienteRepository;
+import com.mgcss.infrastructure.persistence.JpaSolicitudRepository;
+import com.mgcss.infrastructure.persistence.JpaTecnicoRepository;
 
 @Service
 public class SolicitudService {
-	private final SolicitudRepository solicitudRepository;
-	private final TecnicoRepository tecnicoRepository;
-	private final ClienteRepository clienteRepository;
+	private final JpaSolicitudRepository solicitudRepository;
+	private final JpaTecnicoRepository tecnicoRepository;
+	private final JpaClienteRepository clienteRepository;
     
 
     
-    public SolicitudService(SolicitudRepository solicitudRepository, TecnicoRepository tecnicoRepository,
-			ClienteRepository clienteRepository) {
+    public SolicitudService(JpaSolicitudRepository solicitudRepository, JpaTecnicoRepository tecnicoRepository,
+			JpaClienteRepository clienteRepository) {
 		this.solicitudRepository = solicitudRepository;
 		this.tecnicoRepository = tecnicoRepository;
 		this.clienteRepository = clienteRepository;

@@ -5,15 +5,26 @@ import java.time.LocalDateTime;
 import com.mgcss.domain.Cliente;
 import com.mgcss.domain.Tecnico;
 
-public class SolicitudResponseDTO {
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Modelo de datos detallado devuelto tras consultar o procesar una solicitud de asistencia")
+public class SolicitudResponseDTO {
+	
+	@Schema(description = "Identificador único de la solicitud generado automáticamente", example = "15")
     private final Long id;
+	@Schema(description = "Texto descriptivo de la incidencia registrada", example = "Pantalla rota tras impacto")
     private final String descripcion;
+	@Schema(description = "Estado operativo actual de la resolución de la incidencia", example = "EN_PROCESO")
     private final String estado;
+	@Schema(description = "Fecha y hora exacta en la que se cerró la solicitud (nulo si sigue abierta)")
     private LocalDateTime fechaCierre;
+	@Schema(description = "Tiempo total estimado o consumido para la ejecución del servicio (SLA)")
 	private LocalDateTime tiempoej;
+	@Schema(description = "Indica si la solicitud requiere atención prioritaria e inmediata", example = "true")
 	private boolean urgente;
+	@Schema(description = "Ficha del técnico asignado al servicio (puede ser nulo si no se ha asignado)")
 	private Tecnico tecnico;
+	@Schema(description = "Información del cliente que reportó la incidencia")
 	private Cliente cliente;
 	
 	public SolicitudResponseDTO(Builder b) {

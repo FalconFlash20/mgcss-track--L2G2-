@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.mgcss.domain.Tecnico;
-import com.mgcss.domain.TecnicoRepository;
+import com.mgcss.infrastructure.persistence.JpaTecnicoRepository;
 import com.mgcss.service.TecnicoService;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,7 +21,7 @@ import com.mgcss.service.TecnicoService;
 class TestTecnicoService {
 
 	@Mock
-    private TecnicoRepository tecnicoRepository;
+    private JpaTecnicoRepository tecnicoRepository;
 
     @InjectMocks
     private TecnicoService service;

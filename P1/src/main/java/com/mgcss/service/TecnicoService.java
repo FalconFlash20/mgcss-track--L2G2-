@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.mgcss.domain.Tecnico;
-import com.mgcss.domain.TecnicoRepository;
+import com.mgcss.infrastructure.persistence.JpaTecnicoRepository;
 
 @Service
 public class TecnicoService {
-	private final TecnicoRepository tecnicoRepository;
+	private final JpaTecnicoRepository tecnicoRepository;
 
-	public TecnicoService(TecnicoRepository tecnicoRepository) {
+	public TecnicoService(JpaTecnicoRepository tecnicoRepository) {
 		this.tecnicoRepository = tecnicoRepository;
 	}
 	public Tecnico crearTecnico(Tecnico t) {

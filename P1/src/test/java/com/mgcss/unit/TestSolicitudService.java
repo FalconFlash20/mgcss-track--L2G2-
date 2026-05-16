@@ -17,9 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.mgcss.domain.Cliente;
 import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Solicitud.EstadoSolicitud;
-import com.mgcss.domain.SolicitudRepository;
 import com.mgcss.domain.Tecnico;
-import com.mgcss.domain.TecnicoRepository;
+import com.mgcss.infrastructure.persistence.JpaSolicitudRepository;
+import com.mgcss.infrastructure.persistence.JpaTecnicoRepository;
 import com.mgcss.domain.Cliente.TipoCliente;
 import com.mgcss.service.SolicitudService;
 
@@ -27,9 +27,9 @@ import com.mgcss.service.SolicitudService;
 @Tag("unit")
  class TestSolicitudService {
 	@Mock
-	private SolicitudRepository solicitudRepository;
+	private JpaSolicitudRepository solicitudRepository;
 	@Mock
-	private TecnicoRepository tecnicoRepository;
+	private JpaTecnicoRepository tecnicoRepository;
 	@InjectMocks
 	private SolicitudService service;
 	
