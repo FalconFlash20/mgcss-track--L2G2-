@@ -27,7 +27,7 @@ public class SolicitudResponseDTO {
 	@Schema(description = "Información del cliente que reportó la incidencia")
 	private Cliente cliente;
 	
-	public SolicitudResponseDTO(Builder b) {
+	private SolicitudResponseDTO(Builder b) {
 		this.id = b.id;
 		this.descripcion = b.descripcion;
 		this.estado = b.estado;
