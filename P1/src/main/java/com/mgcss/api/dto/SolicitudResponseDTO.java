@@ -37,20 +37,6 @@ public class SolicitudResponseDTO {
 		this.tecnico = b.tecnico;
 		this.cliente = b.cliente;
 	}
-		
-	public SolicitudResponseDTO(Long id, String descripcion, String estado, LocalDateTime fechaCierre,
-			LocalDateTime tiempoej, boolean urgente, Tecnico tecnico, Cliente cliente) {
-		this.id = id;
-		this.descripcion = descripcion;
-		this.estado = estado;
-		this.fechaCierre = fechaCierre;
-		this.tiempoej = tiempoej;
-		this.urgente = urgente;
-		this.tecnico = tecnico;
-		this.cliente = cliente;
-		
-	}
-
 	public LocalDateTime getFechaCierre() {
 		return fechaCierre;
 	}

@@ -94,8 +94,9 @@ import com.mgcss.service.SolicitudService;
 	void lanzarExcepcionSiReabrirSolicitudNo() {
 	    Cliente cliente = new Cliente(1L, "Fran", "fran@pccom.com", Cliente.TipoCliente.STANDARD);
 	    Solicitud solicitudAbierta = solicitudRepository.save(new Solicitud("Reparación gráfica",EstadoSolicitud.ABIERTA,LocalDateTime.now(), cliente));
+	   Long idSol=solicitudAbierta.getId();
 	    assertThrows(RuntimeException.class, () -> {
-	        service.reabrirSolicitud(solicitudAbierta.getId());
+	        service.reabrirSolicitud(idSol);
 	    });
 	}
 	@Test
