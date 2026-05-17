@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import com.mgcss.domain.Cliente;
 
 @Repository
-public interface JpaClienteRepository extends JpaRepository<Cliente, Long> {
+public interface JpaClienteRepository extends JpaRepository<Cliente, Long>{
 }

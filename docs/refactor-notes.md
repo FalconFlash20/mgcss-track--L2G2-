@@ -223,10 +223,10 @@ public void reabrir() {
 ```
 
 ### Análisis
-El código comentado no aporta valor al código, dificulta la lectura, es un claro Code Smell.
+El código comentado no aporta valor al código, dificulta la lectura, es un claro Code Smell
 
 ### Refactor aplicado
-Se eliminaron completamente los bloques de código comentado.
+Se eliminaron completamente los bloques de código comentado
 
 ### Resultado
 - Código más directo y claro 
@@ -236,4 +236,64 @@ Se eliminaron completamente los bloques de código comentado.
 - Test antiguo reabrir() en SolicitudTest
 
 ---
+## Problema 7 – Uso ineficiente de Collectors en Stream
+
+### Descripción
+Se detectó el uso de `.collect(Collectors.toList())` para finalizar el procesamiento de Streams en los controladores, en lugar del método más moderno `.toList()`
+
+```java
+@GetMapping
+public List<TecnicoResponseDTO> listar() {
+    return tecnicoService.listarTecnicos().stream()
+            .map(this::mapear)
+            .collect(Collectors.toList());
+}
+```
+
+### Análisis
+El método `.toList()` es preferible sobre `.collect(Collectors.toList())` por tres razones:
+1. Código más corto y legible
+2. Devuelve una lista inmutable
+3. Mejor eficiencia al no requerir la instancia de `Collector()`
+
+### Refactor aplicado
+Se sustituyeron todas las ocurrencias de `.collect(Collectors.toList())` por el método directo `.toList()`
+
+### Resultado
+- Código más limpio
+- Garantiza la inmutabilidad de las listas devueltas
+### Casos afectados
+-listar() en los tres Controller
+---
+## Problema 8 – Constructor con exceso de parámetros en SolicitudResponseDTO
+
+### Descripción
+Se detectó un Code Smell en la clase `SolicitudResponseDTO` donde el constructor superaba el límite de 7 parámetros permitidos por SonarCloud (tenía 8)
+
+### Código antes
+
+```java
+public SolicitudResponseDTO(Long id, String descripcion, String estado, LocalDateTime fechaCierre, LocalDateTime tiempoej, boolean urgente, Tecnico tecnico, Cliente cliente) {
+    this.id = id;
+    this.descripcion = descripcion;
+    // ... asignación de los 8 campos
+}
+```
+
+### Análisis
+Los constructores con demasiados parámetros son difíciles de mantener y propensos a errores en el orden de los argumentos
+### Refactor aplicado
+Se implementó el Patrón Builder mediante una clase anidada estática. Se cambió el acceso del constructor principal a private para que solo el Builder pueda instanciarlo
+
+### Resultado
+- Cumplimiento de las reglas de calidad
+- Código de mapeo más expresivo y seguro
+
+### Casos afectados
+- Constructor de SolicitudResponseDTO
+- mapear() en SOlicitudController
+
+---
+
+
 

@@ -9,7 +9,7 @@ import com.mgcss.domain.Tecnico;
 import com.mgcss.domain.Tecnico.Especialidad;
 
 
-public class TecnicoTest {
+ class TecnicoTest {
 	@Test
      void crearTecnicoCorrecto() {
         Tecnico t = new Tecnico("Fran", true, Especialidad.SOFTWARE);

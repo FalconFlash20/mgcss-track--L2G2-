@@ -1,0 +1,42 @@
+package com.mgcss.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.mgcss.domain.Cliente;
+import com.mgcss.infrastructure.persistence.JpaClienteRepository;
+
+@Service
+public class ClienteService {
+	private final JpaClienteRepository clienterepository;
+
+	public ClienteService(JpaClienteRepository cliente) {
+		this.clienterepository = cliente;
+	}
+	public Cliente crearCliente(Cliente c) {
+		return clienterepository.save(c);
+	}
+	public Cliente consultarCliente(Long cId) {
+    	return clienterepository.findById(cId).orElseThrow(() -> new IllegalArgumentException("No se ha podido consultar el cliente"));		
+	}
+	public List<Cliente> listar() {
+		return clienterepository.findAll();
+	}
+	public void ascender(Long id) {
+		Cliente c=consultarCliente(id);
+		c.ascenderCliente();
+		clienterepository.save(c);
+	}
+	public void bloquear(Long id) {
+		Cliente c=consultarCliente(id);
+		c.bloquearCuenta();
+		clienterepository.save(c);
+	}
+	public void desbloquear(Long id) {
+		Cliente c=consultarCliente(id);
+		c.desbloquearCuenta();
+		clienterepository.save(c);
+	}
+	
+}

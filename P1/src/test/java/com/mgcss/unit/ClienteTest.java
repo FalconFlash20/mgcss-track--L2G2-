@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import com.mgcss.domain.Cliente;
 import com.mgcss.domain.Cliente.TipoCliente;
 
-public class ClienteTest {
+ class ClienteTest {
 	
     private Cliente clienteStandard() {
         return new Cliente(1L, "Pepe", "pepe@test.com", TipoCliente.STANDARD);

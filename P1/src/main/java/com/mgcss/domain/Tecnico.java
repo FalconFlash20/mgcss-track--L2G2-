@@ -33,6 +33,11 @@ public class Tecnico {
         this.especialidad = especialidad;
     }
 	
+	
+	public Long getId() {
+		return id;
+	}
+
 	public boolean isActivo() {
 		return activo;
 	}

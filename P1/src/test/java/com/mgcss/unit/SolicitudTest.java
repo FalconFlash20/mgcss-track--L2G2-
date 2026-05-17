@@ -14,7 +14,7 @@ import com.mgcss.domain.Tecnico;
 import com.mgcss.domain.Tecnico.Especialidad;
 import com.mgcss.domain.Cliente.TipoCliente;
 
-public class SolicitudTest {
+ class SolicitudTest {
 	
 	private Cliente cliente() {
         return new Cliente(1L, "Pepe", "pepe@test.com", TipoCliente.STANDARD);

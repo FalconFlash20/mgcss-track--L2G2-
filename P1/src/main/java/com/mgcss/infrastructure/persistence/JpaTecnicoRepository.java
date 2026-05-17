@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.mgcss.domain.Tecnico;
 
 @Repository
-public interface JpaTecnicoRepository extends JpaRepository<Tecnico, Long> {
+public interface JpaTecnicoRepository extends JpaRepository<Tecnico, Long>{
+	
 }
