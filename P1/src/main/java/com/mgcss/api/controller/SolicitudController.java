@@ -90,7 +90,7 @@ public class SolicitudController {
 	}
 
 	@PutMapping("/{id}/cambiarEstado")
-	@Operation(summary = "Cambiar estado de la solicitud", description = "Modifica manualmente el estado actual de la solicitud (EJ: EN_PROCESO, RESUELTA, CERRADA).")
+	@Operation(summary = "Cambiar estado de la solicitud", description = "Modifica manualmente el estado actual de la solicitud (EJ: EN_PROCESO, ABIERTA, CERRADA).")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "Estado actualizado con éxito"),
 		@ApiResponse(responseCode = "400", description = "El estado proporcionado no es válido o la transición no está permitida"),
