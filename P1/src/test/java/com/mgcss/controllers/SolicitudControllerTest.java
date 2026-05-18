@@ -32,7 +32,7 @@ import com.mgcss.service.SolicitudService;
     private MockMvc mockMvc;
 
     @MockitoBean
-    private SolicitudService solicitudservice;
+    private SolicitudService solicitudService;
 
     @Test
     void deberiaCrearSolicitud() throws Exception {
@@ -41,7 +41,7 @@ import com.mgcss.service.SolicitudService;
 
         Solicitud solicitud = new Solicitud( "Error conexión", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente);
 
-        when(solicitudservice.crearSolicitud("Error conexión", 1L)).thenReturn(solicitud);
+        when(solicitudService.crearSolicitud("Error conexión", 1L)).thenReturn(solicitud);
 
         String json = """
                 {
@@ -51,8 +51,8 @@ import com.mgcss.service.SolicitudService;
                 """;
 
         mockMvc.perform(post("/api/solicitudes").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.descripcion").value("Error conexión"))
-                .andExpect(jsonPath("$.estado").value("ABIERTA"));
+        .andExpect(status().isCreated()).andExpect(jsonPath("$.descripcion").value("Error conexión"))
+        .andExpect(jsonPath("$.estado").value("ABIERTA"));
     }
 
     @Test
@@ -61,7 +61,7 @@ import com.mgcss.service.SolicitudService;
 
         Solicitud solicitud = new Solicitud("Fallo servidor", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente);
 
-        when(solicitudservice.consultarSolicitud(1L)).thenReturn(solicitud);
+        when(solicitudService.consultarSolicitud(1L)).thenReturn(solicitud);
 
         mockMvc.perform(get("/api/solicitudes/1")).andExpect(status().isOk())
         .andExpect(jsonPath("$.descripcion").value("Fallo servidor"))
@@ -74,7 +74,7 @@ import com.mgcss.service.SolicitudService;
     	Solicitud s1 = new Solicitud("Error 1", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente);
     	Solicitud s2 = new Solicitud("Error 2", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente);
 
-        when(solicitudservice.listar()).thenReturn(List.of(s1, s2));
+        when(solicitudService.listar()).thenReturn(List.of(s1, s2));
 
         mockMvc.perform(get("/api/solicitudes")).andExpect(status().isOk())
         .andExpect(jsonPath("$.length()").value(2));
@@ -84,8 +84,8 @@ import com.mgcss.service.SolicitudService;
     void deberiaReabrirSolicitud() throws Exception {
     	Cliente cliente = new Cliente(1L, "Alejandro", "alex@test.com", Cliente.TipoCliente.PREMIUM);
         Solicitud solicitud = new Solicitud("Incidencia", EstadoSolicitud.CERRADA, LocalDateTime.now(), cliente);
-        doNothing().when(solicitudservice).reabrirSolicitud(1L);
-        when(solicitudservice.consultarSolicitud(1L)).thenReturn(solicitud);
+        doNothing().when(solicitudService).reabrirSolicitud(1L);
+        when(solicitudService.consultarSolicitud(1L)).thenReturn(solicitud);
 
         mockMvc.perform(patch("/api/solicitudes/1/reabrir")).andExpect(status().isOk());
     }
@@ -96,8 +96,8 @@ import com.mgcss.service.SolicitudService;
 
         Solicitud solicitud = new Solicitud("Hardware roto", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente);
 
-        doNothing().when(solicitudservice).asignarTecnico(1L, 5L);
-        when(solicitudservice.consultarSolicitud(1L)).thenReturn(solicitud);
+        doNothing().when(solicitudService).asignarTecnico(1L, 5L);
+        when(solicitudService.consultarSolicitud(1L)).thenReturn(solicitud);
 
         mockMvc.perform(put("/api/solicitudes/1/asignarTecnico").param("tecnicoId", "5")).andExpect(status().isOk());
     }
@@ -108,10 +108,28 @@ import com.mgcss.service.SolicitudService;
 
         Solicitud solicitud = new Solicitud("Problema red", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente);
         
-        doNothing().when(solicitudservice).cambiarEstado(1L, EstadoSolicitud.EN_PROCESO);
+        doNothing().when(solicitudService).cambiarEstado(1L, EstadoSolicitud.EN_PROCESO);
 
-        when(solicitudservice.consultarSolicitud(1L)).thenReturn(solicitud);
+        when(solicitudService.consultarSolicitud(1L)).thenReturn(solicitud);
 
         mockMvc.perform(put("/api/solicitudes/1/cambiarEstado").param("estado", "EN_PROCESO")).andExpect(status().isOk());
+    }
+    
+    @Test
+    void deberiaDevolver400SiDescripcionEsVacia() throws Exception {
+    	String json = """
+            {
+                "descripcion":"",
+                "clienteId":1
+            }
+            """;
+
+        mockMvc.perform(post("/api/solicitudes").contentType(MediaType.APPLICATION_JSON)
+        .content(json)).andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void deberiaDevolver400SiEstadoEsInvalido() throws Exception {
+        mockMvc.perform(put("/api/solicitudes/1/cambiarEstado").param("estado", "ESTADO_FAKE")).andExpect(status().isBadRequest());
     }
 }
