@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -103,43 +105,32 @@ import com.mgcss.service.ClienteService;
         mockMvc.perform(put("/api/clientes/1/desbloquear")).andExpect(status().isOk());
     }
     
-    @Test
-    void deberiaDevolver400SiNombreEsVacio() throws Exception {
-        String json = """
-            {
-                "nombre":"",
-                "email":"alex@test.com",
-                "tipoCliente":"STANDARD"
-            }
-            """;
-
+    @ParameterizedTest
+    @ValueSource(strings = {
+        """
+        {
+            "nombre":"",
+            "email":"alex@test.com",
+            "tipoCliente":"STANDARD"
+        }
+        """,
+        """
+        {
+            "nombre":"Alex",
+            "email":"correo-mal",
+            "tipoCliente":"STANDARD"
+        }
+        """,
+        """
+        {
+            "nombre":"Alex",
+            "email":"alex@test.com",
+            "tipoCliente":"FAKE"
+        }
+        """
+    })
+    void deberiaDevolver400ConDatosInvalidos(String json) throws Exception {
         mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
-        .content(json)).andExpect(status().isBadRequest());
-    }
-    
-    @Test
-    void deberiaDevolver400SiTipoClienteEsInvalido() throws Exception {
-        String json = """
-            {
-                "nombre":"Alex",
-                "email":"alex@test.com",
-                "tipoCliente":"FAKE"
-            }
-            """;
-        mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
-        .content(json)).andExpect(status().isBadRequest());
-    }
-    
-    @Test
-    void deberiaDevolver400SiEmailEsInvalido() throws Exception {
-        String json = """
-            {
-                "nombre":"Alex",
-                "email":"correo-mal",
-                "tipoCliente":"STANDARD"
-            }
-            """;
-        mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
-        .content(json)).andExpect(status().isBadRequest());
+        		.content(json)).andExpect(status().isBadRequest());
     }
 }
