@@ -6,13 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class TecnicoResponseDTO {
 	
 	@Schema(description = "Identificador único del técnico generado por el sistema", example = "4")
-	private Long id;
+	private final Long id;
 	@Schema(description = "Nombre completo del técnico", example = "Carlos Gómez")
-	private String nombre;
+	private final String nombre;
 	@Schema(description = "Estado de disponibilidad del técnico para recibir nuevas incidencias", example = "true")
-	private boolean activo;
+	private final boolean activo;
 	@Schema(description = "Especialización técnica actual asignada al operario", example = "HARDWARE")
-	private String especialidad;
+	private final String especialidad;
 
 	public TecnicoResponseDTO(Long id, String nombre, boolean activo, String especialidad) {
 		this.id = id;
@@ -26,7 +26,7 @@ public class TecnicoResponseDTO {
 	public String getNombre() {
 		return nombre;
 	}
-	public boolean getActivo() {
+	public boolean isActivo() {
 		return activo;
 	}
 	public String getEspecialidad() {
