@@ -2,9 +2,6 @@ package com.mgcss.api.dto;
 
 import java.time.LocalDateTime;
 
-import com.mgcss.domain.Cliente;
-import com.mgcss.domain.Tecnico;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Modelo de datos detallado devuelto tras consultar o procesar una solicitud de asistencia")

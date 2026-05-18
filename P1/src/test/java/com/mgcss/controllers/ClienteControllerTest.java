@@ -28,23 +28,23 @@ import com.mgcss.service.ClienteService;
     private MockMvc mockMvc;
 
     @MockitoBean
-    private ClienteService clienteservice;
+    private ClienteService clienteService;
 
     @Test
     void deberiaCrearCliente() throws Exception {
         Cliente cliente = new Cliente(1L, "Alejandro", "alex@test.com", Cliente.TipoCliente.STANDARD);
 
-        when(clienteservice.crearCliente(org.mockito.ArgumentMatchers.any(Cliente.class))).thenReturn(cliente);
+        when(clienteService.crearCliente(org.mockito.ArgumentMatchers.any(Cliente.class))).thenReturn(cliente);
 
         String json = """
                 {
                     "nombre":"Alejandro",
                     "email":"alex@test.com",
-                    "tipoCLiente":"STANDARD"
+                    "tipoCliente":"STANDARD"
                 }
                 """;
 
-        mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isOk())
+        mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated())
                 .andExpect(jsonPath("$.nombre").value("Alejandro")).andExpect(jsonPath("$.email").value("alex@test.com"))
                 .andExpect(jsonPath("$.tipoCliente").value("STANDARD"));
     }
@@ -53,7 +53,7 @@ import com.mgcss.service.ClienteService;
     void deberiaConsultarCliente() throws Exception {
         Cliente cliente = new Cliente(1L, "Alejandro", "alex@test.com", Cliente.TipoCliente.PREMIUM);
 
-        when(clienteservice.consultarCliente(1L)).thenReturn(cliente);
+        when(clienteService.consultarCliente(1L)).thenReturn(cliente);
 
         mockMvc.perform(get("/api/clientes/1")).andExpect(status().isOk()).andExpect(jsonPath("$.nombre").value("Alejandro"))
                 .andExpect(jsonPath("$.tipoCliente").value("PREMIUM"));
@@ -65,7 +65,7 @@ import com.mgcss.service.ClienteService;
 
         Cliente c2 = new Cliente(2L, "Irene", "irene@test.com", Cliente.TipoCliente.PREMIUM);
 
-        when(clienteservice.listar()).thenReturn(List.of(c1, c2));
+        when(clienteService.listar()).thenReturn(List.of(c1, c2));
 
         mockMvc.perform(get("/api/clientes")).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(2));
     }
@@ -74,9 +74,9 @@ import com.mgcss.service.ClienteService;
     void deberiaAscenderCliente() throws Exception {
         Cliente cliente = new Cliente(1L, "Alejandro", "alex@universidad.edu", Cliente.TipoCliente.PREMIUM);
 
-        doNothing().when(clienteservice).ascender(1L);
+        doNothing().when(clienteService).ascender(1L);
 
-        when(clienteservice.consultarCliente(1L)).thenReturn(cliente);
+        when(clienteService.consultarCliente(1L)).thenReturn(cliente);
 
         mockMvc.perform(put("/api/clientes/1/ascender")).andExpect(status().isOk());
     }
@@ -85,9 +85,9 @@ import com.mgcss.service.ClienteService;
     void deberiaBloquearCliente() throws Exception {
         Cliente cliente = new Cliente(1L, "Alejandro", "alex@test.com", Cliente.TipoCliente.STANDARD);
 
-        doNothing().when(clienteservice).bloquear(1L);
+        doNothing().when(clienteService).bloquear(1L);
 
-        when(clienteservice.consultarCliente(1L)).thenReturn(cliente);
+        when(clienteService.consultarCliente(1L)).thenReturn(cliente);
 
         mockMvc.perform(put("/api/clientes/1/bloquear")).andExpect(status().isOk());
     }
@@ -96,10 +96,50 @@ import com.mgcss.service.ClienteService;
     void deberiaDesbloquearCliente() throws Exception {
         Cliente cliente = new Cliente(1L, "Alejandro", "alex@test.com", Cliente.TipoCliente.STANDARD);
 
-        doNothing().when(clienteservice).desbloquear(1L);
+        doNothing().when(clienteService).desbloquear(1L);
 
-        when(clienteservice.consultarCliente(1L)).thenReturn(cliente);
+        when(clienteService.consultarCliente(1L)).thenReturn(cliente);
 
         mockMvc.perform(put("/api/clientes/1/desbloquear")).andExpect(status().isOk());
+    }
+    
+    @Test
+    void deberiaDevolver400SiNombreEsVacio() throws Exception {
+        String json = """
+            {
+                "nombre":"",
+                "email":"alex@test.com",
+                "tipoCliente":"STANDARD"
+            }
+            """;
+
+        mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
+        .content(json)).andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void deberiaDevolver400SiTipoClienteEsInvalido() throws Exception {
+        String json = """
+            {
+                "nombre":"Alex",
+                "email":"alex@test.com",
+                "tipoCliente":"FAKE"
+            }
+            """;
+        mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
+        .content(json)).andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void deberiaDevolver400SiEmailEsInvalido() throws Exception {
+        String json = """
+            {
+                "nombre":"Alex",
+                "email":"correo-mal",
+                "tipoCliente":"STANDARD"
+            }
+            """;
+        mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
+        .content(json)).andExpect(status().isBadRequest());
     }
 }
