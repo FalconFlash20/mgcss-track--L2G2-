@@ -26,7 +26,7 @@ public class TecnicoResponseDTO {
 	public String getNombre() {
 		return nombre;
 	}
-	public boolean isActivo() {
+	public boolean getActivo() {
 		return activo;
 	}
 	public String getEspecialidad() {

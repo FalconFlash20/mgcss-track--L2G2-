@@ -23,12 +23,12 @@ class TestClienteService {
 	@Mock
     private JpaClienteRepository clienteRepository;
     @InjectMocks
-    private ClienteService service;
+    private ClienteService clienteService;
     @Test
     void consultarClienteCorrectamente() {
         Cliente c = new Cliente(1L, "Pepe", "pepe@test.com", TipoCliente.STANDARD);
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(c));
-        Cliente resultado = service.consultarCliente(1L);
+        Cliente resultado = clienteService.consultarCliente(1L);
         assertEquals(c, resultado);
         System.out.println("Cliente " + resultado.getNombre() + " consultado correctamente");
     }
@@ -37,7 +37,7 @@ class TestClienteService {
     void lanzarExcepcionSiClienteNoExiste() {
         when(clienteRepository.findById(1L)).thenReturn(Optional.empty());
         Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            service.consultarCliente(1L);
+            clienteService.consultarCliente(1L);
         });
         System.out.println(e.getMessage());
         verify(clienteRepository, never()).save(any());
@@ -47,7 +47,7 @@ class TestClienteService {
     void bloquearClienteCorrectamente() {
         Cliente c = new Cliente(1L, "Pepe", "pepe@test.com", TipoCliente.STANDARD);
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(c));
-        service.bloquear(1L);
+        clienteService.bloquear(1L);
         verify(clienteRepository).save(c);
         System.out.println("Cliente " + c.getId() + " bloqueado correctamente");
     }
@@ -56,7 +56,7 @@ class TestClienteService {
     void ascenderClienteCorrectamente() {
         Cliente c = new Cliente(1L, "Pepe", "pepe@test.com", TipoCliente.STANDARD);
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(c));
-        service.ascender(1L);
+        clienteService.ascender(1L);
         verify(clienteRepository).save(c);
         System.out.println("Cliente " + c.getId() + " ascendido correctamente");
     }

@@ -124,4 +124,10 @@ import com.mgcss.service.TecnicoService;
         mockMvc.perform(post("/api/tecnicos").contentType(MediaType.APPLICATION_JSON)
                 .content(json)).andExpect(status().isBadRequest());
     }
+    
+    @Test
+    void deberiaDevolver400SiNuevaEspecialidadEsInvalida() throws Exception {
+        mockMvc.perform(put("/api/tecnicos/1/especialidad").param("nuevaesp", "FAKE"))
+        .andExpect(status().isBadRequest());
+    }
 }

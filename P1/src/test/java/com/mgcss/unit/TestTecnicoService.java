@@ -24,13 +24,13 @@ class TestTecnicoService {
     private JpaTecnicoRepository tecnicoRepository;
 
     @InjectMocks
-    private TecnicoService service;
+    private TecnicoService tecnicoService;
 
     @Test
     void consultarTecnicoCorrectamente() {
         Tecnico t = new Tecnico("Juan", true, Tecnico.Especialidad.SOFTWARE);
         when(tecnicoRepository.findById(1L)).thenReturn(Optional.of(t));
-        Tecnico resultado = service.consultarTecnico(1L);
+        Tecnico resultado = tecnicoService.consultarTecnico(1L);
         assertEquals(t, resultado);
         System.out.println("Tecnico " + resultado.getNombre() + " consultado correctamente");
     }
@@ -39,7 +39,7 @@ class TestTecnicoService {
     void lanzarExcepcionSiTecnicoNoExiste() {
         when(tecnicoRepository.findById(1L)).thenReturn(Optional.empty());
         Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            service.consultarTecnico(1L);
+            tecnicoService.consultarTecnico(1L);
         });
         System.out.println(e.getMessage());
         verify(tecnicoRepository, never()).save(any());
@@ -49,7 +49,7 @@ class TestTecnicoService {
     void activarTecnicoCorrectamente() {
         Tecnico t = new Tecnico("Juan", false, Tecnico.Especialidad.SOFTWARE);
         when(tecnicoRepository.findById(1L)).thenReturn(Optional.of(t));
-        service.activar(1L);
+        tecnicoService.activar(1L);
         verify(tecnicoRepository).save(t);
         System.out.println("Tecnico " + t.getNombre() + " activado correctamente");
     }
@@ -58,7 +58,7 @@ class TestTecnicoService {
     void actualizarEspecialidadCorrectamente() {
         Tecnico t = new Tecnico("Juan", true, Tecnico.Especialidad.SOFTWARE);
         when(tecnicoRepository.findById(1L)).thenReturn(Optional.of(t));
-        service.actualizarEspecialidad(1L, Tecnico.Especialidad.HARDWARE);
+        tecnicoService.actualizarEspecialidad(1L, Tecnico.Especialidad.HARDWARE);
         verify(tecnicoRepository).save(t);
         System.out.println("Especialidad de " + t.getNombre() + " actualizada");
     }
