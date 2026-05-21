@@ -23,6 +23,7 @@ import com.mgcss.api.controller.SolicitudController;
 import com.mgcss.domain.Cliente;
 import com.mgcss.domain.Solicitud;
 import com.mgcss.domain.Solicitud.EstadoSolicitud;
+import com.mgcss.domain.Tecnico;
 import com.mgcss.service.SolicitudService;
 
 @WebMvcTest(SolicitudController.class)
@@ -103,7 +104,21 @@ import com.mgcss.service.SolicitudService;
     }
 
     @Test
-    void deberiaCambiarEstado() throws Exception {
+    void deberiaMapearTecnicoAsignado() throws Exception {
+        Cliente cliente = new Cliente(1L, "Alex", "alex@test.com", Cliente.TipoCliente.STANDARD);
+        Tecnico tecnico = new Tecnico("Fran", true, Tecnico.Especialidad.SOFTWARE);
+        Solicitud solicitud = new Solicitud("Problema grave", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente);
+
+        solicitud.asignarTecnico(tecnico);
+
+        when(solicitudService.consultarSolicitud(1L)).thenReturn(solicitud);
+
+        mockMvc.perform(get("/api/solicitudes/1")).andExpect(status().isOk())
+        .andExpect(jsonPath("$.tecnicoNombre").value("Fran"));
+    }
+    
+    @Test
+    void deberiaCambiarEstadoAEnProceso() throws Exception {
     	Cliente cliente = new Cliente(1L, "Alejandro", "alex@test.com", Cliente.TipoCliente.PREMIUM);
 
         Solicitud solicitud = new Solicitud("Problema red", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente);
@@ -113,6 +128,34 @@ import com.mgcss.service.SolicitudService;
         when(solicitudService.consultarSolicitud(1L)).thenReturn(solicitud);
 
         mockMvc.perform(put("/api/solicitudes/1/cambiarEstado").param("estado", "EN_PROCESO")).andExpect(status().isOk());
+    }
+    
+    @Test
+    void deberiaCambiarEstadoACerrada() throws Exception {
+    	Cliente cliente = new Cliente(1L, "Alejandro", "alex@test.com", Cliente.TipoCliente.PREMIUM);
+
+        Solicitud solicitud = new Solicitud("Problema red", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente);
+        
+        doNothing().when(solicitudService).cambiarEstado(1L, EstadoSolicitud.CERRADA);
+
+        when(solicitudService.consultarSolicitud(1L)).thenReturn(solicitud);
+
+        mockMvc.perform(put("/api/solicitudes/1/cambiarEstado").param("estado", "CERRADA"))
+        .andExpect(status().isOk());
+    }
+    
+    @Test
+    void deberiaCambiarEstadoAAbierta() throws Exception {
+    	Cliente cliente = new Cliente(1L, "Alejandro", "alex@test.com", Cliente.TipoCliente.PREMIUM);
+
+        Solicitud solicitud = new Solicitud("Problema red", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente);
+
+        doNothing().when(solicitudService).cambiarEstado(1L, EstadoSolicitud.ABIERTA);
+
+        when(solicitudService.consultarSolicitud(1L)).thenReturn(solicitud);
+
+        mockMvc.perform(put("/api/solicitudes/1/cambiarEstado").param("estado", "ABIERTA"))
+        .andExpect(status().isOk());
     }
     
     @Test
@@ -130,6 +173,26 @@ import com.mgcss.service.SolicitudService;
     
     @Test
     void deberiaDevolver400SiEstadoEsInvalido() throws Exception {
-        mockMvc.perform(put("/api/solicitudes/1/cambiarEstado").param("estado", "ESTADO_FAKE")).andExpect(status().isBadRequest());
+        mockMvc.perform(put("/api/solicitudes/1/cambiarEstado").param("estado", "ESTADO_FAKE"))
+        .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void deberiaDevolver400SiClienteIdEsNull() throws Exception {
+        String json = """
+            {
+                "descripcion":"Problema red",
+                "clienteId":null
+            }
+            """;
+
+        mockMvc.perform(post("/api/solicitudes").contentType(MediaType.APPLICATION_JSON).content(json))
+        .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void deberiaDevolver400SiFaltaTecnicoId() throws Exception {
+        mockMvc.perform(put("/api/solicitudes/1/asignarTecnico"))
+        .andExpect(status().isBadRequest());
     }
 }
