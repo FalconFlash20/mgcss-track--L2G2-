@@ -1,8 +1,9 @@
 package com.mgcss.api.controller;
 
 import java.util.List;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,91 +29,84 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 @RequestMapping("/api/solicitudes")
 @Tag(name = "Solicitud Controller", description = "Endpoints para la creación, asignación y gestión de estados de las solicitudes")
 public class SolicitudController {
-	private final SolicitudService solicitudservice;
+	private final SolicitudService solicitudService;
 
 	public SolicitudController(SolicitudService solicitudservice) {
-		this.solicitudservice = solicitudservice;
+		this.solicitudService = solicitudservice;
 	}
 
 	@PostMapping
 	@Operation(summary = "Crear una nueva solicitud", description = "Registra una solicitud de asistencia técnica asociada a un cliente específico.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "201", description = "Solicitud creada correctamente"),
-		@ApiResponse(responseCode = "400", description = "Datos de entrada incorrectos"),
-		@ApiResponse(responseCode = "404", description = "El ID del cliente proporcionado no existe")
-	})
-	public ResponseEntity<SolicitudResponseDTO> crearSolicitud(@RequestBody @Validated SolicitudRequestDTO dto){
-		Solicitud s=solicitudservice.crearSolicitud(dto.getDescripcion(), dto.getClienteId());
-		return ResponseEntity.ok(mapear(s));
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Solicitud creada correctamente"),
+			@ApiResponse(responseCode = "400", description = "Datos de entrada incorrectos"),
+			@ApiResponse(responseCode = "404", description = "El ID del cliente proporcionado no existe") })
+	public ResponseEntity<SolicitudResponseDTO> crearSolicitud(@RequestBody @Valid SolicitudRequestDTO dto) {
+		Solicitud s = solicitudService.crearSolicitud(dto.getDescripcion(), dto.getClienteId());
+		return ResponseEntity.status(HttpStatus.CREATED).body(mapear(s));
 	}
-	
+
 	@GetMapping("/{id}")
 	@Operation(summary = "Consultar solicitud por ID", description = "Recupera toda la información detallada de una solicitud a partir de su identificador único.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "Solicitud localizada con éxito"),
-		@ApiResponse(responseCode = "404", description = "No se ha encontrado ninguna solicitud con ese ID")
-	})
-	public ResponseEntity<SolicitudResponseDTO> consultar(@PathVariable("id") Long id){
-		Solicitud s=solicitudservice.consultarSolicitud(id);
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Solicitud localizada con éxito"),
+			@ApiResponse(responseCode = "404", description = "No se ha encontrado ninguna solicitud con ese ID") })
+	public ResponseEntity<SolicitudResponseDTO> consultar(@PathVariable("id") Long id) {
+		Solicitud s = solicitudService.consultarSolicitud(id);
 		return ResponseEntity.ok(mapear(s));
 	}
 
 	@GetMapping
 	@Operation(summary = "Listar todas las solicitudes", description = "Obtiene un listado global con todas las solicitudes de asistencia registradas en el sistema.")
 	@ApiResponse(responseCode = "200", description = "Listado de solicitudes recuperado correctamente")
-	public List<SolicitudResponseDTO> listar(){
-		return solicitudservice.listar().stream().map(this::mapear).toList();
+	public List<SolicitudResponseDTO> listar() {
+		return solicitudService.listar().stream().map(this::mapear).toList();
 	}
-	
+
 	@PatchMapping("/{id}/reabrir")
 	@Operation(summary = "Reabrir una solicitud cerrada", description = "Permite reabrir una solicitud que ya había sido finalizada para volver a trabajar en ella.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "Solicitud reabierta con éxito"),
-		@ApiResponse(responseCode = "400", description = "No se puede reabrir la solicitud en su estado actual"),
-		@ApiResponse(responseCode = "404", description = "Solicitud no encontrada")
-	})
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Solicitud reabierta con éxito"),
+			@ApiResponse(responseCode = "400", description = "No se puede reabrir la solicitud en su estado actual"),
+			@ApiResponse(responseCode = "404", description = "Solicitud no encontrada") })
 	public ResponseEntity<SolicitudResponseDTO> reabrirSolicitud(@PathVariable("id") Long id) {
-	    solicitudservice.reabrirSolicitud(id);
-	    Solicitud s = solicitudservice.consultarSolicitud(id);
-	    return ResponseEntity.ok(mapear(s));
+		solicitudService.reabrirSolicitud(id);
+		Solicitud s = solicitudService.consultarSolicitud(id);
+		return ResponseEntity.ok(mapear(s));
 	}
-	
+
 	@PutMapping("/{id}/asignarTecnico")
 	@Operation(summary = "Asignar un técnico a la solicitud", description = "Vincula a un técnico del equipo para hacerse cargo de la resolución de la incidencia.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "Técnico asignado correctamente"),
-		@ApiResponse(responseCode = "404", description = "No se ha encontrado la solicitud o el técnico especificado")
-	})
-	public ResponseEntity<SolicitudResponseDTO> asignarTecnico(@PathVariable("id") Long id,@RequestParam("tecnicoId") Long tecnicoId) {
-	    solicitudservice.asignarTecnico(id, tecnicoId);
-	    Solicitud s = solicitudservice.consultarSolicitud(id);
-	    return ResponseEntity.ok(mapear(s));
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Técnico asignado correctamente"),
+			@ApiResponse(responseCode = "404", description = "No se ha encontrado la solicitud o el técnico especificado") })
+	public ResponseEntity<SolicitudResponseDTO> asignarTecnico(@PathVariable("id") Long id,
+			@RequestParam("tecnicoId") Long tecnicoId) {
+		solicitudService.asignarTecnico(id, tecnicoId);
+		Solicitud s = solicitudService.consultarSolicitud(id);
+		return ResponseEntity.ok(mapear(s));
 	}
 
 	@PutMapping("/{id}/cambiarEstado")
 	@Operation(summary = "Cambiar estado de la solicitud", description = "Modifica manualmente el estado actual de la solicitud (EJ: EN_PROCESO, ABIERTA, CERRADA).")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "Estado actualizado con éxito"),
-		@ApiResponse(responseCode = "400", description = "El estado proporcionado no es válido o la transición no está permitida"),
-		@ApiResponse(responseCode = "404", description = "Solicitud no encontrada")
-	})
-	public ResponseEntity<SolicitudResponseDTO> cambiarEstado(@PathVariable("id") Long id,@RequestParam("estado") String estado) {
-	    solicitudservice.cambiarEstado(id, EstadoSolicitud.valueOf(estado));
-	    Solicitud s = solicitudservice.consultarSolicitud(id);
-	    return ResponseEntity.ok(mapear(s));
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Estado actualizado con éxito"),
+			@ApiResponse(responseCode = "400", description = "El estado proporcionado no es válido o la transición no está permitida"),
+			@ApiResponse(responseCode = "404", description = "Solicitud no encontrada") })
+	public ResponseEntity<SolicitudResponseDTO> cambiarEstado(@PathVariable("id") Long id,
+			@RequestParam("estado") String estado) {
+		EstadoSolicitud nuevoEstado;
+		try {
+			nuevoEstado = EstadoSolicitud.valueOf(estado.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build();
+		}
+		solicitudService.cambiarEstado(id, nuevoEstado);
+		Solicitud s = solicitudService.consultarSolicitud(id);
+		return ResponseEntity.ok(mapear(s));
 	}
-	
+
 	private SolicitudResponseDTO mapear(Solicitud s) {
-		return new SolicitudResponseDTO.Builder()
-	            .id(s.getId())
-	            .descripcion(s.getDescripcion())
-	            .estado(s.getEstado().toString())
-	            .fechaCierre(s.getFechaCierre())
-	            .tiempoej(s.getSLA())
-	            .urgente(s.isUrgente())
-	            .tecnico(s.getTecnico())
-	            .cliente(s.getCliente())
-	            .build();
+		return new SolicitudResponseDTO.Builder().id(s.getId()).descripcion(s.getDescripcion())
+				.estado(s.getEstado().name()).fechaCierre(s.getFechaCierre()).tiempoej(s.getSLA())
+				.urgente(s.isUrgente()).tecnicoId(s.getTecnico() != null ? s.getTecnico().getId() : null)
+				.tecnicoNombre(s.getTecnico() != null ? s.getTecnico().getNombre() : null)
+				.clienteId(s.getCliente().getId()).clienteNombre(s.getCliente().getNombre()).build();
 	}
-	
+
 }

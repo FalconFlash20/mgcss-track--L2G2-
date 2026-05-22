@@ -34,7 +34,7 @@ import com.mgcss.service.SolicitudService;
 	@Mock
 	private JpaClienteRepository clienteRepository;
 	@InjectMocks
-	private SolicitudService service;
+	private SolicitudService solicitudService;
 	
 	@Test
 	void deberiaLanzarExcepcionSiTecnicoInactivo() {
@@ -46,7 +46,7 @@ import com.mgcss.service.SolicitudService;
 	    when(tecnicoRepository.findById(2L)).thenReturn(Optional.of(t));
 	    
 		Exception e = assertThrows(IllegalArgumentException.class, () -> {
-		    service.asignarTecnico(1L, 2L);
+		    solicitudService.asignarTecnico(1L, 2L);
 		});
 		System.out.println(e.getMessage());
 		verify(solicitudRepository, never()).save(any());
@@ -61,7 +61,7 @@ import com.mgcss.service.SolicitudService;
 	    when(solicitudRepository.findById(1L)).thenReturn(Optional.of(s));
 	    when(tecnicoRepository.findById(2L)).thenReturn(Optional.of(t));
 
-	    service.asignarTecnico(1L, 2L);
+	    solicitudService.asignarTecnico(1L, 2L);
 
 	    assertEquals(t, s.getTecnico());
 	    verify(solicitudRepository).save(s);
@@ -73,7 +73,7 @@ import com.mgcss.service.SolicitudService;
 	void lanzarExcepcionSiSolicitudNoExiste() {
 	    when(solicitudRepository.findById(1L)).thenReturn(Optional.empty());
 	    Exception e = assertThrows(IllegalArgumentException.class,
-	        () -> { service.asignarTecnico(1L, 2L);});
+	        () -> { solicitudService.asignarTecnico(1L, 2L);});
 	    System.out.println(e.getMessage());
 	    
 	    verify(solicitudRepository, never()).save(any());
@@ -86,7 +86,7 @@ import com.mgcss.service.SolicitudService;
 	    when(solicitudRepository.findById(1L)).thenReturn(Optional.of(s));
 	    when(tecnicoRepository.findById(2L)).thenReturn(Optional.empty());
 	    Exception e = assertThrows(IllegalArgumentException.class,
-	            () -> { service.asignarTecnico(1L, 2L);});
+	            () -> { solicitudService.asignarTecnico(1L, 2L);});
 	    System.out.println(e.getMessage());
 	    verify(solicitudRepository, never()).save(any());
 	}
@@ -97,7 +97,7 @@ import com.mgcss.service.SolicitudService;
 	    when(solicitudRepository.findById(1L)).thenReturn(Optional.of(solicitudAbierta));
 	    Long idSol=1L;
 	    Exception e=assertThrows(RuntimeException.class, () -> {
-	        service.reabrirSolicitud(idSol);
+	        solicitudService.reabrirSolicitud(idSol);
 	    });
 		System.out.println(e.getMessage());
 		verify(solicitudRepository, never()).save(any());
@@ -110,7 +110,7 @@ import com.mgcss.service.SolicitudService;
 		when(solicitudRepository.findById(1L)).thenReturn(Optional.of(s));
 		when(tecnicoRepository.findById(2L)).thenReturn(Optional.of(t));
 		Exception e = assertThrows(IllegalArgumentException.class, () -> {
-			service.asignarTecnico(1L, 2L);
+			solicitudService.asignarTecnico(1L, 2L);
 		});	
 		System.out.println(e.getMessage());
 		verify(solicitudRepository, never()).save(any());

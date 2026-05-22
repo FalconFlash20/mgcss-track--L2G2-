@@ -44,8 +44,8 @@ import com.mgcss.service.TecnicoService;
                 """;
 
         mockMvc.perform(post("/api/tecnicos").contentType(MediaType.APPLICATION_JSON).content(json))
-        	.andExpect(status().isOk()).andExpect(jsonPath("$.nombre").value("Carlos"))
-        	.andExpect(jsonPath("$.activo").value(true)).andExpect(jsonPath("$.especialidad").value("SOFTWARE"));
+        .andExpect(status().isCreated()).andExpect(jsonPath("$.nombre").value("Carlos"))
+        .andExpect(jsonPath("$.activo").value(true)).andExpect(jsonPath("$.especialidad").value("SOFTWARE"));
     }
 
     @Test
@@ -99,5 +99,35 @@ import com.mgcss.service.TecnicoService;
         when(tecnicoService.consultarTecnico(1L)).thenReturn(tecnico);
 
         mockMvc.perform(put("/api/tecnicos/1/especialidad").param("nuevaesp", "SOFTWARE")).andExpect(status().isOk());
+    }
+    
+    @Test
+    void deberiaDevolver400SiEspecialidadEsInvalida() throws Exception {
+        String json = """
+            {
+                "nombre":"Carlos",
+                "especialidad":"FAKE"
+            }
+            """;
+        mockMvc.perform(post("/api/tecnicos").contentType(MediaType.APPLICATION_JSON)
+        		.content(json)).andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void deberiaDevolver400SiNombreEsVacio() throws Exception {
+        String json = """
+            {
+                "nombre":"",
+                "especialidad":"SOFTWARE"
+            }
+            """;
+        mockMvc.perform(post("/api/tecnicos").contentType(MediaType.APPLICATION_JSON)
+                .content(json)).andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void deberiaDevolver400SiNuevaEspecialidadEsInvalida() throws Exception {
+        mockMvc.perform(put("/api/tecnicos/1/especialidad").param("nuevaesp", "FAKE"))
+        .andExpect(status().isBadRequest());
     }
 }
