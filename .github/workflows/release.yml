@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+          
+      - name: Make gradlew executable
+        run: chmod +x P1/gradlew
+
+      - name: Build project
+        run: cd P1 && ./gradlew build
+
+      - name: Run tests
+        run: cd P1 && ./gradlew test
+        
+      - name: SonarQube analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: cd P1 && ./gradlew sonar --info
+          
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+            name: mgcss-${{ github.ref_name }}
+            path: P1/build/libs/*.jar
+
+      - name: Build Docker image
+        run: docker build -t mgcss-track:${{ github.ref_name }} ./P1
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@afa34e3a463cce90339cb20b62492f44b4be5c1f
+        with:
+          generate_release_notes: true
