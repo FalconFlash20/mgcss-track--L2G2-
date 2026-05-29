@@ -52,6 +52,8 @@ jobs:
         run: docker build -t mgcss-track:${{ github.ref_name }} ./P1
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@03f198a9e4f1fe2c90e55aa12fcdf873b71ee015
+        uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
+          tag_name: ${{ github.ref_name }}
+          target_commitish: ${{ github.sha }}
