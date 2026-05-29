@@ -249,4 +249,37 @@ import com.mgcss.domain.Cliente.TipoCliente;
         Solicitud s = new Solicitud("Incidencia", EstadoSolicitud.ABIERTA, LocalDateTime.now(), premium);
         assertFalse(s.slaVencido());
     }
+    
+    @Test
+    void slaFalseSiNoCerrada() {
+    	Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
+        assertFalse(s.cumpleSLA());
+    }
+    
+    @Test
+    void slaTrueSiDentroPlazo() {
+    	Cliente premium = new Cliente(1L, "Ana", "ana@test.com", Cliente.TipoCliente.PREMIUM);
+        Solicitud s = new Solicitud("desc", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), premium);
+        s.cerrar();
+        assertTrue(s.cumpleSLA());
+    }
+    
+    @Test
+    void slaVencidoFalseSiCerrada() {
+    	Solicitud s = new Solicitud("desc", EstadoSolicitud.CERRADA, LocalDateTime.now(), cliente());
+        assertFalse(s.slaVencido());
+    }
+    
+    @Test
+    void slaVencidoTrueSiHaCaducado() {
+    	Cliente premium = new Cliente(1L, "Ana", "ana@test.com", Cliente.TipoCliente.PREMIUM);
+        Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now().minusDays(3), premium);
+        assertTrue(s.slaVencido());
+    }
+    
+    @Test
+    void slaVencidoFalseSiNoCaducado() {
+    	Solicitud s = new Solicitud("desc", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente());
+        assertFalse(s.slaVencido());
+    }
 }
