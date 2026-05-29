@@ -216,7 +216,7 @@ import com.mgcss.domain.Cliente.TipoCliente;
         Cliente premium = new Cliente(1L, "Ana", "ana@empresa.org", Cliente.TipoCliente.PREMIUM);
         LocalDateTime ahora = LocalDateTime.now();
         Solicitud s = new Solicitud("Reparar servidor", EstadoSolicitud.ABIERTA, ahora, premium);
-        assertEquals(ahora.plusHours(48), s.getSLA(), "El SLA para Premium debe ser de 24h");
+        assertEquals(ahora.plusHours(48), s.getSLA(), "El SLA para Premium debe ser de 48h");
     }
     
     @Test
@@ -224,7 +224,29 @@ import com.mgcss.domain.Cliente.TipoCliente;
         Cliente standard = new Cliente(2L, "Juan", "juan@gmail.com", Cliente.TipoCliente.STANDARD);
         LocalDateTime ahora = LocalDateTime.now();
         Solicitud s = new Solicitud("Duda factura", EstadoSolicitud.ABIERTA, ahora, standard);
-        assertEquals(ahora.plusHours(96), s.getSLA(), "El SLA para Standard debe ser de 72h");
+        assertEquals(ahora.plusHours(96), s.getSLA(), "El SLA para Standard debe ser de 96h");
         
+    }
+    
+    @Test
+    void deberiaCumplirSla() {
+        Cliente premium = new Cliente(1L, "Ana", "ana@test.com", Cliente.TipoCliente.PREMIUM);
+        Solicitud s = new Solicitud("Incidencia", EstadoSolicitud.EN_PROCESO, LocalDateTime.now().minusHours(1), premium);
+        s.cerrar();
+        assertTrue(s.cumpleSLA());
+    }
+    
+    @Test
+    void deberiaDetectarSlaVencido() {
+    	Cliente premium = new Cliente(1L, "Ana", "ana@test.com", Cliente.TipoCliente.PREMIUM);
+        Solicitud s = new Solicitud("Incidencia", EstadoSolicitud.ABIERTA, LocalDateTime.now().minusDays(5), premium);
+        assertTrue(s.slaVencido());
+    }
+    
+    @Test
+    void deberiaDetectarSlaNoVencido() {
+    	Cliente premium = new Cliente(1L, "Ana", "ana@test.com", Cliente.TipoCliente.PREMIUM);
+        Solicitud s = new Solicitud("Incidencia", EstadoSolicitud.ABIERTA, LocalDateTime.now(), premium);
+        assertFalse(s.slaVencido());
     }
 }

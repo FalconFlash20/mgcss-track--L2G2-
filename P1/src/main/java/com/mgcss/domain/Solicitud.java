@@ -143,6 +143,22 @@ public class Solicitud {
 		return tiempoej;
 	}
 
+	public boolean cumpleSLA() {
+	    if (fechaCierre == null) {
+	        return false;
+	    }
+
+	    return !fechaCierre.isAfter(tiempoej);
+	}
+
+	public boolean slaVencido() {
+	    if (estado == EstadoSolicitud.CERRADA) {
+	        return false;
+	    }
+
+	    return LocalDateTime.now().isAfter(tiempoej);
+	}
+
 	public void marcarComoUrgente() {
 	    if (this.urgente) {
 	        throw new IllegalStateException("La solicitud ya tiene prioridad urgente.");
