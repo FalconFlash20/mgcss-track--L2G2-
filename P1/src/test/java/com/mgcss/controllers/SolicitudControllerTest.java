@@ -10,7 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,5 +196,21 @@ import com.mgcss.service.SolicitudService;
     void deberiaDevolver400SiFaltaTecnicoId() throws Exception {
         mockMvc.perform(put("/api/solicitudes/1/asignarTecnico"))
         .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void deberiaObtenerMetricas() throws Exception {
+
+        Map<String, Object> metricas = new HashMap<>();
+
+        metricas.put("totalSolicitudes", 10);
+        metricas.put("abiertas", 3);
+        metricas.put("enProceso", 4);
+        metricas.put("cerradas", 3);
+
+        when(solicitudService.obtenerMetricas()).thenReturn(metricas);
+
+        mockMvc.perform(get("/api/solicitudes/metricas")).andExpect(status().isOk())
+        .andExpect(jsonPath("$.totalSolicitudes").value(10)).andExpect(jsonPath("$.abiertas").value(3));
     }
 }

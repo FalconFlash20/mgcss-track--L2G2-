@@ -1,6 +1,8 @@
 package com.mgcss.api.controller;
 
 import java.util.List;
+import java.util.Map;
+
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +61,12 @@ public class SolicitudController {
 	@ApiResponse(responseCode = "200", description = "Listado de solicitudes recuperado correctamente")
 	public List<SolicitudResponseDTO> listar() {
 		return solicitudService.listar().stream().map(this::mapear).toList();
+	}
+	
+	@GetMapping("/metricas")
+	@Operation(summary = "Dashboard de métricas", description = "Obtiene métricas globales de solicitudes y SLA")
+	public ResponseEntity<Map<String, Object>> metricas() {
+	    return ResponseEntity.ok(solicitudService.obtenerMetricas());
 	}
 
 	@PatchMapping("/{id}/reabrir")
