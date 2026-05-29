@@ -3,6 +3,9 @@ package com.mgcss.unit;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Tag;
@@ -61,5 +64,19 @@ class TestTecnicoService {
         tecnicoService.actualizarEspecialidad(1L, Tecnico.Especialidad.HARDWARE);
         verify(tecnicoRepository).save(t);
         System.out.println("Especialidad de " + t.getNombre() + " actualizada");
+    }
+    
+    @Test
+    void deberiaObtenerMetricasTecnicos() {
+        Tecnico activo = new Tecnico("Fran", true, Tecnico.Especialidad.SOFTWARE);
+        Tecnico inactivo = new Tecnico("Juan", false, Tecnico.Especialidad.HARDWARE);
+
+        when(tecnicoRepository.findAll()).thenReturn(List.of(activo, inactivo));
+
+        Map<String, Object> metricas = tecnicoService.obtenerMetricas();
+
+        assertEquals(2, metricas.get("totalTecnicos"));
+        assertEquals(1L, metricas.get("activos"));
+        assertEquals(1L, metricas.get("inactivos"));
     }
 }

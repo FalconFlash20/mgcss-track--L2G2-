@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard MGCSS</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px;
+    display: inline-block;
+    min-width: 180px;
+    text-align: center;
+}
+
+.valor {
+    font-size: 28px;
+    font-weight: bold;
+}
+</style>
+
+</head>
+<body>
+
+<h1>Dashboard de Métricas MGCSS</h1>
+
+<h2>Solicitudes</h2>
+
+<div class="card">
+    <h3>Total Solicitudes</h3>
+    <div class="valor" th:text="${totalSolicitudes}">0</div>
+</div>
+
+<div class="card">
+    <h3>Abiertas</h3>
+    <div class="valor" th:text="${abiertas}">0</div>
+</div>
+
+<div class="card">
+    <h3>En proceso</h3>
+    <div class="valor" th:text="${enProceso}">0</div>
+</div>
+
+<div class="card">
+    <h3>Cerradas</h3>
+    <div class="valor" th:text="${cerradas}">0</div>
+</div>
+
+<h2>Clientes</h2>
+
+<div class="card">
+    <h3>Total Clientes</h3>
+    <div class="valor" th:text="${totalClientes}">0</div>
+</div>
+
+<div class="card">
+    <h3>Premium</h3>
+    <div class="valor" th:text="${premium}">0</div>
+</div>
+
+<div class="card">
+    <h3>Standard</h3>
+    <div class="valor" th:text="${standard}">0</div>
+</div>
+
+<div class="card">
+    <h3>Bloqueados</h3>
+    <div class="valor" th:text="${bloqueados}">0</div>
+</div>
+
+<div class="card">
+    <h3>Verificados</h3>
+    <div class="valor" th:text="${verificados}">0</div>
+</div>
+
+<h2>Técnicos</h2>
+
+<div class="card">
+    <h3>Total Técnicos</h3>
+    <div class="valor" th:text="${totalTecnicos}">0</div>
+</div>
+
+<div class="card">
+    <h3>Activos</h3>
+    <div class="valor" th:text="${activos}">0</div>
+</div>
+
+<div class="card">
+    <h3>Inactivos</h3>
+    <div class="valor" th:text="${inactivos}">0</div>
+</div>
+
+<div class="card">
+    <h3>Hardware</h3>
+    <div class="valor" th:text="${hardware}">0</div>
+</div>
+
+<div class="card">
+    <h3>Software</h3>
+    <div class="valor" th:text="${software}">0</div>
+</div>
+
+</body>
+</html>

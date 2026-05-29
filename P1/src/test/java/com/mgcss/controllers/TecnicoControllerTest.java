@@ -8,7 +8,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,5 +131,20 @@ import com.mgcss.service.TecnicoService;
     void deberiaDevolver400SiNuevaEspecialidadEsInvalida() throws Exception {
         mockMvc.perform(put("/api/tecnicos/1/especialidad").param("nuevaesp", "FAKE"))
         .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void deberiaObtenerMetricasTecnicos() throws Exception {
+
+        Map<String, Object> metricas = new HashMap<>();
+
+        metricas.put("totalTecnicos", 8);
+        metricas.put("activos", 5);
+        metricas.put("inactivos", 3);
+
+        when(tecnicoService.obtenerMetricas()).thenReturn(metricas);
+
+        mockMvc.perform(get("/api/tecnicos/metricas")).andExpect(status().isOk())
+        .andExpect(jsonPath("$.totalTecnicos").value(8)).andExpect(jsonPath("$.activos").value(5));
     }
 }

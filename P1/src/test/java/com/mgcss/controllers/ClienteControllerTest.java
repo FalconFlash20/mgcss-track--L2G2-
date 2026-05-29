@@ -8,7 +8,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -132,5 +134,20 @@ import com.mgcss.service.ClienteService;
     void deberiaDevolver400ConDatosInvalidos(String json) throws Exception {
         mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
         		.content(json)).andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void deberiaObtenerMetricasClientes() throws Exception {
+
+        Map<String, Object> metricas = new HashMap<>();
+
+        metricas.put("totalClientes", 10);
+        metricas.put("premium", 4);
+        metricas.put("standard", 6);
+
+        when(clienteService.obtenerMetricas()).thenReturn(metricas);
+
+        mockMvc.perform(get("/api/clientes/metricas")).andExpect(status().isOk())
+        .andExpect(jsonPath("$.totalClientes").value(10)).andExpect(jsonPath("$.premium").value(4));
     }
 }
