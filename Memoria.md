@@ -444,6 +444,27 @@ El objetivo principal fue mantener el Quality Gate siempre en verde.
 * **Vulnerabilidades:** [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
 * **Duplicidad:** [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
 * **Líneas de Código:** [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
+
+## 11.1 Análisis de la Deuda Técnica
+
+Durante el desarrollo del proyecto se ha utilizado SonarCloud como herramienta principal para la identificación y seguimiento de deuda técnica. El análisis continuo de las métricas permitió detectar problemas relacionados con la mantenibilidad, legibilidad y calidad general del código, que fueron corregidos progresivamente mediante tareas de refactorización.
+
+### Problemas Detectados
+Uno de los problemas más frecuentes detectados por SonarCloud fue el uso de expresiones lambda complejas en varios tests unitarios. Estas expresiones contenían múltiples invocaciones de métodos dentro de bloques `assertThrows`, dificultando la identificación precisa del origen de las excepciones. Para resolver este problema se extrajo la preparación de objetos fuera de las lambdas, manteniendo una única invocación dentro de cada aserción.
+También se identificaron casos de duplicación de código en los tests.
+Otro aspecto detectado fue la existencia de código comentado y fragmentos obsoletos que permanecían en el proyecto tras diversas iteraciones de desarrollo. Estos elementos fueron eliminados para mejorar la legibilidad y reducir los Code Smells reportados por SonarCloud.
+Asimismo, la clase `SolicitudResponseDTO` presentaba inicialmente un constructor con un número elevado de parámetros, lo que dificultaba su mantenimiento y aumentaba el riesgo de errores durante la creación de objetos. Para solucionar este problema se implementó el patrón Builder, obteniendo una construcción más segura, legible y mantenible de los DTOs.
+
+### Gestión de la Deuda Técnica
+La estrategia adoptada durante el proyecto consistió en corregir de forma temprana los problemas detectados por las herramientas de análisis estático para evitar la acumulación de deuda técnica a largo plazo. Esta política permitió mantener una base de código estable y preparada para la incorporación de nuevas funcionalidades sin incrementar significativamente la complejidad del sistema.
+
+Especial relevancia tuvo la incorporación de la funcionalidad de reapertura de solicitudes y el historial de estados. Antes de implementar este cambio se realizó un análisis de impacto para identificar las partes afectadas del sistema y minimizar los riesgos asociados a la modificación de reglas de negocio ya existentes.
+
+### Situación Final
+Tras las distintas tareas de refactorización realizadas a lo largo del proyecto, se consiguió reducir significativamente la deuda técnica identificada durante las primeras iteraciones. El uso continuado de SonarCloud permitió mantener bajo control aspectos como la duplicación de código, los Code Smells, la complejidad de determinados métodos y la cobertura de pruebas.
+
+Como resultado, la versión final presenta una arquitectura más mantenible, un código más limpio y una mejor preparación para futuras evoluciones del sistema, cumpliendo los criterios de calidad establecidos durante el desarrollo del proyecto.
+
 ---
 
 # 12. Problemas Encontrados y Soluciones
@@ -536,7 +557,7 @@ Cada versión publicada genera automáticamente:
 * Imagen Docker versionada.
 Para ejecutar una versión liberada basta con descargar el artefacto generado y lanzar:
 ```bash
-java -jar nombre-del-artefacto.jar
+java -jar P1-0.0.1-SNAPSHOT.jar
 ```
 Este procedimiento garantiza la trazabilidad completa entre:
 ```text
