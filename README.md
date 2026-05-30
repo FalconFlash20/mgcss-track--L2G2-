@@ -1,38 +1,202 @@
 # MGCSS - Sistema de Gestión de Incidencias
-## Tecnologías y Requisitos
 
-* **Java:** 17 (LTS)
-* **Framework:** Spring Boot 3.x
-* **Gestor de Dependencias:** Gradle
-* **Persistencia:** Spring Data JPA / Hibernate
-* **Base de Datos:** H2 (In-memory) / Configurable para PostgreSQL o MySQL
-* **Arquitectura:** Clean Architecture (Dominio, Servicio, API, Infraestructura)
+## Descripción
 
-## Estructura del Proyecto
+MGCSS es una aplicación desarrollada con Spring Boot para la gestión de incidencias técnicas, permitiendo registrar solicitudes, asignar técnicos, gestionar estados, controlar SLA y realizar seguimiento completo del ciclo de vida de cada incidencia.
+
+El proyecto ha sido desarrollado siguiendo principios de Clean Architecture, TDD, Integración Continua y Gestión del Cambio.
+
+---
+
+# Tecnologías Utilizadas
+
+| Tecnología        | Versión |
+| ----------------- | ------- |
+| Java              | 17      |
+| Spring Boot       | 3.x     |
+| Gradle            | 8.x     |
+| Spring Data JPA   | Sí      |
+| Hibernate         | Sí      |
+| H2 Database       | Sí      |
+| Swagger / OpenAPI | Sí      |
+| Docker            | Sí      |
+| GitHub Actions    | Sí      |
+| SonarCloud        | Sí      |
+| Thymeleaf         | Sí      |
+
+---
+
+# Arquitectura
+
+El sistema está organizado siguiendo una separación clara de responsabilidades:
 
 ```text
 com.mgcss
 ├── api
-│   ├── Controller      # Endpoints REST (Cliente, Tecnico, Solicitud)
-│   └── DTO             # Objetos de transferencia (Request/Response Records/Classes)
-├── domain              # Entidades y lógica de negocio pura (Repository Interfaces)
+│   ├── controller
+│   └── dto
+├── domain
+├── service
 ├── infrastructure
-│   └── persistence     # Implementaciones JPA de los repositorios (Doble herencia)
-└── service             # Servicios de aplicación y coordinación de lógica
+│   └── persistence
 ```
-### Gestión de Datos con DTO (Data Transfer Objects)
-#### Implementación Técnica
-Se han definido clases de transferencia específicas para cada operación de la API:
-* **RequestDTOs:** (ej. `SolicitudRequestDTO`) Utilizados para capturar y validar los datos de entrada del cliente.
-* **ResponseDTOs:** (ej. `SolicitudResponseDTO`) Utilizados para estructurar la información de salida, transformando las entidades JPA antes de ser enviadas como JSON.
-#### Estrategia de Mapeo: Métodos Privados de Conversión
-A diferencia de otros proyectos que utilizan librerías externas (como MapStruct o ModelMapper), en este sistema se ha optado por un **mapeo manual mediante métodos privados** dentro de cada `Controller`.
-**¿Por qué esta decisión?**
-1.  **Control Total y Transparencia:** Al escribir manualmente el método, tenemos un control absoluto sobre qué campos se transforman y cómo. Esto facilita la depuración.
-2.  **Reducción de Dependencias:** Evitamos sobrecargar el archivo `build.gradle` con librerías adicionales, manteniendo el proyecto ligero y con un tiempo de compilación menor.
-3.  **Simplicidad en el Dominio:** El mapeo manual es directo y no requiere configuraciones complejas de mapeadores externos.
-## Estado de Calidad (SonarCloud)
-### Resumen General
+
+## Capas
+
+### Domain
+
+Contiene las entidades y reglas de negocio.
+
+Ejemplos:
+
+* Solicitud
+* Cliente
+* Tecnico
+
+### Service
+
+Orquesta casos de uso y coordina operaciones.
+
+### Infrastructure
+
+Implementa persistencia mediante Spring Data JPA.
+
+### API
+
+Expone la funcionalidad mediante endpoints REST.
+
+---
+
+# Funcionalidades Implementadas
+
+## Gestión de Solicitudes
+
+* Crear solicitud
+* Consultar solicitud
+* Listar solicitudes
+* Asignar técnico
+* Cambiar estado
+* Reabrir solicitud
+
+## Gestión del Cambio
+
+Implementación del cambio solicitado durante la Entrega 4:
+
+* Reapertura de solicitudes cerradas
+* Historial completo de estados
+* Persistencia del histórico mediante JPA
+
+## Gestión SLA
+
+Cálculo automático del SLA
+
+### Cliente Premium
+
+48 horas
+
+### Cliente Standard
+
+96 horas
+
+Además se calculan automáticamente:
+
+* SLA cumplidos
+* SLA vencidos
+
+---
+
+# API REST
+
+Endpoints principales:
+
+| Método | Endpoint                             |
+| ------ | ------------------------------------ |
+| POST   | /api/solicitudes                     |
+| GET    | /api/solicitudes                     |
+| GET    | /api/solicitudes/{id}                |
+| PUT    | /api/solicitudes/{id}/asignarTecnico |
+| PUT    | /api/solicitudes/{id}/cambiarEstado  |
+| PATCH  | /api/solicitudes/{id}/reabrir        |
+
+---
+
+# Documentación Swagger
+
+Disponible en:
+
+```text
+http://localhost:8080/swagger-ui.html
+```
+
+Incluye:
+
+* Documentación OpenAPI
+* DTOs documentados
+* Códigos HTTP
+* Casos de uso de prueba
+
+---
+
+# Persistencia
+
+Base de datos:
+
+* H2 Database
+
+Tecnologías:
+
+* Spring Data JPA
+* Hibernate
+
+Se utilizan repositorios JPA para:
+
+* Solicitud
+* Cliente
+* Tecnico
+
+---
+
+# Testing
+
+El proyecto incluye:
+
+## Tests Unitarios
+
+* Dominio
+* Servicios
+
+Herramientas:
+
+* JUnit 5
+* Mockito
+
+## Tests de Integración
+
+* Persistencia JPA
+* H2 Database
+
+## Tests de Controlador
+
+* MockMvc
+* WebMvcTest
+
+Cobertura validada mediante SonarCloud.
+
+---
+
+# Calidad del Código
+
+## SonarCloud
+
+Se utilizan Quality Gates para garantizar:
+
+* Cobertura mínima
+* Ausencia de bugs críticos
+* Ausencia de vulnerabilidades
+* Control de deuda técnica
+
+Badges SonarCloud:
+
 | Quality Gate | Cobertura | Mantenibilidad | Fiabilidad | Seguridad |
 | :---: | :---: | :---: | :---: | :---: |
 | [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=FalconFlash20_mgcss-track--L2G2-)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=coverage)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-) | [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-) | [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-) | [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-) |
@@ -44,3 +208,136 @@ A diferencia de otros proyectos que utilizan librerías externas (como MapStruct
 * **Vulnerabilidades:** [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
 * **Duplicidad:** [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
 * **Líneas de Código:** [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=FalconFlash20_mgcss-track--L2G2-&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=FalconFlash20_mgcss-track--L2G2-)
+---
+
+# Integración Continua
+
+GitHub Actions ejecuta automáticamente:
+
+* Compilación
+* Tests
+* Análisis Sonar
+
+Cada Pull Request debe superar el pipeline antes de ser integrado.
+
+---
+
+# Release Management
+
+Versionado semántico:
+
+```text
+MAJOR.MINOR.PATCH
+```
+
+Ejemplos:
+
+```text
+v1.0.0
+v1.1.0
+```
+
+Proceso automatizado:
+
+1. Merge a main
+2. Creación de tag
+3. Push del tag
+4. Ejecución de release.yml
+5. Generación automática de Release
+6. Publicación de artefactos
+
+---
+
+# Docker
+
+Construcción:
+
+```bash
+docker build -t mgcss-track .
+```
+
+Ejecución:
+
+```bash
+docker run -p 8080:8080 mgcss-track
+```
+
+---
+
+# Dashboard de Métricas
+
+Implementado mediante Thymeleaf.
+
+URL:
+
+```text
+http://localhost:8080/dashboard
+```
+
+Métricas disponibles:
+
+## Solicitudes
+
+* Total solicitudes
+* Abiertas
+* En proceso
+* Cerradas
+
+## Clientes
+
+* Total clientes
+* Premium
+* Standard
+* Bloqueados
+* Verificados
+
+## Técnicos
+
+* Total técnicos
+* Activos
+* Inactivos
+* Hardware
+* Software
+
+---
+
+# Gestión de Proyecto
+
+Se ha utilizado GitHub Projects para:
+
+* Gestión de iteraciones
+* Seguimiento de Issues
+* Control de tareas
+* Trazabilidad de cambios
+
+---
+
+# Estrategia de Ramas
+
+```text
+main
+feature/*
+```
+
+Todas las funcionalidades se desarrollan mediante Pull Request.
+
+---
+
+# Convenciones de Commits
+
+Se emplean Conventional Commits:
+
+```text
+feat:
+fix:
+refactor:
+test:
+docs:
+chore:
+```
+
+---
+
+# Autores
+* López Fiestas, Francisco Jossué
+* Martín Correa, Alejandro
