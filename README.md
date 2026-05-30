@@ -334,7 +334,26 @@ refactor:
 test:
 docs:
 chore:
+
 ```
+
+# Instalación y Ejecución
+
+## Clonar repositorio
+
+git clone https://github.com/FalconFlash20/mgcss-track--L2G2-.git
+
+## Entrar en el proyecto
+
+cd mgcss-track--L2G2-/P1
+
+## Ejecutar aplicación
+
+./gradlew bootRun
+
+La aplicación quedará disponible en:
+
+http://localhost:8080
 
 ---
 
