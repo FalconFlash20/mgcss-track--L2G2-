@@ -297,14 +297,15 @@ Beneficios:
 ## 7.4 Containerización con Docker
 
 Se construyó una imagen Docker para garantizar:
-* Portabilidad.
-* Reproducibilidad.
-* Facilidad de despliegue.
 
-La aplicación puede ejecutarse mediante:
-```bash
-docker run -p 8080:8080 mgcss-track
-```
+* Portabilidad entre entornos.
+* Reproducibilidad de ejecuciones.
+* Facilidad de despliegue.
+* Independencia de la configuración local del desarrollador.
+
+Docker permitió ejecutar exactamente la misma aplicación en desarrollo, integración continua y producción, reduciendo problemas derivados de diferencias de configuración entre sistemas.
+
+Las instrucciones completas de construcción y ejecución se detallan posteriormente en el apartado de Instalación y Ejecución.
 ---
 
 # 8. Entrega Final – Release Management
@@ -469,7 +470,83 @@ Uso de configuración externalizada y pruebas completas del contenedor.
 
 ---
 
-# 13. Conclusiones
+# 13. Instalación y Ejecución
+Con el objetivo de garantizar la reproducibilidad del proyecto, se documenta el procedimiento completo de instalación y ejecución en un entorno local.
+
+## Requisitos Previos
+Para ejecutar la aplicación es necesario disponer de:
+* Java 17
+* Git
+* Gradle (o utilizar el Gradle Wrapper incluido en el proyecto)
+* Docker (opcional)
+---
+## Clonar el repositorio
+```bash
+git clone https://github.com/FalconFlash20/mgcss-track--L2G2-.git
+```
+---
+## Acceder al proyecto
+```bash
+cd mgcss-track--L2G2-/P1
+```
+---
+## Ejecutar la aplicación
+Utilizando el Gradle Wrapper incluido en el proyecto:
+```bash
+./gradlew bootRun
+```
+Una vez iniciada la aplicación, estará disponible en:
+```text
+http://localhost:8080
+```
+---
+## Documentación Swagger
+La documentación completa de la API REST puede consultarse desde:
+```text
+http://localhost:8080/swagger-ui.html
+```
+---
+## Dashboard de Métricas
+La aplicación incorpora un dashboard desarrollado con Thymeleaf para visualizar métricas operativas del sistema.
+Disponible en:
+```text
+http://localhost:8080/dashboard
+```
+---
+## Ejecución mediante Docker
+También es posible ejecutar la aplicación mediante contenedores Docker.
+### Construcción de la imagen
+```bash
+docker build -t mgcss-track .
+```
+### Ejecución del contenedor
+```bash
+docker run -p 8080:8080 mgcss-track
+```
+Una vez desplegado el contenedor, la aplicación quedará disponible en:
+```text
+http://localhost:8080
+```
+---
+## Ejecución desde una Release
+El proyecto incorpora un proceso automatizado de generación de Releases mediante GitHub Actions.
+Cada versión publicada genera automáticamente:
+* Artefacto JAR ejecutable.
+* Release Notes.
+* Imagen Docker versionada.
+Para ejecutar una versión liberada basta con descargar el artefacto generado y lanzar:
+```bash
+java -jar nombre-del-artefacto.jar
+```
+Este procedimiento garantiza la trazabilidad completa entre:
+```text
+Commit → Tag → Release → Artefacto
+```
+y permite reproducir exactamente cualquier versión publicada del sistema.
+
+---
+
+# 14. Conclusiones
 
 El proyecto ha permitido aplicar de forma práctica conceptos fundamentales de ingeniería software:
 * TDD.
