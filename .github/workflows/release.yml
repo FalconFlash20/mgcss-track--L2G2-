@@ -57,3 +57,4 @@ jobs:
           generate_release_notes: true
           tag_name: ${{ github.ref_name }}
           target_commitish: ${{ github.sha }}
+          files: P1/build/libs/*.jar
