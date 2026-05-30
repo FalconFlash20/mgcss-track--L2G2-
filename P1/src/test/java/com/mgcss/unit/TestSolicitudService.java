@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Tag;
@@ -114,5 +116,22 @@ import com.mgcss.service.SolicitudService;
 		});	
 		System.out.println(e.getMessage());
 		verify(solicitudRepository, never()).save(any());
+	}
+	
+	@Test
+	void deberiaObtenerMetricas() {
+	    Cliente cliente = new Cliente(1L, "Pepe", "pepe@test.com", TipoCliente.STANDARD);
+	    Solicitud abierta = new Solicitud("A", EstadoSolicitud.ABIERTA, LocalDateTime.now(), cliente);
+	    Solicitud proceso = new Solicitud("B", EstadoSolicitud.EN_PROCESO, LocalDateTime.now(), cliente);
+	    Solicitud cerrada = new Solicitud("C", EstadoSolicitud.CERRADA, LocalDateTime.now(), cliente);
+
+	    when(solicitudRepository.findAll()).thenReturn(List.of(abierta, proceso, cerrada));
+
+	    Map<String,Object> metricas =solicitudService.obtenerMetricas();
+
+	    assertEquals(3, metricas.get("totalSolicitudes"));
+	    assertEquals(1L, metricas.get("abiertas"));
+	    assertEquals(1L, metricas.get("enProceso"));
+	    assertEquals(1L, metricas.get("cerradas"));
 	}
 }

@@ -3,6 +3,9 @@ package com.mgcss.unit;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Tag;
@@ -59,5 +62,19 @@ class TestClienteService {
         clienteService.ascender(1L);
         verify(clienteRepository).save(c);
         System.out.println("Cliente " + c.getId() + " ascendido correctamente");
+    }
+    
+    @Test
+    void deberiaObtenerMetricasClientes() {
+        Cliente premium = new Cliente(1L, "Ana", "ana@test.com", Cliente.TipoCliente.PREMIUM);
+        Cliente standard = new Cliente(2L, "Juan", "juan@test.com", Cliente.TipoCliente.STANDARD);
+
+        when(clienteRepository.findAll()).thenReturn(List.of(premium, standard));
+
+        Map<String, Object> metricas = clienteService.obtenerMetricas();
+
+        assertEquals(2, metricas.get("totalClientes"));
+        assertEquals(1L, metricas.get("premium"));
+        assertEquals(1L, metricas.get("standard"));
     }
 }

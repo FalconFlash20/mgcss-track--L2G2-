@@ -1,7 +1,9 @@
 package com.mgcss.service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -64,5 +66,21 @@ public class SolicitudService {
     }
     public List<Solicitud> listar() {
     	return solicitudRepository.findAll();
+    }
+    
+    public Map<String, Object> obtenerMetricas() {
+    	
+        List<Solicitud> solicitudes = solicitudRepository.findAll();
+        Map<String, Object> metricas = new HashMap<>();
+
+        metricas.put("totalSolicitudes", solicitudes.size());
+        metricas.put("abiertas", solicitudes.stream().filter(s -> s.getEstado() == EstadoSolicitud.ABIERTA).count());
+        metricas.put("enProceso", solicitudes.stream().filter(s -> s.getEstado() == EstadoSolicitud.EN_PROCESO).count());
+        metricas.put("cerradas",solicitudes.stream().filter(s -> s.getEstado() == EstadoSolicitud.CERRADA).count());
+        metricas.put("urgentes", solicitudes.stream().filter(Solicitud::isUrgente).count());
+        metricas.put("slaCumplidos", solicitudes.stream().filter(Solicitud::cumpleSLA).count());
+        metricas.put("slaVencidos", solicitudes.stream().filter(Solicitud::slaVencido).count());
+
+        return metricas;
     }
 }

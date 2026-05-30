@@ -1,6 +1,7 @@
 package com.mgcss.api.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +71,13 @@ public class ClienteController {
                 .toList();
     }
 
+    @GetMapping("/metricas")
+    @Operation(summary = "Obtener métricas de clientes", description = "Devuelve estadísticas globales de los clientes registrados")
+    @ApiResponse(responseCode = "200", description = "Métricas obtenidas correctamente")
+    public ResponseEntity<Map<String, Object>> obtenerMetricas() {
+        return ResponseEntity.ok(clienteService.obtenerMetricas());
+    }
+    
     @PutMapping("/{id}/ascender")
     @Operation(summary = "Ascender categoría de cliente", description = "Incrementa o promociona el nivel/categoría del cliente seleccionado.")
     @ApiResponses(value = {

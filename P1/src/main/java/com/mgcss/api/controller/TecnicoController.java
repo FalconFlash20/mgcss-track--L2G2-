@@ -1,6 +1,7 @@
 package com.mgcss.api.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +65,13 @@ public class TecnicoController {
 	@ApiResponse(responseCode = "200", description = "Plantilla recuperada correctamente")
 	public List<TecnicoResponseDTO> listar() {
 		return tecnicoService.listarTecnicos().stream().map(this::mapear).toList();
+	}
+	
+	@GetMapping("/metricas")
+	@Operation(summary = "Obtener métricas de técnicos", description = "Devuelve estadísticas globales de los técnicos registrados")
+	@ApiResponse(responseCode = "200", description = "Métricas obtenidas correctamente")
+	public ResponseEntity<Map<String, Object>> obtenerMetricas() {
+	    return ResponseEntity.ok(tecnicoService.obtenerMetricas());
 	}
 
 	@PutMapping("/{id}/activar")
